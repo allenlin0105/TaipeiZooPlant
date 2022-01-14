@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ContentViewController: UIViewController {
     
     @IBOutlet weak var contentTableView: UITableView!
     private var content: PlantModel = PlantModel(plantResultList: [])
@@ -26,7 +26,7 @@ class ViewController: UIViewController {
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return content.plantResultList.count
     }
@@ -50,7 +50,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 //MARK: - ContentProtocol
-extension ViewController: ContentProtocol {
+extension ContentViewController: ContentProtocol {
     func updateContentTableView(plantContent: PlantModel) {
         plantContent.plantResultList.forEach { data in
             self.content.plantResultList.append(data)
