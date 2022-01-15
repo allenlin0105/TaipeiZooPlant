@@ -54,7 +54,6 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         let featureSpaceHeight: CGFloat = content.plantResultList[indexPath.row].feature.height(withConstrainedWidth: screenWidth - 30, font: .systemFont(ofSize: 15))
         
         return imageSpaceHeight + featureSpaceHeight + 15
-//        return 250
     }
 }
 
