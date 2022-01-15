@@ -17,8 +17,7 @@ class ContentViewController: UIViewController {
         super.viewDidLoad()
         
         contentTableView.dataSource = self
-        contentTableView.register(UINib(nibName: "ContentTableViewCell", bundle: nil), forCellReuseIdentifier: "content")
-        contentTableView.rowHeight = 150
+        contentTableView.register(UINib(nibName: "ContentTableViewCell", bundle: nil), forCellReuseIdentifier: "contentCell")
         
         contentViewModel.delegate = self
         contentViewModel.requestPlantData()
@@ -32,7 +31,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "content", for: indexPath) as? ContentTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "contentCell", for: indexPath) as? ContentTableViewCell else {
             return UITableViewCell()
         }
         
@@ -46,6 +45,16 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.contentTableView.deselectRow(at: indexPath, animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let imageSpaceHeight: CGFloat = 15 + 100 + 10
+        
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        let featureSpaceHeight: CGFloat = content.plantResultList[indexPath.row].feature.height(withConstrainedWidth: screenWidth - 30, font: .systemFont(ofSize: 15))
+        
+        return imageSpaceHeight + featureSpaceHeight + 15
+//        return 250
     }
 }
 
