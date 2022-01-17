@@ -8,5 +8,5 @@
 import Foundation
 
 protocol ContentProtocol {
-    func updateContentTableView(plantContent: PlantModel)
+    func updateContentTableView(plantContent: PlantModel, updateKey: String)
 }

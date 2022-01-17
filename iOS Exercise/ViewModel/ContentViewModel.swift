@@ -5,7 +5,7 @@
 //  Created by 林承濬 on 2022/1/14.
 //
 
-import Foundation
+import UIKit
 
 class ContentViewModel {
     private var url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0"
@@ -18,7 +18,8 @@ class ContentViewModel {
             let task = session.dataTask(with: url) { data, response, error in
                 let content = self.parseJSON(data)
                 self.saveNewContent(content)
-                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+                self.delegate?.updateContentTableView(plantContent: self.plantDataModel, updateKey: "content")
+                self.requestImage()
             }
             task.resume()
         }
@@ -26,6 +27,23 @@ class ContentViewModel {
     
     func saveNewContent(_ newContent: [PlantData]) {
         self.plantDataModel.plantResultList += newContent
+    }
+    
+    func requestImage() {
+        for i in 0..<self.plantDataModel.plantResultList.count {
+            let data = self.plantDataModel.plantResultList[i]
+            if data.image == nil {
+                let session = URLSession(configuration: .default)
+                let task = session.dataTask(with: data.imageURL) { data, response, error in
+                    guard let safeData = data else {
+                        return
+                    }
+                    self.plantDataModel.plantResultList[i].image = UIImage(data: safeData)
+                    self.delegate?.updateContentTableView(plantContent: self.plantDataModel, updateKey: "img")
+                }
+                task.resume()
+            }
+        }
     }
     
     func parseJSON(_ data: Data?) -> [PlantData] {

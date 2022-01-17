@@ -38,6 +38,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         cell.plantName.text = content.plantResultList[indexPath.row].name
         cell.plantLocation.text = content.plantResultList[indexPath.row].location
         cell.plantFeature.text = content.plantResultList[indexPath.row].feature
+        cell.plantImage.image = content.plantResultList[indexPath.row].image ?? nil
         return cell
     }
     
@@ -59,9 +60,17 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
 
 //MARK: - ContentProtocol
 extension ContentViewController: ContentProtocol {
-    func updateContentTableView(plantContent: PlantModel) {
-        plantContent.plantResultList.forEach { data in
-            self.content.plantResultList.append(data)
+    func updateContentTableView(plantContent: PlantModel, updateKey: String) {
+        if (updateKey == "content") {
+            self.content.plantResultList += plantContent.plantResultList
+//            plantContent.plantResultList.forEach { data in
+//                self.content.plantResultList.append(data)
+//            }
+        } else if (updateKey == "img") {
+            for i in 0..<plantContent.plantResultList.count {
+                let data = plantContent.plantResultList[i]
+                self.content.plantResultList[i].image = data.image ?? nil
+            }
         }
         DispatchQueue.main.async {
             self.contentTableView.reloadData()
