@@ -10,7 +10,6 @@ import UIKit
 class ContentViewController: UIViewController {
     
     @IBOutlet weak var contentTableView: UITableView!
-    private var content: PlantModel = PlantModel(plantResultList: [])
     let contentViewModel = ContentViewModel()
     
     override func viewDidLoad() {
@@ -27,7 +26,7 @@ class ContentViewController: UIViewController {
 //MARK: - UITableViewDelegate & UITableViewDataSource
 extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return content.plantResultList.count
+        return contentViewModel.getTotalDataSize()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -35,10 +34,12 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.plantName.text = content.plantResultList[indexPath.row].name
-        cell.plantLocation.text = content.plantResultList[indexPath.row].location
-        cell.plantFeature.text = content.plantResultList[indexPath.row].feature
-        cell.plantImage.image = content.plantResultList[indexPath.row].image?.resizeTopAlignedToFill(newWidth: 100) ?? nil
+        let data = contentViewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
+        cell.plantName.text = data.name
+        cell.plantLocation.text = data.location
+        cell.plantFeature.text = data.feature
+        cell.plantImage.image = data.image?.resizeTopAlignedToFill(newWidth: 100) ?? nil
+        
         return cell
     }
     
@@ -52,7 +53,8 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         let imageSpaceHeight: CGFloat = 15 + 100 + 10
         
         let screenWidth: CGFloat = UIScreen.main.bounds.width
-        let featureSpaceHeight: CGFloat = content.plantResultList[indexPath.row].feature.height(withConstrainedWidth: screenWidth - 30, font: .systemFont(ofSize: 15))
+        let data = contentViewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
+        let featureSpaceHeight: CGFloat = data.feature.height(withConstrainedWidth: screenWidth - 30, font: .systemFont(ofSize: 15))
         
         return imageSpaceHeight + featureSpaceHeight + 15
     }
@@ -61,14 +63,6 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: - ContentProtocol
 extension ContentViewController: ContentProtocol {
     func updateContentTableView(plantContent: PlantModel, updateKey: String) {
-        if (updateKey == "content") {
-            self.content.plantResultList += plantContent.plantResultList
-        } else if (updateKey == "img") {
-            for i in 0..<plantContent.plantResultList.count {
-                let data = plantContent.plantResultList[i]
-                self.content.plantResultList[i].image = data.image ?? nil
-            }
-        }
         DispatchQueue.main.async {
             self.contentTableView.reloadData()
         }

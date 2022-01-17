@@ -46,6 +46,14 @@ class ContentViewModel {
         }
     }
     
+    func getTotalDataSize() -> Int {
+        return self.plantDataModel.plantResultList.count
+    }
+    
+    func getCertainDataForTableViewCellWithIndex(index: Int) -> PlantData {
+        return self.plantDataModel.plantResultList[index]
+    }
+    
     func parseJSON(_ data: Data?) -> [PlantData] {
         let decoder = JSONDecoder()
         if let safeData = data {
