@@ -17,6 +17,8 @@ class ContentTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.plantImage.contentMode = .top
+        self.plantImage.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

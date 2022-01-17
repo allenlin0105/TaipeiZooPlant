@@ -38,7 +38,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         cell.plantName.text = content.plantResultList[indexPath.row].name
         cell.plantLocation.text = content.plantResultList[indexPath.row].location
         cell.plantFeature.text = content.plantResultList[indexPath.row].feature
-        cell.plantImage.image = content.plantResultList[indexPath.row].image ?? nil
+        cell.plantImage.image = content.plantResultList[indexPath.row].image?.resizeTopAlignedToFill(newWidth: 100) ?? nil
         return cell
     }
     
