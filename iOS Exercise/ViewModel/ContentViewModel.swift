@@ -10,7 +10,7 @@ import Foundation
 class ContentViewModel {
     private var url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0"
     var delegate: ContentProtocol?
-    private var plantDataList: PlantModel = PlantModel(plantResultList: [])
+    private var plantDataModel: PlantModel = PlantModel(plantResultList: [])
     
     func requestPlantData() {
         if let url = URL(string: self.url) {
@@ -18,14 +18,14 @@ class ContentViewModel {
             let task = session.dataTask(with: url) { data, response, error in
                 let content = self.parseJSON(data)
                 self.saveNewContent(content)
-                self.delegate?.updateContentTableView(plantContent: self.plantDataList)
+                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
             }
             task.resume()
         }
     }
     
     func saveNewContent(_ newContent: [PlantData]) {
-        self.plantDataList.plantResultList += newContent
+        self.plantDataModel.plantResultList += newContent
     }
     
     func parseJSON(_ data: Data?) -> [PlantData] {
@@ -45,7 +45,7 @@ class ContentViewModel {
     func changeDecodedDataIntoUsableData(_ result: [DecodedPlantData]) -> [PlantData] {
         var usableResult: [PlantData] = []
         result.forEach { data in
-            usableResult.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: data.F_Pic01_URL))
+            usableResult.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: data.F_Pic01_URL, image: nil))
         }
         
         return usableResult
