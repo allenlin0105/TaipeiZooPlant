@@ -10,7 +10,7 @@ import UIKit
 class ContentViewModel {
     private var url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0"
     var delegate: ContentProtocol?
-    private var plantDataModel: PlantModel = PlantModel(plantResultList: [])
+    private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     
     func requestPlantData() {
         if let url = URL(string: self.url) {
@@ -26,19 +26,19 @@ class ContentViewModel {
     }
     
     func saveNewContent(_ newContent: [PlantData]) {
-        self.plantDataModel.plantResultList += newContent
+        self.plantDataModel.plantDataList += newContent
     }
     
     func requestImage() {
-        for i in 0..<self.plantDataModel.plantResultList.count {
-            let data = self.plantDataModel.plantResultList[i]
+        for i in 0..<self.plantDataModel.plantDataList.count {
+            let data = self.plantDataModel.plantDataList[i]
             if data.image == nil {
                 let session = URLSession(configuration: .default)
                 let task = session.dataTask(with: data.imageURL) { data, response, error in
                     guard let safeData = data else {
                         return
                     }
-                    self.plantDataModel.plantResultList[i].image = UIImage(data: safeData)
+                    self.plantDataModel.plantDataList[i].image = UIImage(data: safeData)
                     self.delegate?.updateContentTableView(plantContent: self.plantDataModel, updateKey: "img")
                 }
                 task.resume()
@@ -47,11 +47,11 @@ class ContentViewModel {
     }
     
     func getTotalDataSize() -> Int {
-        return self.plantDataModel.plantResultList.count
+        return self.plantDataModel.plantDataList.count
     }
     
     func getCertainDataForTableViewCellWithIndex(index: Int) -> PlantData {
-        return self.plantDataModel.plantResultList[index]
+        return self.plantDataModel.plantDataList[index]
     }
     
     func parseJSON(_ data: Data?) -> [PlantData] {

@@ -8,10 +8,10 @@
 import Foundation
 
 struct DecodedPlantModel: Decodable {
-    let result: PlantResult
+    let result: DecodedResults
 }
 
-struct PlantResult: Decodable {
+struct DecodedResults: Decodable {
     let results: [DecodedPlantData]
 }
 

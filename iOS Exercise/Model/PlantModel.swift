@@ -8,7 +8,7 @@
 import UIKit
 
 struct PlantModel {
-    var plantResultList: [PlantData]
+    var plantDataList: [PlantData]
 }
 
 struct PlantData {
