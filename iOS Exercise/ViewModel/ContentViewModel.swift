@@ -8,24 +8,27 @@
 import Foundation
 
 class ContentViewModel {
-    private var url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=3&offset=0"
+    private var url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0"
     var delegate: ContentProtocol?
+    private var plantDataList: PlantModel = PlantModel(plantResultList: [])
     
     func requestPlantData() {
         if let url = URL(string: self.url) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { data, response, error in
                 let content = self.parseJSON(data)
-                guard let safeContent = content else {
-                    return
-                }
-                self.delegate?.updateContentTableView(plantContent: safeContent)
+                self.saveNewContent(content)
+                self.delegate?.updateContentTableView(plantContent: self.plantDataList)
             }
             task.resume()
         }
     }
     
-    func parseJSON(_ data: Data?) -> PlantModel? {
+    func saveNewContent(_ newContent: [PlantData]) {
+        self.plantDataList.plantResultList += newContent
+    }
+    
+    func parseJSON(_ data: Data?) -> [PlantData] {
         let decoder = JSONDecoder()
         if let safeData = data {
             do {
@@ -33,19 +36,18 @@ class ContentViewModel {
                 let responseResult = decodedData.result.results
                 return changeDecodedDataIntoUsableData(responseResult)
             } catch {
-                return nil
+                return []
             }
         }
-        return nil
+        return []
     }
     
-    func changeDecodedDataIntoUsableData(_ result: [DecodedPlantData]) -> PlantModel {
-        var changedResultList: [PlantData] = []
+    func changeDecodedDataIntoUsableData(_ result: [DecodedPlantData]) -> [PlantData] {
+        var usableResult: [PlantData] = []
         result.forEach { data in
-            changedResultList.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: data.F_Pic01_URL))
+            usableResult.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: data.F_Pic01_URL))
         }
         
-        let usable_result = PlantModel(plantResultList: changedResultList)
-        return usable_result
+        return usableResult
     }
 }
