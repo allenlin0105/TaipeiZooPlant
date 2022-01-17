@@ -13,7 +13,6 @@ class ContentViewModel {
     private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     
     // MARK: - Response to ContentViewController
-    
     func getTotalDataSize() -> Int {
         return self.plantDataModel.plantDataList.count
     }
@@ -23,7 +22,6 @@ class ContentViewModel {
     }
     
     // MARK: - API Request
-    
     func requestPlantData() {
         if let url = URL(string: self.url) {
             let session = URLSession(configuration: .default)
