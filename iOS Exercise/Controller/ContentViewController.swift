@@ -63,9 +63,6 @@ extension ContentViewController: ContentProtocol {
     func updateContentTableView(plantContent: PlantModel, updateKey: String) {
         if (updateKey == "content") {
             self.content.plantResultList += plantContent.plantResultList
-//            plantContent.plantResultList.forEach { data in
-//                self.content.plantResultList.append(data)
-//            }
         } else if (updateKey == "img") {
             for i in 0..<plantContent.plantResultList.count {
                 let data = plantContent.plantResultList[i]
