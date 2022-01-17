@@ -62,7 +62,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
 
 //MARK: - ContentProtocol
 extension ContentViewController: ContentProtocol {
-    func updateContentTableView(plantContent: PlantModel, updateKey: String) {
+    func updateContentTableView(plantContent: PlantModel) {
         DispatchQueue.main.async {
             self.contentTableView.reloadData()
         }
