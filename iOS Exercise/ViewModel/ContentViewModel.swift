@@ -29,28 +29,27 @@ class ContentViewModel {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { data, response, error in
                 let newData = self.parseJSON(data)
+                let startIndex = self.plantDataModel.plantDataList.count, endIndex = newData.count
                 self.plantDataModel.plantDataList += newData
                 self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
-                self.requestImage()
+                self.requestImage(from: startIndex, to: endIndex)
             }
             task.resume()
         }
     }
     
-    func requestImage() {
-        for i in 0..<self.plantDataModel.plantDataList.count {
+    func requestImage(from startIndex: Int, to endIndex: Int) {
+        for i in startIndex..<endIndex {
             let data = self.plantDataModel.plantDataList[i]
-            if data.image == nil {
-                let session = URLSession(configuration: .default)
-                let task = session.dataTask(with: data.imageURL) { data, response, error in
-                    guard let safeData = data else {
-                        return
-                    }
-                    self.plantDataModel.plantDataList[i].image = UIImage(data: safeData)
-                    self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: data.imageURL) { data, response, error in
+                guard let safeData = data else {
+                    return
                 }
-                task.resume()
+                self.plantDataModel.plantDataList[i].image = UIImage(data: safeData)
+                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
             }
+            task.resume()
         }
     }
     
