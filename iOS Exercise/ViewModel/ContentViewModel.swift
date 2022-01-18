@@ -8,7 +8,6 @@
 import UIKit
 
 class ContentViewModel {
-    private var url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0"
     var delegate: ContentProtocol?
     private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     
@@ -23,16 +22,26 @@ class ContentViewModel {
     
     // MARK: - API Request
     func requestPlantData() {
-        if let url = URL(string: self.url) {
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { data, response, error in
-                let newData = self.parseJSON(data)
-                let startIndex = self.plantDataModel.plantDataList.count, endIndex = newData.count
-                self.plantDataModel.plantDataList += newData
-                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
-                self.requestImage(from: startIndex, to: endIndex)
+        for offset in stride(from: 0, to: 20, by: 5) {
+            let targetUrl = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=5&offset=" + String(offset)
+            if let url = URL(string: targetUrl) {
+                let session = URLSession(configuration: .default)
+                let task = session.dataTask(with: url) { data, response, error in
+                    let newData = self.parseJSON(data)
+                    
+                    // This while loop is to prevent race condition and assure the data order is correct
+                    while offset > self.plantDataModel.plantDataList.count {
+                        Thread.sleep(forTimeInterval: 1)
+                    }
+                    
+                    let startIndex = self.plantDataModel.plantDataList.count
+                    let endIndex = startIndex + newData.count
+                    self.plantDataModel.plantDataList += newData
+                    self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+                    self.requestImage(from: startIndex, to: endIndex)
+                }
+                task.resume()
             }
-            task.resume()
         }
     }
     
