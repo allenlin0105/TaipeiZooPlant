@@ -18,9 +18,6 @@ class ContentTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.plantImage.contentMode = .top
-        self.plantImage.clipsToBounds = true
-        
         innerStackView.setCustomSpacing(0, after: plantLocation)
     }
 
