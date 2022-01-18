@@ -49,16 +49,6 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let imageSpaceHeight: CGFloat = 15 + 100 + 10
-        
-        let screenWidth: CGFloat = UIScreen.main.bounds.width
-        let data = contentViewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
-        let featureSpaceHeight: CGFloat = data.feature.height(withConstrainedWidth: screenWidth - 30, font: .systemFont(ofSize: 15))
-        
-        return imageSpaceHeight + featureSpaceHeight + 15
-    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == contentViewModel.getTotalDataSize() {
             print("Hello")
