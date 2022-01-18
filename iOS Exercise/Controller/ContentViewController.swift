@@ -9,24 +9,24 @@ import UIKit
 
 class ContentViewController: UIViewController {
     
-    @IBOutlet weak var contentTableView: UITableView!
-    let contentViewModel = ContentViewModel()
+    @IBOutlet weak var tableView: UITableView!
+    var viewModel = ContentViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        contentTableView.dataSource = self
-        contentTableView.register(UINib(nibName: "ContentTableViewCell", bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
+        tableView.dataSource = self
+        tableView.register(UINib(nibName: "ContentTableViewCell", bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
         
-        contentViewModel.delegate = self
-        contentViewModel.requestPlantData()
+        viewModel.delegate = self
+        viewModel.requestPlantData()
     }
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
 extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contentViewModel.getTotalDataSize()
+        return viewModel.getTotalDataSize()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -34,7 +34,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let data = contentViewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
+        let data = viewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
         cell.plantName.text = data.name
         cell.plantLocation.text = data.location
         cell.plantFeature.text = data.feature
@@ -45,14 +45,13 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.contentTableView.deselectRow(at: indexPath, animated: true)
+            self.tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == contentViewModel.getTotalDataSize() {
-            print("Hello")
-            contentViewModel.requestPlantData()
+        if indexPath.row + 1 == viewModel.getTotalDataSize() {
+            viewModel.requestPlantData()
         }
     }
 }
@@ -61,7 +60,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
 extension ContentViewController: ContentProtocol {
     func updateContentTableView(plantContent: PlantModel) {
         DispatchQueue.main.async {
-            self.contentTableView.reloadData()
+            self.tableView.reloadData()
         }
     }
 }
