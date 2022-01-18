@@ -15,6 +15,6 @@ struct PlantData {
     let name: String
     let location: String
     let feature: String
-    let imageURL: URL
+    let imageURL: URL?
     var image: UIImage?
 }

@@ -58,6 +58,13 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         
         return imageSpaceHeight + featureSpaceHeight + 15
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == contentViewModel.getTotalDataSize() {
+            print("Hello")
+            contentViewModel.requestPlantData()
+        }
+    }
 }
 
 //MARK: - ContentProtocol

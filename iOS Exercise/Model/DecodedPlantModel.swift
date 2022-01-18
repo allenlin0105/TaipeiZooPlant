@@ -19,5 +19,5 @@ struct DecodedPlantData: Decodable {
     let F_Name_Ch: String
     let F_Location: String
     let F_Feature: String
-    let F_Pic01_URL: URL
+    let F_Pic01_URL: String
 }

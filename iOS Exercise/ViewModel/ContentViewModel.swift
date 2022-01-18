@@ -22,7 +22,7 @@ class ContentViewModel {
     
     // MARK: - API Request
     func requestPlantData() {
-        for offset in stride(from: 0, to: 20, by: 5) {
+        for offset in stride(from: self.plantDataModel.plantDataList.count, to: self.plantDataModel.plantDataList.count + 20, by: 5) {
             let targetUrl = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=5&offset=" + String(offset)
             if let url = URL(string: targetUrl) {
                 let session = URLSession(configuration: .default)
@@ -49,7 +49,10 @@ class ContentViewModel {
         for i in startIndex..<endIndex {
             let data = self.plantDataModel.plantDataList[i]
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: data.imageURL) { data, response, error in
+            guard let safeImageUrl = data.imageURL else {
+                continue
+            }
+            let task = session.dataTask(with: safeImageUrl) { data, response, error in
                 guard let safeData = data else {
                     return
                 }
@@ -77,7 +80,7 @@ class ContentViewModel {
     func changeDecodedDataIntoUsableData(_ result: [DecodedPlantData]) -> [PlantData] {
         var usableResult: [PlantData] = []
         result.forEach { data in
-            usableResult.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: data.F_Pic01_URL, image: nil))
+            usableResult.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: URL(string: data.F_Pic01_URL) ?? nil, image: nil))
         }
         
         return usableResult
