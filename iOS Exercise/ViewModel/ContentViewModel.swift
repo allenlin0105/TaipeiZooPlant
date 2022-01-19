@@ -10,7 +10,7 @@ import Alamofire
 
 class ContentViewModel {
     var delegate: ContentProtocol?
-    private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    private var plantDataModel: PlantModel = PlantModel(plantDataList: [], finishAllAccess: false)
     
     // MARK: - Response to ContentViewController
     func getTotalDataSize() -> Int {
@@ -23,6 +23,10 @@ class ContentViewModel {
     
     // MARK: - API Request
     func requestPlantData() {
+        if plantDataModel.finishAllAccess {
+            return
+        }
+        
         let requestUrl = "https://data.taipei/opendata/datalist/apiAccess"
         let parameters = [
             "scope": "resourceAquire",
@@ -34,6 +38,10 @@ class ContentViewModel {
             switch response.result {
             case .success:
                 let newData = self.parseJSON(response.data)
+                if newData.count == 0 {
+                    self.plantDataModel.finishAllAccess = true
+                    break
+                }
                 let startIndex = self.plantDataModel.plantDataList.count
                 let endIndex = startIndex + newData.count
                 self.plantDataModel.plantDataList += newData
