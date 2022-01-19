@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ContentViewModel {
     var delegate: ContentProtocol?
@@ -22,36 +23,48 @@ class ContentViewModel {
     
     // MARK: - API Request
     func requestPlantData() {
-        let targetUrl = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=" + String(self.plantDataModel.plantDataList.count)
-        if let url = URL(string: targetUrl) {
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { data, response, error in
-                let newData = self.parseJSON(data)
+        let requestUrl = "https://data.taipei/opendata/datalist/apiAccess"
+        let parameters = [
+            "scope": "resourceAquire",
+            "rid": "f18de02f-b6c9-47c0-8cda-50efad621c14",
+            "limit": "20",
+            "offset": String(self.plantDataModel.plantDataList.count)
+        ]
+        AF.request(requestUrl, parameters: parameters).responseData { response in
+            switch response.result {
+            case .success:
+                let newData = self.parseJSON(response.data)
                 let startIndex = self.plantDataModel.plantDataList.count
                 let endIndex = startIndex + newData.count
                 self.plantDataModel.plantDataList += newData
                 self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
                 self.requestImage(from: startIndex, to: endIndex)
+                break
+            case .failure:
+                break
             }
-            task.resume()
         }
     }
     
     func requestImage(from startIndex: Int, to endIndex: Int) {
         for i in startIndex..<endIndex {
             let data = self.plantDataModel.plantDataList[i]
-            let session = URLSession(configuration: .default)
             guard let safeImageUrl = data.imageURL else {
                 continue
             }
-            let task = session.dataTask(with: safeImageUrl) { data, response, error in
-                guard let safeData = data else {
-                    return
+            AF.request(safeImageUrl).responseData { response in
+                switch response.result {
+                case .success:
+                    guard let safeData = response.data else {
+                        return
+                    }
+                    self.plantDataModel.plantDataList[i].image = UIImage(data: safeData)
+                    self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+                    break
+                case .failure:
+                    break
                 }
-                self.plantDataModel.plantDataList[i].image = UIImage(data: safeData)
-                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
             }
-            task.resume()
         }
     }
     
