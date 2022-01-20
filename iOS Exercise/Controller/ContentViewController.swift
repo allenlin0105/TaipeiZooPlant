@@ -15,6 +15,7 @@ class ContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ContentTableViewCell", bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
         
@@ -23,8 +24,23 @@ class ContentViewController: UIViewController {
     }
 }
 
-//MARK: - UITableViewDelegate & UITableViewDataSource
-extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
+//MARK: - UITableViewDelegate
+extension ContentViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == viewModel.getTotalDataSize() {
+            viewModel.requestPlantData()
+        }
+    }
+}
+
+//MARK: - UITableViewDataSource
+extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.getTotalDataSize()
     }
@@ -41,18 +57,6 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource {
         cell.plantImage.image = data.image?.resizeTopAlignedToFill(newWidth: 100) ?? nil
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.tableView.deselectRow(at: indexPath, animated: true)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == viewModel.getTotalDataSize() {
-            viewModel.requestPlantData()
-        }
     }
 }
 
