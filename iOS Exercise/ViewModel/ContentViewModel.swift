@@ -11,6 +11,7 @@ import Alamofire
 class ContentViewModel {
     var delegate: ContentProtocol?
     private var plantDataModel: PlantModel = PlantModel(plantDataList: [], finishAllAccess: false)
+    private var notValidOffset: Int = -1
     
     // MARK: - Response to ContentViewController
     func getTotalDataSize() -> Int {
@@ -23,15 +24,17 @@ class ContentViewModel {
     
     // MARK: - API Request
     func requestPlantData() {
-        if plantDataModel.finishAllAccess {
+        if plantDataModel.finishAllAccess || plantDataModel.plantDataList.count == notValidOffset {
             return
         }
         
+        notValidOffset = plantDataModel.plantDataList.count
+        let requestDataCount = 20
         let requestUrl = "https://data.taipei/opendata/datalist/apiAccess"
         let parameters = [
             "scope": "resourceAquire",
             "rid": "f18de02f-b6c9-47c0-8cda-50efad621c14",
-            "limit": "20",
+            "limit": String(requestDataCount),
             "offset": String(self.plantDataModel.plantDataList.count)
         ]
         AF.request(requestUrl, parameters: parameters).responseData { response in
@@ -43,7 +46,7 @@ class ContentViewModel {
                     break
                 }
                 let startIndex = self.plantDataModel.plantDataList.count
-                let endIndex = startIndex + newData.count
+                let endIndex = startIndex + requestDataCount
                 self.plantDataModel.plantDataList += newData
                 self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
                 self.requestImage(from: startIndex, to: endIndex)
