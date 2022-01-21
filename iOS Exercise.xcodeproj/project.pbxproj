@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8AE944D5022B7D4B54941EB4 /* Pods_iOS_Exercise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ECB2E933D4E03F40E2341A /* Pods_iOS_Exercise.framework */; };
 		9F29F49A2795A12100BB9E35 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F29F4992795A12100BB9E35 /* UIImageExtension.swift */; };
+		9F8B51F2279AB107006D2BC3 /* URLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8B51F1279AB107006D2BC3 /* URLConstructor.swift */; };
 		9F8EB826279996BF00085C81 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB825279996BF00085C81 /* DataLoader.swift */; };
 		9F8EB82A27999D3800085C81 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB82927999D3800085C81 /* DataMapper.swift */; };
 		E310C23A27915C5D005A1AD7 /* ContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C23827915C5D005A1AD7 /* ContentTableViewCell.swift */; };
@@ -30,6 +31,7 @@
 		06D10C9432256CCE3C16395C /* Pods-iOS Exercise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Exercise.debug.xcconfig"; path = "Target Support Files/Pods-iOS Exercise/Pods-iOS Exercise.debug.xcconfig"; sourceTree = "<group>"; };
 		2EABCD473150CD90E48DFBD5 /* Pods-iOS Exercise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Exercise.release.xcconfig"; path = "Target Support Files/Pods-iOS Exercise/Pods-iOS Exercise.release.xcconfig"; sourceTree = "<group>"; };
 		9F29F4992795A12100BB9E35 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		9F8B51F1279AB107006D2BC3 /* URLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstructor.swift; sourceTree = "<group>"; };
 		9F8EB825279996BF00085C81 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		9F8EB82927999D3800085C81 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		D4ECB2E933D4E03F40E2341A /* Pods_iOS_Exercise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Exercise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 			children = (
 				9F8EB825279996BF00085C81 /* DataLoader.swift */,
 				9F8EB82927999D3800085C81 /* DataMapper.swift */,
+				9F8B51F1279AB107006D2BC3 /* URLConstructor.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F8B51F2279AB107006D2BC3 /* URLConstructor.swift in Sources */,
 				9F8EB82A27999D3800085C81 /* DataMapper.swift in Sources */,
 				9F8EB826279996BF00085C81 /* DataLoader.swift in Sources */,
 				E310C246279179EC005A1AD7 /* ContentProtocol.swift in Sources */,

@@ -51,7 +51,7 @@ class ContentViewModel {
             "limit": "20",
             "offset": String(plantDataModel.plantDataList.count)
         ]
-        if let url = dataLoader.urlConstructor(scheme: "https", host: "data.taipei", path: "/opendata/datalist/apiAccess", parameters: parameters) {
+        if let url = URLConstructor.getUrl(scheme: "https", host: "data.taipei", path: "/opendata/datalist/apiAccess", parameters: parameters) {
             dataLoader.loadData(requestUrl: url) { data in
                 let newData = DataMapper.mapTextData(data: data)
                 if newData.count == 0 {
