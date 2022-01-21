@@ -8,7 +8,6 @@
 import UIKit
 
 class ContentTableViewCell: UITableViewCell {
-
     @IBOutlet weak var plantImage: UIImageView!
     @IBOutlet weak var plantName: UILabel!
     @IBOutlet weak var plantLocation: UILabel!
