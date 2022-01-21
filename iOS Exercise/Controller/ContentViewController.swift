@@ -46,17 +46,7 @@ extension ContentViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier, for: indexPath) as? ContentTableViewCell else {
-            return UITableViewCell()
-        }
-        
-        let data = viewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
-        cell.plantName.text = data.name
-        cell.plantLocation.text = data.location
-        cell.plantFeature.text = data.feature
-        cell.plantImage.image = data.image?.resizeTopAlignedToFill(newWidth: 100) ?? nil
-        
-        return cell
+        return viewModel.cell(tableView: tableView, indexPath: indexPath)
     }
 }
 

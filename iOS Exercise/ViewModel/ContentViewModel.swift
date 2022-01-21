@@ -48,28 +48,29 @@ class ContentViewModel {
                     self.plantDataModel.finishAllAccess = true
                     return
                 }
-                let startIndex = self.plantDataModel.plantDataList.count
-                let endIndex = startIndex + newData.count
                 self.plantDataModel.plantDataList += newData
                 self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
-                self.requestImage(from: startIndex, to: endIndex)
             }
         }
     }
     
-    func requestImage(from startIndex: Int, to endIndex: Int) {
-        for i in startIndex..<endIndex {
-            let data = self.plantDataModel.plantDataList[i]
-            guard let url = data.imageURL else {
-                continue
-            }
-            dataLoader.loadData(requestUrl: url) { data in
+    func cell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier, for: indexPath) as? ContentTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let data = plantDataModel.plantDataList[indexPath.row]
+        if data.image == nil && data.imageURL != nil {
+            dataLoader.loadData(requestUrl: data.imageURL!) { data in
                 guard let image = DataMapper.mapImageData(data: data) else {
                     return
                 }
-                self.plantDataModel.plantDataList[i].image = image
+                self.plantDataModel.plantDataList[indexPath.row].image = image
                 self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
             }
         }
+        cell.bind(data: data)
+        
+        return cell
     }
 }

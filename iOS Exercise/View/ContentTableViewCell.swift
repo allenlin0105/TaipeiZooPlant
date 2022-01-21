@@ -20,10 +20,11 @@ class ContentTableViewCell: UITableViewCell {
         // Initialization code
         innerStackView.setCustomSpacing(0, after: plantLocation)
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
     
+    func bind(data: PlantData) {
+        plantName.text = data.name
+        plantLocation.text = data.location
+        plantFeature.text = data.feature
+        plantImage.image = data.image?.resizeTopAlignedToFill(newWidth: 100) ?? nil
+    }
 }
