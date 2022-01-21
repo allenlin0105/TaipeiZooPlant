@@ -9,10 +9,10 @@ import Foundation
 import Alamofire
 
 class ContentViewModel {
-    var delegate: ContentProtocol?
-    private var plantDataModel: PlantModel = PlantModel(plantDataList: [], finishAllAccess: false)
+    private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    private var finishAllAccess: Bool = false
     private var notValidOffset: Int = -1
-    
+    var delegate: ContentProtocol?
     var dataLoader: DataLoader
     
     init (dataLoader: DataLoader) {
@@ -40,7 +40,7 @@ class ContentViewModel {
     
     // MARK: - API Request
     func requestPlantData() {
-        if plantDataModel.finishAllAccess || plantDataModel.plantDataList.count == notValidOffset {
+        if finishAllAccess || plantDataModel.plantDataList.count == notValidOffset {
             return
         }
         
@@ -55,7 +55,7 @@ class ContentViewModel {
             dataLoader.loadData(requestUrl: url) { data in
                 let newData = DataMapper.mapTextData(data: data)
                 if newData.count == 0 {
-                    self.plantDataModel.finishAllAccess = true
+                    self.finishAllAccess = true
                     return
                 }
                 self.plantDataModel.plantDataList += newData

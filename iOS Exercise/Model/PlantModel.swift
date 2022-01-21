@@ -9,7 +9,6 @@ import UIKit
 
 struct PlantModel {
     var plantDataList: [PlantData]
-    var finishAllAccess: Bool
 }
 
 struct PlantData {
