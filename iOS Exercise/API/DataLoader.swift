@@ -5,7 +5,7 @@
 //  Created by allen on 2022/1/20.
 //
 
-import UIKit
+import Foundation
 import Alamofire
 
 class DataLoader {

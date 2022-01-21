@@ -5,7 +5,6 @@
 //  Created by allen on 2022/1/20.
 //
 
-import Foundation
 import UIKit
 
 class DataMapper {
