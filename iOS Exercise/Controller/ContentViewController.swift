@@ -10,7 +10,7 @@ import UIKit
 class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var viewModel = ContentViewModel()
+    var viewModel = ContentViewModel(dataLoader: DataLoader())
     
     override func viewDidLoad() {
         super.viewDidLoad()
