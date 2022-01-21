@@ -10,7 +10,12 @@ import UIKit
 class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var viewModel = ContentViewModel(dataLoader: DataLoader())
+    var viewModel: ContentViewModel?
+    
+    convenience init(viewModel: ContentViewModel) {
+        self.init()
+        self.viewModel = viewModel
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +24,8 @@ class ContentViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ContentTableViewCell", bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
         
-        viewModel.delegate = self
-        viewModel.requestPlantData()
+        viewModel?.delegate = self
+        viewModel?.requestPlantData()
     }
 }
 
@@ -33,8 +38,8 @@ extension ContentViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == viewModel.getTotalDataSize() {
-            viewModel.requestPlantData()
+        if indexPath.row + 1 == viewModel?.getTotalDataSize() {
+            viewModel?.requestPlantData()
         }
     }
 }
@@ -42,7 +47,7 @@ extension ContentViewController: UITableViewDelegate {
 //MARK: - UITableViewDataSource
 extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getTotalDataSize()
+        return viewModel?.getTotalDataSize() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -50,9 +55,9 @@ extension ContentViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let data = viewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
-        cell.bind(data: data)
-        
+        if let data = viewModel?.getCertainDataForTableViewCellWithIndex(index: indexPath.row) {
+            cell.bind(data: data)
+        }
         return cell
     }
 }
