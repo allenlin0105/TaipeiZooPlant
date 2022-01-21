@@ -9,5 +9,5 @@ import Foundation
 
 struct GlobalStrings {
     static let mainStoryboardIdentifier = "Main"
-    static let cellIdentifier = "contentCell"
+    static let cellIdentifier = "ContentTableViewCell"
 }
