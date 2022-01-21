@@ -46,7 +46,14 @@ extension ContentViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return viewModel.cell(tableView: tableView, indexPath: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier, for: indexPath) as? ContentTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let data = viewModel.getCertainDataForTableViewCellWithIndex(index: indexPath.row)
+        cell.bind(data: data)
+        
+        return cell
     }
 }
 

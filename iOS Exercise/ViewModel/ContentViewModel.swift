@@ -5,7 +5,7 @@
 //  Created by 林承濬 on 2022/1/14.
 //
 
-import UIKit
+import Foundation
 import Alamofire
 
 class ContentViewModel {
@@ -25,7 +25,17 @@ class ContentViewModel {
     }
     
     func getCertainDataForTableViewCellWithIndex(index: Int) -> PlantData {
-        return self.plantDataModel.plantDataList[index]
+        let data = plantDataModel.plantDataList[index]
+        if data.image == nil && data.imageURL != nil {
+            dataLoader.loadData(requestUrl: data.imageURL!) { data in
+                guard let image = DataMapper.mapImageData(data: data) else {
+                    return
+                }
+                self.plantDataModel.plantDataList[index].image = image
+                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+            }
+        }
+        return data
     }
     
     // MARK: - API Request
@@ -52,25 +62,5 @@ class ContentViewModel {
                 self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
             }
         }
-    }
-    
-    func cell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier, for: indexPath) as? ContentTableViewCell else {
-            return UITableViewCell()
-        }
-        
-        let data = plantDataModel.plantDataList[indexPath.row]
-        if data.image == nil && data.imageURL != nil {
-            dataLoader.loadData(requestUrl: data.imageURL!) { data in
-                guard let image = DataMapper.mapImageData(data: data) else {
-                    return
-                }
-                self.plantDataModel.plantDataList[indexPath.row].image = image
-                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
-            }
-        }
-        cell.bind(data: data)
-        
-        return cell
     }
 }
