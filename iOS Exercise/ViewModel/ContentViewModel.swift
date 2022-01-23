@@ -32,7 +32,7 @@ class ContentViewModel {
                     return
                 }
                 self.plantDataModel.plantDataList[index].image = image
-                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+                self.delegate?.updateContentTableView()
             }
         }
         return data
@@ -59,7 +59,7 @@ class ContentViewModel {
                     return
                 }
                 self.plantDataModel.plantDataList += newData
-                self.delegate?.updateContentTableView(plantContent: self.plantDataModel)
+                self.delegate?.updateContentTableView()
             }
         }
     }
