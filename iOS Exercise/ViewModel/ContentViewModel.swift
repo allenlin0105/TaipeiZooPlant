@@ -11,7 +11,7 @@ import Alamofire
 class ContentViewModel {
     private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     private(set) var finishAllAccess: Bool = false
-    private var notValidOffset: Int = -1
+    private(set) var notValidOffset: Int = -1
     var delegate: ContentProtocol?
     var dataLoader: DataLoaderProtocol
     
@@ -39,11 +39,7 @@ class ContentViewModel {
     }
     
     // MARK: - API Request
-    func requestPlantData() {
-        if finishAllAccess || plantDataModel.plantDataList.count == notValidOffset {
-            return
-        }
-        
+    func requestPlantData() {        
         notValidOffset = plantDataModel.plantDataList.count
         let parameters = [
             "scope": "resourceAquire",

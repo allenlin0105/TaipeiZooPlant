@@ -37,9 +37,14 @@ extension ContentViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == viewModel?.getTotalDataSize() {
+        if isAvailableToRequestData(at: indexPath.row) {
             viewModel?.requestPlantData()
         }
+    }
+    
+    private func isAvailableToRequestData(at rowIndex: Int) -> Bool {
+        guard let finish = viewModel?.finishAllAccess, let notValidRow = viewModel?.notValidOffset else { return false }
+        return !finish && rowIndex != notValidRow && rowIndex + 1 == viewModel?.getTotalDataSize()
     }
 }
 
