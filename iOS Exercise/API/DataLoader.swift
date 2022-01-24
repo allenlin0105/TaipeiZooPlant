@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class DataLoader {
+class DataLoader: DataLoaderProtocol {
     func loadData(requestUrl: URL, completionHandler: @escaping ((Data?) -> Void)) {
         AF.request(requestUrl).responseData { response in
             switch response.result {
