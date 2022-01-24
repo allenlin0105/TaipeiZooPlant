@@ -10,12 +10,12 @@ import Alamofire
 
 class ContentViewModel {
     private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
-    private var finishAllAccess: Bool = false
+    private(set) var finishAllAccess: Bool = false
     private var notValidOffset: Int = -1
     var delegate: ContentProtocol?
-    var dataLoader: DataLoader
+    var dataLoader: DataLoaderProtocol
     
-    init (dataLoader: DataLoader) {
+    init (dataLoader: DataLoaderProtocol) {
         self.dataLoader = dataLoader
     }
     
