@@ -13,6 +13,7 @@
 		9F8EB826279996BF00085C81 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB825279996BF00085C81 /* DataLoader.swift */; };
 		9F8EB82A27999D3800085C81 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB82927999D3800085C81 /* DataMapper.swift */; };
 		9FCE1A8C279D4553000A751D /* TestContentURLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A8B279D4553000A751D /* TestContentURLConstructor.swift */; };
+		9FCE1A8E279E3750000A751D /* TestContentDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A8D279E3750000A751D /* TestContentDataMapper.swift */; };
 		E310C23A27915C5D005A1AD7 /* ContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C23827915C5D005A1AD7 /* ContentTableViewCell.swift */; };
 		E310C23B27915C5D005A1AD7 /* ContentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E310C23927915C5D005A1AD7 /* ContentTableViewCell.xib */; };
 		E310C23D27916FE5005A1AD7 /* PlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C23C27916FE5005A1AD7 /* PlantModel.swift */; };
@@ -47,6 +48,7 @@
 		9F8EB82927999D3800085C81 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		9FCE1A80279D4243000A751D /* iOS ExerciseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS ExerciseTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FCE1A8B279D4553000A751D /* TestContentURLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentURLConstructor.swift; sourceTree = "<group>"; };
+		9FCE1A8D279E3750000A751D /* TestContentDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentDataMapper.swift; sourceTree = "<group>"; };
 		D4ECB2E933D4E03F40E2341A /* Pods_iOS_Exercise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Exercise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E310C23827915C5D005A1AD7 /* ContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTableViewCell.swift; sourceTree = "<group>"; };
 		E310C23927915C5D005A1AD7 /* ContentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentTableViewCell.xib; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				9FCE1A8B279D4553000A751D /* TestContentURLConstructor.swift */,
+				9FCE1A8D279E3750000A751D /* TestContentDataMapper.swift */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FCE1A8E279E3750000A751D /* TestContentDataMapper.swift in Sources */,
 				9FCE1A8C279D4553000A751D /* TestContentURLConstructor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
