@@ -11,7 +11,7 @@ struct PlantModel {
     var plantDataList: [PlantData]
 }
 
-struct PlantData {
+struct PlantData: Equatable {
     let name: String
     let location: String
     let feature: String
