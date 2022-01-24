@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class ContentViewModel {
     private var plantDataModel: PlantModel = PlantModel(plantDataList: [])
@@ -27,12 +26,18 @@ class ContentViewModel {
     func getCertainDataForTableViewCellWithIndex(index: Int) -> PlantData {
         let data = plantDataModel.plantDataList[index]
         if data.image == nil && data.imageURL != nil {
-            dataLoader.loadData(requestUrl: data.imageURL!) { data in
-                guard let image = DataMapper.mapImageData(data: data) else {
-                    return
+            dataLoader.loadData(requestUrl: data.imageURL!) { result in
+                switch result {
+                case .success(let data):
+                    guard let image = DataMapper.mapImageData(data: data) else {
+                        return
+                    }
+                    self.plantDataModel.plantDataList[index].image = image
+                    self.delegate?.updateContentTableView()
+                    break
+                case .failure(_):
+                    break
                 }
-                self.plantDataModel.plantDataList[index].image = image
-                self.delegate?.updateContentTableView()
             }
         }
         return data
@@ -48,15 +53,23 @@ class ContentViewModel {
             "offset": String(plantDataModel.plantDataList.count)
         ]
         if let url = URLConstructor.getUrl(scheme: "https", host: "data.taipei", path: "/opendata/datalist/apiAccess", parameters: parameters) {
-            dataLoader.loadData(requestUrl: url) { data in
-                let newData = DataMapper.mapTextData(data: data)
-                if newData.count == 0 {
-                    self.finishAllAccess = true
-                    return
+            dataLoader.loadData(requestUrl: url) { result in
+                switch result {
+                case .success(let data):
+                    let newData = DataMapper.mapTextData(data: data)
+                    if newData.count == 0 {
+                        self.finishAllAccess = true
+                        return
+                    }
+                    self.plantDataModel.plantDataList += newData
+                    self.delegate?.updateContentTableView()
+                    break
+                case .failure(_):
+                    break
                 }
-                self.plantDataModel.plantDataList += newData
-                self.delegate?.updateContentTableView()
             }
+        } else {
+            
         }
     }
 }

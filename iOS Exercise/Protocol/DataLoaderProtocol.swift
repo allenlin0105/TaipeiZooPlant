@@ -8,5 +8,5 @@
 import Foundation
 
 protocol DataLoaderProtocol {
-    func loadData(requestUrl: URL, completionHandler: @escaping ((Data?) -> Void))
+    func loadData(requestUrl: URL, completionHandler: @escaping (Swift.Result<Data, Error>) -> Void)
 }
