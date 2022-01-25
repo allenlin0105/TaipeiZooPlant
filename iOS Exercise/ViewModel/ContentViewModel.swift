@@ -10,6 +10,8 @@ import Foundation
 class ContentViewModel {
     var apiString: String
     var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    private var alreadyRequestOffset: Int = -1
+    
     var dataLoader: DataLoaderProtocol
     var delegate: ContentProtocol?
     
@@ -19,11 +21,16 @@ class ContentViewModel {
     }
     
     func start() {
-        requestPlantData(at: plantDataModel.plantDataList.count)
+        let startOffset = 0
+        if startOffset != alreadyRequestOffset {
+            requestPlantData(at: startOffset)
+        }
     }
     
     // MARK: - API Request
     func requestPlantData(at offset: Int) {
+        alreadyRequestOffset = offset
+        
         apiString = "\(apiString)&offset=\(offset)"
         let url = URL(string: apiString)!
         dataLoader.loadData(requestUrl: url) { result in

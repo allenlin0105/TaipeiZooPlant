@@ -32,6 +32,16 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
+    func test_startTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
+        let (sut, _) = makeSUT(with: .success)
+        sut.start()
+        sut.start()
+        
+        let stub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
+        
+        XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: APICondition) -> (ContentViewModel, DataLoaderProtocol) {
