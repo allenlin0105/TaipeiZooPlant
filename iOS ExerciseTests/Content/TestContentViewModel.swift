@@ -17,14 +17,14 @@ class TestContentViewModel: XCTestCase {
     private let testingImageUrlString = "http://www.zoo.gov.tw/image.jpg"
     
     func test_start_withOneRequest_setupUrlWithOffsetEqualsZero() {
-        let (sut, _) = makeSUT(with: .success)
+        let sut = makeSUT(with: [.success])
         sut.start()
         
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
     
     func test_start_withOneRequest_receiveCorrectData() {
-        let (sut, _) = makeSUT(with: .success)
+        let sut = makeSUT(with: [.success])
         sut.start()
         
         let stub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
@@ -33,14 +33,14 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_start_withOneRequestButInternetFail_receiveNetworkError() {
-        let (sut, _) = makeSUT(with: .networkFailure)
+        let sut = makeSUT(with: [.networkFailure])
         sut.start()
         
         XCTAssertEqual(sut.alreadyRequestOffset, -1)
     }
     
     func test_startTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
-        let (sut, _) = makeSUT(with: .success)
+        let sut = makeSUT(with: [.success])
         sut.start()
         sut.start()
         
@@ -51,23 +51,23 @@ class TestContentViewModel: XCTestCase {
     
     // MARK: - Helper
     
-    func makeSUT(with apiCondition: APICondition) -> (ContentViewModel, DataLoaderProtocol) {
+    func makeSUT(with apiCondition: [APICondition]) -> ContentViewModel {
         let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition)
         let sut = ContentViewModel(apiString: GlobalStrings.baseAPIString, dataLoader: mock)
-        return (sut, mock)
+        return sut
     }
     
     private class DataLoaderMock: DataLoaderProtocol {
-        private let apiCondition: APICondition
+        private let apiCondition: [APICondition]
         
-        init(apiCondition: APICondition) {
+        init(apiCondition: [APICondition]) {
             self.apiCondition = apiCondition
         }
 
         func loadData(requestUrl: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
-            switch apiCondition {
+            let offset = Int(URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0") ?? 0
+            switch apiCondition[offset] {
             case .success:
-                let offset = Int(URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0") ?? 0
                 let data = createValidationData(at: offset)
                 completionHandler(.success(data))
                 break
