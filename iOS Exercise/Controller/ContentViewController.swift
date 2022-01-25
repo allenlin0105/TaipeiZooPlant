@@ -24,7 +24,7 @@ class ContentViewController: UIViewController {
         tableView.register(UINib(nibName: GlobalStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
         
         viewModel?.delegate = self
-        viewModel?.requestPlantData()
+//        viewModel?.requestPlantData()
     }
 }
 
@@ -38,20 +38,22 @@ extension ContentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if isAvailableToRequestData(at: indexPath.row) {
-            viewModel?.requestPlantData()
+//            viewModel?.requestPlantData()
         }
     }
     
     private func isAvailableToRequestData(at rowIndex: Int) -> Bool {
-        guard let finish = viewModel?.finishAllAccess, let notValidRow = viewModel?.notValidOffset else { return false }
-        return !finish && rowIndex != notValidRow && rowIndex + 1 == viewModel?.getTotalDataSize()
+//        guard let finish = viewModel?.finishAllAccess, let notValidRow = viewModel?.notValidOffset else { return false }
+        return false
+//        return !finish && rowIndex != notValidRow && rowIndex + 1 == viewModel?.getTotalDataSize()
     }
 }
 
 //MARK: - UITableViewDataSource
 extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.getTotalDataSize() ?? 0
+//        return viewModel?.getTotalDataSize() ?? 0
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,9 +61,9 @@ extension ContentViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let data = viewModel?.getCertainDataForTableViewCellWithIndex(index: indexPath.row) {
-            cell.bind(data: data)
-        }
+//        if let data = viewModel?.getCertainDataForTableViewCellWithIndex(index: indexPath.row) {
+//            cell.bind(data: data)
+//        }
         return cell
     }
 }
