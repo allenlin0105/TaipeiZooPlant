@@ -49,6 +49,18 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
+    func test_requestData_withTwoDifferentRequest_receiveCorrectData() {
+        let sut = makeSUT(with: [.success, .success])
+        sut.start()
+        sut.requestPlantData(at: 20)
+        
+        let firstStub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
+        let secondStub = [PlantData].init(repeating: PlantData(name: "name1", location: "location1", feature: "feature1", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
+        let stub = firstStub + secondStub
+        
+        XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition]) -> ContentViewModel {
@@ -65,7 +77,9 @@ class TestContentViewModel: XCTestCase {
         }
 
         func loadData(requestUrl: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
-            let offset = Int(URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0") ?? 0
+            let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
+            let offset = (Int(offsetString) ?? 0) / 20
+
             switch apiCondition[offset] {
             case .success:
                 let data = createValidationData(at: offset)

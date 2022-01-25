@@ -31,7 +31,7 @@ class ContentViewModel {
     func requestPlantData(at offset: Int) {
         alreadyRequestOffset = offset
         
-        apiString = "\(apiString)&offset=\(offset)"
+        apiString = "\(GlobalStrings.baseAPIString)&offset=\(offset)"
         let url = URL(string: apiString)!
         dataLoader.loadData(requestUrl: url) { result in
             switch result {
