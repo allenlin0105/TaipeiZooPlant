@@ -32,11 +32,11 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
-    func test_start_withOneRequestButInternetFail_receiveNetworkError() {
+    func test_start_withOneRequestButNetworkFail_receiveNetworkError() {
         let sut = makeSUT(with: [.networkFailure])
         sut.start()
         
-        XCTAssertEqual(sut.alreadyRequestOffset, -1)
+        XCTAssertEqual(sut.alreadyRequestOffset, -20)
     }
     
     func test_startTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
@@ -61,6 +61,32 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
+    func test_requestData_withTwoDifferentRequestButOneNetworkFail_onlyReceiveDataOneTime() {
+        let firstSUT = makeSUT(with: [.success, .networkFailure])
+        firstSUT.start()
+        firstSUT.requestPlantData(at: 20)
+        
+        let secondSUT = makeSUT(with: [.networkFailure, .success])
+        secondSUT.start()
+        secondSUT.start()
+        
+        let stub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
+        
+        XCTAssertEqual(firstSUT.plantDataModel.plantDataList, stub)
+        XCTAssertEqual(secondSUT.plantDataModel.plantDataList, stub)
+        XCTAssertEqual(firstSUT.alreadyRequestOffset, 0)
+        XCTAssertEqual(secondSUT.alreadyRequestOffset, 0)
+    }
+    
+    func test_requestData_withTwoDifferentRequestButBothFail_receiveNetworkError() {
+        let sut = makeSUT(with: [.networkFailure, .networkFailure])
+        sut.start()
+        sut.start()
+        
+        XCTAssertEqual(sut.plantDataModel.plantDataList, [])
+        XCTAssertEqual(sut.alreadyRequestOffset, -20)
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition]) -> ContentViewModel {
@@ -71,17 +97,17 @@ class TestContentViewModel: XCTestCase {
     
     private class DataLoaderMock: DataLoaderProtocol {
         private let apiCondition: [APICondition]
+        private var requestCount: Int = 0
         
         init(apiCondition: [APICondition]) {
             self.apiCondition = apiCondition
         }
 
         func loadData(requestUrl: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
-            let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
-            let offset = (Int(offsetString) ?? 0) / 20
-
-            switch apiCondition[offset] {
+            switch apiCondition[requestCount] {
             case .success:
+                let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
+                let offset = (Int(offsetString) ?? 0) / 20
                 let data = createValidationData(at: offset)
                 completionHandler(.success(data))
                 break
@@ -89,6 +115,8 @@ class TestContentViewModel: XCTestCase {
                 completionHandler(.failure(.requestFail))
                 break
             }
+            
+            requestCount += 1
         }
         
         private func createValidationData(at offset: Int) -> Data {
