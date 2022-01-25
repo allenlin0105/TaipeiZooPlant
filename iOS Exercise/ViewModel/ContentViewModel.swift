@@ -10,7 +10,7 @@ import Foundation
 class ContentViewModel {
     var apiString: String
     var plantDataModel: PlantModel = PlantModel(plantDataList: [])
-    private var alreadyRequestOffset: Int = -1
+    var alreadyRequestOffset: Int = -1
     
     var dataLoader: DataLoaderProtocol
     var delegate: ContentProtocol?
@@ -39,7 +39,12 @@ class ContentViewModel {
                 let newData = DataMapper.mapTextData(data: data)
                 self.plantDataModel.plantDataList += newData
                 break
-            case .failure(_):
+            case .failure(let error):
+                switch error {
+                case .requestFail:
+                    self.alreadyRequestOffset = -1
+                    break
+                }
                 break
             }
         }

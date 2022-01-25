@@ -32,6 +32,13 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
+    func test_start_withOneRequestButInternetFail_receiveNetworkError() {
+        let (sut, _) = makeSUT(with: .networkFailure)
+        sut.start()
+        
+        XCTAssertEqual(sut.alreadyRequestOffset, -1)
+    }
+    
     func test_startTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
         let (sut, _) = makeSUT(with: .success)
         sut.start()
@@ -57,7 +64,7 @@ class TestContentViewModel: XCTestCase {
             self.apiCondition = apiCondition
         }
 
-        func loadData(requestUrl: URL, completionHandler: @escaping (Result<Data, Error>) -> Void) {
+        func loadData(requestUrl: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
             switch apiCondition {
             case .success:
                 let offset = Int(URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0") ?? 0
@@ -65,7 +72,7 @@ class TestContentViewModel: XCTestCase {
                 completionHandler(.success(data))
                 break
             case .networkFailure:
-                
+                completionHandler(.failure(.requestFail))
                 break
             }
         }

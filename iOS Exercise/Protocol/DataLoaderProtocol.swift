@@ -7,6 +7,10 @@
 
 import Foundation
 
+enum APIError: Error {
+    case requestFail
+}
+
 protocol DataLoaderProtocol {
-    func loadData(requestUrl: URL, completionHandler: @escaping (Swift.Result<Data, Error>) -> Void)
+    func loadData(requestUrl: URL, completionHandler: @escaping (Swift.Result<Data, APIError>) -> Void)
 }
