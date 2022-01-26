@@ -13,5 +13,6 @@ enum APIError: Error {
 }
 
 protocol DataLoaderProtocol {
-    func loadData(requestUrl: URL, completionHandler: @escaping (Swift.Result<Data, APIError>) -> Void)
+    typealias resultCallback = (Swift.Result<Data, APIError>) -> Void
+    func loadData(requestUrl: URL, completionHandler: @escaping resultCallback)
 }

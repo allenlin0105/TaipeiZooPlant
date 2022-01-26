@@ -94,7 +94,7 @@ class TestContentViewModel: XCTestCase {
             self.apiCondition = apiCondition
         }
 
-        func loadData(requestUrl: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+        func loadData(requestUrl: URL, completionHandler: @escaping resultCallback) {
             switch apiCondition[requestCount] {
             case .success:
                 let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
