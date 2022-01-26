@@ -16,33 +16,33 @@ enum APICondition {
 class TestContentViewModel: XCTestCase {
     private let testingImageUrlString = "http://www.zoo.gov.tw/image.jpg"
     
-    func test_start_withOneRequest_setupUrlWithOffsetEqualsZero() {
+    func test_setupUrl_withOneRequest_receiveUrlWithOffsetEqualsZero() {
         let sut = makeSUT(with: [.success])
-        sut.start()
+        sut.requestPlantData(at: 0)
         
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
     
-    func test_start_withOneRequest_receiveCorrectData() {
+    func test_requestData_withOneRequest_receiveCorrectData() {
         let sut = makeSUT(with: [.success])
-        sut.start()
+        sut.requestPlantData(at: 0)
         
         let stub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
         
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
-    func test_start_withOneRequestButNetworkFail_receiveNetworkError() {
+    func test_requestData_withOneRequestButNetworkFail_receiveNetworkError() {
         let sut = makeSUT(with: [.networkFailure])
-        sut.start()
+        sut.requestPlantData(at: 0)
         
         XCTAssertEqual(sut.alreadyRequestOffset, -20)
     }
     
-    func test_startTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
-        let sut = makeSUT(with: [.success])
-        sut.start()
-        sut.start()
+    func test_requestDataTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
+        let sut = makeSUT(with: [.success, .success])
+        sut.requestPlantData(at: 0)
+        sut.requestPlantData(at: 0)
         
         let stub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
         
@@ -51,7 +51,7 @@ class TestContentViewModel: XCTestCase {
     
     func test_requestData_withTwoDifferentRequest_receiveCorrectData() {
         let sut = makeSUT(with: [.success, .success])
-        sut.start()
+        sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 20)
         
         let firstStub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
@@ -63,12 +63,12 @@ class TestContentViewModel: XCTestCase {
     
     func test_requestData_withTwoDifferentRequestButOneNetworkFail_onlyReceiveDataOneTime() {
         let firstSUT = makeSUT(with: [.success, .networkFailure])
-        firstSUT.start()
+        firstSUT.requestPlantData(at: 0)
         firstSUT.requestPlantData(at: 20)
         
         let secondSUT = makeSUT(with: [.networkFailure, .success])
-        secondSUT.start()
-        secondSUT.start()
+        secondSUT.requestPlantData(at: 0)
+        secondSUT.requestPlantData(at: 0)
         
         let stub = [PlantData].init(repeating: PlantData(name: "name0", location: "location0", feature: "feature0", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
         
@@ -80,8 +80,8 @@ class TestContentViewModel: XCTestCase {
     
     func test_requestData_withTwoDifferentRequestButBothFail_receiveNetworkError() {
         let sut = makeSUT(with: [.networkFailure, .networkFailure])
-        sut.start()
-        sut.start()
+        sut.requestPlantData(at: 0)
+        sut.requestPlantData(at: 0)
         
         XCTAssertEqual(sut.plantDataModel.plantDataList, [])
         XCTAssertEqual(sut.alreadyRequestOffset, -20)
