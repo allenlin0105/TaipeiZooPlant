@@ -30,6 +30,7 @@ class TestContentViewModel: XCTestCase {
         sut.requestPlantData(at: 0)
 
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
+        XCTAssertEqual(sut.alreadyRequestOffset, 0)
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsAndNoFail_receiveCorrectData() {
@@ -38,6 +39,7 @@ class TestContentViewModel: XCTestCase {
         sut.requestPlantData(at: 20)
         
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
+        XCTAssertEqual(sut.alreadyRequestOffset, 20)
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsButOneNetworkFail_onlyReceiveDataOnce() {
