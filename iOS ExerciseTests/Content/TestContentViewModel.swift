@@ -106,7 +106,8 @@ class TestContentViewModel: XCTestCase {
                 completionHandler(.failure(.requestFail))
                 break
             case .decodeFailure:
-                completionHandler(.failure(.decodeDataFail))
+                let data = createDecodeFailData()
+                completionHandler(.success(data))
                 break
             }
             
@@ -132,6 +133,18 @@ class TestContentViewModel: XCTestCase {
                       "results":[
                          \(allResults)
                       ]
+                   }
+                }
+            """
+            let data: Data? = jsonString.data(using: .utf8)
+            return data!
+        }
+        
+        private func createDecodeFailData() -> Data {
+            let jsonString = """
+                {
+                   "result":{
+                      "results":[]
                    }
                 }
             """

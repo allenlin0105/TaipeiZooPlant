@@ -47,17 +47,14 @@ class ContentViewModel {
         switch result {
         case .success(let data):
             let newData = DataMapper.mapTextData(data: data)
-            plantDataModel.plantDataList += newData
-            alreadyRequestOffset += newData.count
-            break
-        case .failure(let error):
-            switch error {
-            case .requestFail:
-                break
-            case .decodeDataFail:
+            if newData.count == 0 {
                 finishAllAccess = true
-                break
+            } else {
+                plantDataModel.plantDataList += newData
+                alreadyRequestOffset += newData.count
             }
+            break
+        case .failure(_):
             break
         }
         isWaitingData = false
