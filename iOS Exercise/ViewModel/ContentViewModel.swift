@@ -8,12 +8,12 @@
 import Foundation
 
 class ContentViewModel {
-    var apiString: String
-    var plantDataModel: PlantModel = PlantModel(plantDataList: [])
-    var alreadyRequestOffset: Int = -20
-    private var isWaitingData: Bool = false
     
-    var dataLoader: DataLoaderProtocol
+    private(set) var apiString: String
+    private(set) var alreadyRequestOffset: Int = -20
+    private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    private var isWaitingData: Bool = false
+    private var dataLoader: DataLoaderProtocol
     var delegate: ContentProtocol?
     
     init (apiString: String, dataLoader: DataLoaderProtocol) {
@@ -21,24 +21,22 @@ class ContentViewModel {
         self.dataLoader = dataLoader
     }
     
-    func start() {
-        let startOffset = 0
-        if startOffset != alreadyRequestOffset {
-            requestPlantData(at: startOffset)
-        }
-    }
-    
     // MARK: - API Request
+    
     func requestPlantData(at offset: Int) {
-        print("offset: \(offset), already: \(alreadyRequestOffset)")
+        // Waiting for callback return
         while isWaitingData {}
         
-        alreadyRequestOffset = offset
+        // Check if it is duplicated request
+        if offset == alreadyRequestOffset { return }
         
+        // Setup property value for view model
         apiString = "\(GlobalStrings.baseAPIString)&offset=\(offset)"
-        let url = URL(string: apiString)!
+        alreadyRequestOffset = offset
         isWaitingData = true
-            
+
+        // Fire API
+        let url = URL(string: apiString)!
         dataLoader.loadData(requestUrl: url) { result in
             switch result {
             case .success(let data):
