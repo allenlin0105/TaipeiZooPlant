@@ -24,7 +24,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
     
-    func test_requestData_withOneRequest_receiveCorrectData() {
+    func test_requestData_withOneRequestAndNoFail_receiveCorrectData() {
         let (sut, stub) = makeSUT(with: [.success], totalStub: 1)
         sut.requestPlantData(at: 0)
         
@@ -38,7 +38,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.alreadyRequestOffset, -20)
     }
     
-    func test_requestDataTwice_withTwoSameRequest_onlyReceiveDataOneTime() {
+    func test_requestDataTwice_withTwoSameRequestAndNoFail_onlyReceiveDataOneTime() {
         let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 1)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 0)
@@ -46,7 +46,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
-    func test_requestData_withTwoDifferentRequest_receiveCorrectData() {
+    func test_requestDataTwice_withTwoDifferentRequestAndNoFail_receiveCorrectData() {
         let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 2)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 20)
@@ -54,7 +54,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
-    func test_requestData_withTwoDifferentRequestButOneNetworkFail_onlyReceiveDataOneTime() {
+    func test_requestDataTwice_withTwoDifferentRequestButOneNetworkFail_onlyReceiveDataOneTime() {
         let (firstSUT, stub) = makeSUT(with: [.success, .networkFailure], totalStub: 1)
         firstSUT.requestPlantData(at: 0)
         firstSUT.requestPlantData(at: 20)
@@ -69,7 +69,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(secondSUT.alreadyRequestOffset, 0)
     }
     
-    func test_requestData_withTwoDifferentRequestButBothFail_receiveNetworkError() {
+    func test_requestDataTwice_withTwoDifferentRequestButBothFail_receiveNetworkError() {
         let (sut, _) = makeSUT(with: [.networkFailure, .networkFailure], totalStub: 0)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 0)
