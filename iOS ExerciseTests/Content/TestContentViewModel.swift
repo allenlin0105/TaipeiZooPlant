@@ -38,7 +38,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.alreadyRequestOffset, -20)
     }
     
-    func test_requestDataTwice_withTwoSameRequestAndNoFail_onlyReceiveDataOneTime() {
+    func test_requestDataTwice_withTwoSameRequestsAndNoFail_onlyReceiveDataOnce() {
         let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 1)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 0)
@@ -46,7 +46,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
-    func test_requestDataTwice_withTwoDifferentRequestAndNoFail_receiveCorrectData() {
+    func test_requestDataTwice_withTwoDifferentRequestsAndNoFail_receiveCorrectData() {
         let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 2)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 20)
@@ -54,7 +54,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
     }
     
-    func test_requestDataTwice_withTwoDifferentRequestButOneNetworkFail_onlyReceiveDataOneTime() {
+    func test_requestDataTwice_withTwoDifferentRequestsButOneNetworkFail_onlyReceiveDataOnce() {
         let (firstSUT, stub) = makeSUT(with: [.success, .networkFailure], totalStub: 1)
         firstSUT.requestPlantData(at: 0)
         firstSUT.requestPlantData(at: 20)
@@ -69,7 +69,7 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(secondSUT.alreadyRequestOffset, 0)
     }
     
-    func test_requestDataTwice_withTwoDifferentRequestButBothFail_receiveNetworkError() {
+    func test_requestDataTwice_withTwoDifferentRequestsButBothFail_receiveNetworkError() {
         let (sut, _) = makeSUT(with: [.networkFailure, .networkFailure], totalStub: 0)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 0)
