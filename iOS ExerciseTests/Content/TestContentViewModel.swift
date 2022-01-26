@@ -23,21 +23,7 @@ class TestContentViewModel: XCTestCase {
         
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
-    
-    func test_requestData_withOneRequestAndNoFail_receiveCorrectData() {
-        let (sut, stub) = makeSUT(with: [.success], totalStub: 1)
-        sut.requestPlantData(at: 0)
         
-        XCTAssertEqual(sut.plantDataModel.plantDataList, stub)
-    }
-    
-    func test_requestData_withOneRequestButNetworkFail_receiveNetworkError() {
-        let (sut, _) = makeSUT(with: [.networkFailure], totalStub: 0)
-        sut.requestPlantData(at: 0)
-        
-        XCTAssertEqual(sut.alreadyRequestOffset, -20)
-    }
-    
     func test_requestDataTwice_withTwoSameRequestsAndNoFail_onlyReceiveDataOnce() {
         let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 1)
         sut.requestPlantData(at: 0)
