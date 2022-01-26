@@ -11,6 +11,7 @@ class ContentViewModel {
     
     private(set) var apiString: String
     private(set) var alreadyRequestOffset: Int = -20
+    private(set) var finishAllAccess: Bool = false
     private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
@@ -47,9 +48,16 @@ class ContentViewModel {
         case .success(let data):
             let newData = DataMapper.mapTextData(data: data)
             plantDataModel.plantDataList += newData
-            alreadyRequestOffset += 20
+            alreadyRequestOffset += newData.count
             break
-        case .failure(_):
+        case .failure(let error):
+            switch error {
+            case .requestFail:
+                break
+            case .decodeDataFail:
+                finishAllAccess = true
+                break
+            }
             break
         }
         isWaitingData = false

@@ -11,6 +11,7 @@ import XCTest
 enum APICondition {
     case success
     case networkFailure
+    case decodeFailure
 }
 
 class TestContentViewModel: XCTestCase {
@@ -66,6 +67,13 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.alreadyRequestOffset, -20)
     }
     
+    func test_lastRequest_withAllDataReceived_setFinishAllAccessToTrue() {
+        let (sut, _) = makeSUT(with: [.decodeFailure], totalStub: 0)
+        sut.requestPlantData(at: 1000)
+        
+        XCTAssertTrue(sut.finishAllAccess)
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition], totalStub: Int) -> (ContentViewModel, [PlantData]) {
@@ -96,6 +104,9 @@ class TestContentViewModel: XCTestCase {
                 break
             case .networkFailure:
                 completionHandler(.failure(.requestFail))
+                break
+            case .decodeFailure:
+                completionHandler(.failure(.decodeDataFail))
                 break
             }
             

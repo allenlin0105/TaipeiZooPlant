@@ -9,6 +9,7 @@ import Foundation
 
 enum APIError: Error {
     case requestFail
+    case decodeDataFail
 }
 
 protocol DataLoaderProtocol {
