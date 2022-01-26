@@ -32,25 +32,26 @@ class ContentViewModel {
         
         // Setup property value for view model
         apiString = "\(GlobalStrings.baseAPIString)&offset=\(offset)"
-        alreadyRequestOffset = offset
         isWaitingData = true
 
         // Fire API
         let url = URL(string: apiString)!
-        dataLoader.loadData(requestUrl: url) { result in
-            switch result {
-            case .success(let data):
-                let newData = DataMapper.mapTextData(data: data)
-                self.plantDataModel.plantDataList += newData
-                self.isWaitingData = false
-                break
-            case .failure(let error):
-                if error == .requestFail {
-                    self.alreadyRequestOffset = offset - 20
-                }
-                self.isWaitingData = false
-                break
-            }
+        dataLoader.loadData(requestUrl: url) { [weak self] result in
+            let strongSelf = self
+            strongSelf?.handleResult(result: result)
         }
+    }
+    
+    private func handleResult(result: Swift.Result<Data, APIError>) {
+        switch result {
+        case .success(let data):
+            let newData = DataMapper.mapTextData(data: data)
+            plantDataModel.plantDataList += newData
+            alreadyRequestOffset += 20
+            break
+        case .failure(_):
+            break
+        }
+        isWaitingData = false
     }
 }
