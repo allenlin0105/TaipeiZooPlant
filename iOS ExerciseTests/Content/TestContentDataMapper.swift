@@ -23,7 +23,7 @@ class TestContentDataMapper: XCTestCase {
     }
     
     func test_mapJSON_withNoImageUrlJSON_returnDataWithImageUrlEqualsNil() {
-        jsonString = jsonString.replacingOccurrences(of: "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg", with: "", options: NSString.CompareOptions.literal, range: nil)
+        jsonString = jsonString.replace("http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg", with: "")
         let data: Data? = jsonString.data(using: .utf8)
         XCTAssertNotNil(data)
         
@@ -87,4 +87,10 @@ class TestContentDataMapper: XCTestCase {
            }
         }
     """
+}
+
+private extension String {
+    func replace(_ target: String, with newSubString: String) -> String {
+        return self.replacingOccurrences(of: target, with: newSubString, options: NSString.CompareOptions.literal, range: nil)
+    }
 }
