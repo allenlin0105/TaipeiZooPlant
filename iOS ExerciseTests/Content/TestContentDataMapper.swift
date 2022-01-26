@@ -10,7 +10,7 @@ import XCTest
 
 class TestContentDataMapper: XCTestCase {
     
-    func test_mapJSON_withData_returnPlantDataListWithImageUrl() {
+    func test_mapJSON_withValidJSON_returnCorrect() {
         let data: Data? = jsonString.data(using: .utf8)
         XCTAssertNotNil(data)
         
@@ -22,7 +22,7 @@ class TestContentDataMapper: XCTestCase {
         XCTAssertEqual(receive, expect)
     }
     
-    func test_mapJSON_withData_returnPlantDataListWithImageUrlEqualsNil() {
+    func test_mapJSON_withNoImageUrlJSON_returnDataWithImageUrlEqualsNil() {
         jsonString = jsonString.replacingOccurrences(of: "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg", with: "", options: NSString.CompareOptions.literal, range: nil)
         let data: Data? = jsonString.data(using: .utf8)
         XCTAssertNotNil(data)
