@@ -11,7 +11,9 @@ enum APIError: Error {
     case requestFail
 }
 
+typealias APIResultType = Swift.Result<Data, APIError>
+
 protocol DataLoaderProtocol {
-    typealias resultCallback = (Swift.Result<Data, APIError>) -> Void
+    typealias resultCallback = (APIResultType) -> Void
     func loadData(requestUrl: URL, completionHandler: @escaping resultCallback)
 }

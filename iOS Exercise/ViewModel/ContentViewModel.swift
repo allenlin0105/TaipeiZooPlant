@@ -43,7 +43,7 @@ class ContentViewModel {
         }
     }
     
-    private func handleResult(result: Swift.Result<Data, APIError>) {
+    private func handleResult(result: APIResultType) {
         switch result {
         case .success(let data):
             let newData = DataMapper.mapTextData(data: data)
