@@ -9,7 +9,8 @@ import XCTest
 @testable import iOS_Exercise
 
 enum APICondition {
-    case success
+    case successWithJSON
+    case successWithImage
     case networkFailure
     case decodeFailure
 }
@@ -17,14 +18,14 @@ enum APICondition {
 class TestContentViewModel: XCTestCase {
     
     func test_setupUrl_withOneRequest_receiveUrlWithOffsetEqualsZero() {
-        let (sut, _) = makeSUT(with: [.success])
+        let (sut, _) = makeSUT(with: [.successWithJSON])
         sut.requestPlantData(at: 0)
         
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
         
     func test_requestDataTwice_withTwoSameRequestsAndNoFail_onlyReceiveDataOnce() {
-        let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 1)
+        let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithJSON], totalStub: 1)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 0)
 
@@ -33,7 +34,7 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsAndNoFail_receiveCorrectData() {
-        let (sut, stub) = makeSUT(with: [.success, .success], totalStub: 2)
+        let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithJSON], totalStub: 2)
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 20)
         
@@ -42,11 +43,11 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsButOneNetworkFail_onlyReceiveDataOnce() {
-        let (firstSUT, stub) = makeSUT(with: [.success, .networkFailure], totalStub: 1)
+        let (firstSUT, stub) = makeSUT(with: [.successWithJSON, .networkFailure], totalStub: 1)
         firstSUT.requestPlantData(at: 0)
         firstSUT.requestPlantData(at: 20)
         
-        let (secondSUT, _) = makeSUT(with: [.networkFailure, .success], totalStub: 1)
+        let (secondSUT, _) = makeSUT(with: [.networkFailure, .successWithJSON], totalStub: 1)
         secondSUT.requestPlantData(at: 0)
         secondSUT.requestPlantData(at: 0)
         
@@ -73,7 +74,7 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_requestImage_withImageUrlIsNil_imageStillNil() {
-        let (sut, _) = makeSUT(with: [.success], withImageUrl: false)
+        let (sut, _) = makeSUT(with: [.successWithJSON], withImageUrl: false)
         sut.requestPlantData(at: 0)
         sut.requestImage(at: 0)
         
@@ -81,17 +82,27 @@ class TestContentViewModel: XCTestCase {
         XCTAssertNil(sut.plantDataModel.plantDataList.first?.image)
     }
     
+    func test_requestImage_withImageUrl_receiveCorrectImage() {
+        let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithImage], totalStub: 1, stubWithImage: true)
+        sut.requestPlantData(at: 0)
+        sut.requestImage(at: 0)
+        
+        XCTAssertNotNil(sut.plantDataModel.plantDataList.first?.image)
+        XCTAssertEqual(sut.plantDataModel.plantDataList.first?.image?.pngData(), stub.first?.image?.pngData())
+    }
+    
     // MARK: - Helper
     
-    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true) -> (ContentViewModel, [PlantData]) {
+    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {
         let imageUrlString = withImageUrl ? "http://www.zoo.gov.tw/image.jpg" : ""
+        let image = stubWithImage ? UIImage(named: "TestImage") : nil
         
-        let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition, imageUrl: imageUrlString)
+        let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition, imageUrl: imageUrlString, image: image?.pngData())
         let sut = ContentViewModel(apiString: GlobalStrings.baseAPIString, dataLoader: mock)
         
         var stub: [PlantData] = []
         for i in 0..<totalStub {
-            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: imageUrlString), image: nil), count: 20)
+            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: imageUrlString), image: image), count: 20)
         }
         return (sut, stub)
     }
@@ -99,20 +110,25 @@ class TestContentViewModel: XCTestCase {
     private class DataLoaderMock: DataLoaderProtocol {
         private let apiCondition: [APICondition]
         private let imageUrl: String
+        private let image: Data?
         private var requestCount: Int = 0
         
-        init(apiCondition: [APICondition], imageUrl: String) {
+        init(apiCondition: [APICondition], imageUrl: String, image: Data?) {
             self.apiCondition = apiCondition
             self.imageUrl = imageUrl
+            self.image = image
         }
 
         func loadData(requestUrl: URL, completionHandler: @escaping resultCallback) {
             switch apiCondition[requestCount] {
-            case .success:
+            case .successWithJSON:
                 let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
                 let offset = (Int(offsetString) ?? 0) / 20
                 let data = createValidationData(at: offset)
                 completionHandler(.success(data))
+                break
+            case .successWithImage:
+                completionHandler(.success(image!))
                 break
             case .networkFailure:
                 completionHandler(.failure(.requestFail))

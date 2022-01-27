@@ -61,7 +61,25 @@ class ContentViewModel {
     }
     
     func requestImage(at index: Int) {
+        // Prevent json data not loading back yet
+        while isWaitingData {}
+        
         let target = plantDataModel.plantDataList[index]
-        if target.imageURL == nil { return }
+        if target.imageURL == nil || target.image != nil { return }
+        dataLoader.loadData(requestUrl: target.imageURL!) { [weak self] result in
+            let strongSelf = self
+            strongSelf?.handleImage(result: result, index: index)
+        }
+    }
+    
+    private func handleImage(result: APIResultType, index: Int) {
+        switch result {
+        case .success(let data):
+            let image = DataMapper.mapImageData(data: data)
+            plantDataModel.plantDataList[index].image = image
+            break
+        case .failure(_):
+            break
+        }
     }
 }
