@@ -95,6 +95,17 @@ class TestContentViewModel: XCTestCase {
         XCTAssertNil(sut.dataList().first?.image)
     }
     
+    func test_requestImage_jsonNotReceiveYet_shouldBusyWaitingAndDoNotCrash() {
+        let (sut, stub) = makeSUT(with: [.successWithImage, .successWithJSON], totalStub: 1, stubWithImage: true)
+        DispatchQueue.global().async {
+            sut.requestImage(at: 0)
+            
+            XCTAssertNotNil(sut.dataList().first?.image)
+            XCTAssertEqual(sut.dataList().first?.image?.pngData(), stub.first?.image?.pngData())
+        }
+        sut.requestProcedure()
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {

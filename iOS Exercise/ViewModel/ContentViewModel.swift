@@ -15,6 +15,7 @@ class ContentViewModel {
     private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
+    private let requestLimit = 20
     var delegate: ContentProtocol?
     
     init (apiString: String, dataLoader: DataLoaderProtocol) {
@@ -64,7 +65,7 @@ class ContentViewModel {
     
     func requestImage(at index: Int) {
         // Prevent json data not loading back yet
-        while isWaitingData {}
+        while index >= alreadyRequestOffset + requestLimit {}
         
         let target = plantDataModel.plantDataList[index]
         if target.imageURL == nil || target.image != nil { return }
