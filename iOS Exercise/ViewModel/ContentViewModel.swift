@@ -60,12 +60,15 @@ class ContentViewModel {
         isWaitingData = false
     }
     
+    // MARK: - Image Request
+    
     func requestImage(at index: Int) {
         // Prevent json data not loading back yet
         while isWaitingData {}
         
         let target = plantDataModel.plantDataList[index]
         if target.imageURL == nil || target.image != nil { return }
+        
         dataLoader.loadData(requestUrl: target.imageURL!) { [weak self] result in
             let strongSelf = self
             strongSelf?.handleImage(result: result, index: index)
