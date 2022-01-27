@@ -19,7 +19,7 @@ class TestContentViewModel: XCTestCase {
     private let testingImageUrlString = "http://www.zoo.gov.tw/image.jpg"
     
     func test_setupUrl_withOneRequest_receiveUrlWithOffsetEqualsZero() {
-        let (sut, _) = makeSUT(with: [.success], totalStub: 0)
+        let (sut, _) = makeSUT(with: [.success])
         sut.requestPlantData(at: 0)
         
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
@@ -59,7 +59,7 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsButBothFail_receiveNetworkError() {
-        let (sut, _) = makeSUT(with: [.networkFailure, .networkFailure], totalStub: 0)
+        let (sut, _) = makeSUT(with: [.networkFailure, .networkFailure])
         sut.requestPlantData(at: 0)
         sut.requestPlantData(at: 0)
         
@@ -68,14 +68,14 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_lastRequest_withAllDataReceived_setFinishAllAccessToTrue() {
-        let (sut, _) = makeSUT(with: [.decodeFailure], totalStub: 0)
+        let (sut, _) = makeSUT(with: [.decodeFailure])
         sut.requestPlantData(at: 1000)
         
         XCTAssertTrue(sut.finishAllAccess)
     }
     
     func test_requestImage_withImageUrlIsNil_imageStillNil() {
-        let (sut, _) = makeSUT(with: [.success], totalStub: 0)
+        let (sut, _) = makeSUT(with: [.success])
         sut.requestPlantData(at: 0)
         sut.requestImage(at: 0)
         
@@ -84,7 +84,7 @@ class TestContentViewModel: XCTestCase {
     
     // MARK: - Helper
     
-    func makeSUT(with apiCondition: [APICondition], totalStub: Int) -> (ContentViewModel, [PlantData]) {
+    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0) -> (ContentViewModel, [PlantData]) {
         let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition)
         let sut = ContentViewModel(apiString: GlobalStrings.baseAPIString, dataLoader: mock)
         var stub: [PlantData] = []
