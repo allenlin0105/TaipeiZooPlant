@@ -16,8 +16,6 @@ enum APICondition {
 
 class TestContentViewModel: XCTestCase {
     
-    private let testingImageUrlString = "http://www.zoo.gov.tw/image.jpg"
-    
     func test_setupUrl_withOneRequest_receiveUrlWithOffsetEqualsZero() {
         let (sut, _) = makeSUT(with: [.success])
         sut.requestPlantData(at: 0)
@@ -75,31 +73,37 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_requestImage_withImageUrlIsNil_imageStillNil() {
-        let (sut, _) = makeSUT(with: [.success])
+        let (sut, _) = makeSUT(with: [.success], withImageUrl: false)
         sut.requestPlantData(at: 0)
         sut.requestImage(at: 0)
         
+        XCTAssertNil(sut.plantDataModel.plantDataList.first?.imageURL)
         XCTAssertNil(sut.plantDataModel.plantDataList.first?.image)
     }
     
     // MARK: - Helper
     
-    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0) -> (ContentViewModel, [PlantData]) {
-        let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition)
+    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true) -> (ContentViewModel, [PlantData]) {
+        let imageUrlString = withImageUrl ? "http://www.zoo.gov.tw/image.jpg" : ""
+        
+        let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition, imageUrl: imageUrlString)
         let sut = ContentViewModel(apiString: GlobalStrings.baseAPIString, dataLoader: mock)
+        
         var stub: [PlantData] = []
         for i in 0..<totalStub {
-            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: testingImageUrlString), image: nil), count: 20)
+            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: imageUrlString), image: nil), count: 20)
         }
         return (sut, stub)
     }
     
     private class DataLoaderMock: DataLoaderProtocol {
         private let apiCondition: [APICondition]
+        private let imageUrl: String
         private var requestCount: Int = 0
         
-        init(apiCondition: [APICondition]) {
+        init(apiCondition: [APICondition], imageUrl: String) {
             self.apiCondition = apiCondition
+            self.imageUrl = imageUrl
         }
 
         func loadData(requestUrl: URL, completionHandler: @escaping resultCallback) {
@@ -126,7 +130,7 @@ class TestContentViewModel: XCTestCase {
             let singleResult = """
                  {
                     "F_Location":"location\(String(describing: offset))",
-                    "F_Pic01_URL":"http://www.zoo.gov.tw/image.jpg",
+                    "F_Pic01_URL":"\(imageUrl)",
                     "F_Name_Ch":"name\(String(describing: offset))",
                     "F_Feature":"feature\(String(describing: offset))",
                  },
