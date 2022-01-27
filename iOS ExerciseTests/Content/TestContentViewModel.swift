@@ -91,6 +91,15 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.plantDataModel.plantDataList.first?.image?.pngData(), stub.first?.image?.pngData())
     }
     
+    func test_requestImage_withImageUrlButNetworkFail_imageStillNil() {
+        let (sut, _) = makeSUT(with: [.successWithJSON, .networkFailure])
+        sut.requestPlantData(at: 0)
+        sut.requestImage(at: 0)
+        
+        XCTAssertNotNil(sut.plantDataModel.plantDataList.first?.imageURL)
+        XCTAssertNil(sut.plantDataModel.plantDataList.first?.image)
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {
