@@ -9,7 +9,7 @@ import Foundation
 
 class ContentViewModel {
     
-    private(set) var apiString: String
+    private(set) var apiString: String = ""
     private(set) var alreadyRequestOffset: Int = -20
     private(set) var finishAllAccess: Bool = false
     private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
@@ -18,8 +18,7 @@ class ContentViewModel {
     private let requestLimit = 20
     var delegate: ContentProtocol?
     
-    init (apiString: String, dataLoader: DataLoaderProtocol) {
-        self.apiString = apiString
+    init (dataLoader: DataLoaderProtocol) {
         self.dataLoader = dataLoader
     }
     

@@ -113,7 +113,7 @@ class TestContentViewModel: XCTestCase {
         let image = stubWithImage ? UIImage(named: "TestImage") : nil
         
         let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition, imageUrl: imageUrlString, image: image?.pngData())
-        let sut = ContentViewModel(apiString: GlobalStrings.baseAPIString, dataLoader: mock)
+        let sut = ContentViewModel(dataLoader: mock)
         
         var stub: [PlantData] = []
         for i in 0..<totalStub {
