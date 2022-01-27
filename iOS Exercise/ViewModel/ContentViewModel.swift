@@ -59,4 +59,9 @@ class ContentViewModel {
         }
         isWaitingData = false
     }
+    
+    func requestImage(at index: Int) {
+        let target = plantDataModel.plantDataList[index]
+        if target.imageURL == nil { return }
+    }
 }

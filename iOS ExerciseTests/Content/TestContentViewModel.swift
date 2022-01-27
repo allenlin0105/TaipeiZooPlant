@@ -74,6 +74,14 @@ class TestContentViewModel: XCTestCase {
         XCTAssertTrue(sut.finishAllAccess)
     }
     
+    func test_requestImage_withImageUrlIsNil_imageStillNil() {
+        let (sut, _) = makeSUT(with: [.success], totalStub: 0)
+        sut.requestPlantData(at: 0)
+        sut.requestImage(at: 0)
+        
+        XCTAssertNil(sut.plantDataModel.plantDataList.first?.image)
+    }
+    
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition], totalStub: Int) -> (ContentViewModel, [PlantData]) {
