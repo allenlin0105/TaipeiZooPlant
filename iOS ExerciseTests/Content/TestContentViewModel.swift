@@ -119,12 +119,9 @@ class TestContentViewModel: XCTestCase {
         } else {
             mock = DataLoaderMock(apiCondition: apiCondition, imageUrl: "", image: nil)
         }
-        let sut = ContentViewModel(dataLoader: mock)
         
-        var stub: [PlantData] = []
-        for i in 0..<totalStub {
-            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: mock.imageUrl), image: mock.image), count: 20)
-        }
+        let sut = ContentViewModel(dataLoader: mock)
+        let stub = makeStub(totalStub: totalStub, imageUrl: mock.imageUrl, image: mock.image)
         return (sut, stub)
     }
 }
