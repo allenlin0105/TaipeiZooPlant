@@ -48,9 +48,11 @@ class ContentViewModel {
         // Prevent json data not loading back yet
         while index >= alreadyRequestOffset + requestLimit {}
         
+        // Decides whether to fire API for image
         let target = plantDataModel.plantDataList[index]
         guard target.image == nil, let imageURL = target.imageURL else { return }
         
+        // Fire API
         fireAPI(url: imageURL, imageIndex: index)
     }
 }
@@ -65,12 +67,12 @@ extension ContentViewModel {
             if let index = imageIndex {
                 self.handleImage(result: result, index: index)
             } else {
-                self.handleResult(result: result)
+                self.handleJSON(result: result)
             }
         }
     }
     
-    private func handleResult(result: APIResultType) {
+    private func handleJSON(result: APIResultType) {
         switch result {
         case .success(let data):
             let newData = DataMapper.mapTextData(data: data)
