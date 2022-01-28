@@ -10,32 +10,45 @@ import XCTest
 
 class TestContentDataMapper: XCTestCase {
     
+    private let testingImageUrl = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
+    
     func test_mapJSON_withValidJSON_returnCorrect() {
         let data: Data? = jsonString.data(using: .utf8)
-        XCTAssertNotNil(data)
+        XCTAssertNotNil(data, "Data is nil in DataMapper test case")
+        if data == nil { return }
         
         let receive = DataMapper.mapTextData(data: data!)
-        let expect: [PlantData] = [
-            PlantData(name: "九芎", location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館", feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。", imageURL: URL(string: "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"), image: nil)
-        ]
+        let expect = makeCorrectData(withImageUrl: true)
         
         XCTAssertEqual(receive, expect)
     }
     
     func test_mapJSON_withNoImageUrlJSON_returnDataWithImageUrlEqualsNil() {
-        jsonString = jsonString.replace("http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg", with: "")
+        jsonString = jsonString.replace(testingImageUrl, with: "")
         let data: Data? = jsonString.data(using: .utf8)
-        XCTAssertNotNil(data)
+        XCTAssertNotNil(data, "Data is nil in DataMapper test case")
+        if data == nil { return }
         
         let receive = DataMapper.mapTextData(data: data!)
-        let expect: [PlantData] = [
-            PlantData(name: "九芎", location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館", feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。", imageURL: nil, image: nil)
-        ]
+        let expect = makeCorrectData(withImageUrl: false)
         
         XCTAssertEqual(receive, expect)
     }
     
     // MARK: - Helper
+    
+    func makeCorrectData(withImageUrl: Bool) -> [PlantData] {
+        let imageUrl = withImageUrl ? URL(string: testingImageUrl) : nil
+        let data: [PlantData] = [
+            PlantData(name: "九芎",
+                      location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館",
+                      feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。",
+                      imageURL: imageUrl,
+                      image: nil)
+        ]
+        
+        return data
+    }
     
     private var jsonString = """
         {
@@ -89,7 +102,10 @@ class TestContentDataMapper: XCTestCase {
     """
 }
 
+// MARK: - Private Extension for String
+
 private extension String {
+    
     func replace(_ target: String, with newSubString: String) -> String {
         return self.replacingOccurrences(of: target, with: newSubString, options: NSString.CompareOptions.literal, range: nil)
     }
