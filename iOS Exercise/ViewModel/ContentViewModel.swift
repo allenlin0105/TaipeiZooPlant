@@ -10,9 +10,9 @@ import Foundation
 class ContentViewModel {
     
     private(set) var apiString: String = ""
-    private(set) var alreadyRequestOffset: Int = -20
     private(set) var finishAllAccess: Bool = false
     private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    private var alreadyRequestOffset: Int = -20
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
     private let requestLimit = 20

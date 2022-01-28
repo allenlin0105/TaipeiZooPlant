@@ -29,7 +29,6 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure(for: [0, 0])
         
         XCTAssertEqual(sut.dataList(), stub)
-        XCTAssertEqual(sut.alreadyRequestOffset, 0)
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsAndNoFail_receiveCorrectData() {
@@ -37,7 +36,6 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure(for: [0, 20])
         
         XCTAssertEqual(sut.dataList(), stub)
-        XCTAssertEqual(sut.alreadyRequestOffset, 20)
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsButOneNetworkFail_onlyReceiveDataOnce() {
@@ -49,8 +47,6 @@ class TestContentViewModel: XCTestCase {
         
         XCTAssertEqual(firstSUT.dataList(), stub)
         XCTAssertEqual(secondSUT.dataList(), stub)
-        XCTAssertEqual(firstSUT.alreadyRequestOffset, 0)
-        XCTAssertEqual(secondSUT.alreadyRequestOffset, 0)
     }
     
     func test_requestDataTwice_withTwoDifferentRequestsButBothFail_receiveNetworkError() {
@@ -58,7 +54,6 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure(for: [0, 0])
         
         XCTAssertEqual(sut.dataList(), [])
-        XCTAssertEqual(sut.alreadyRequestOffset, -20)
     }
     
     func test_lastRequest_withAllDataReceived_setFinishAllAccessToTrue() {
