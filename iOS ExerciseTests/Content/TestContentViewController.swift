@@ -32,6 +32,19 @@ class TestContentViewController: XCTestCase {
 
         XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 20)
     }
+
+    func test_viewDidLoad_withNoNetworkFail_renderCorrectContentInCell() {
+        let (sut, _, _) = makeSUT()
+        _ = sut.view
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath) as! ContentTableViewCell
+        
+        XCTAssertEqual(cell.plantName.text, "name0")
+        XCTAssertEqual(cell.plantLocation.text, "location0")
+        XCTAssertEqual(cell.plantFeature.text, "feature0")
+    }
+    
     
     // MARK: - Helper
     

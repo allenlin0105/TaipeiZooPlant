@@ -18,27 +18,33 @@ class ContentViewController: UIViewController {
         
         viewModel?.delegate = self
         viewModel?.requestPlantData(at: 0)
+        
+        tableView.register(UINib(nibName: GlobalStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
     }
 }
 
 //MARK: - UITableViewDataSource
 
 extension ContentViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel?.plantDataModel.plantDataList.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as! ContentTableViewCell
+        if let data = viewModel?.plantDataModel.plantDataList[indexPath.row] {
+            cell.bind(data: data)
+        }
+        return cell
     }
 }
 
 //MARK: - ContentProtocol
 
 extension ContentViewController: ContentProtocol {
+    
     func updateContentTableView() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        tableView.reloadData()
     }
 }
