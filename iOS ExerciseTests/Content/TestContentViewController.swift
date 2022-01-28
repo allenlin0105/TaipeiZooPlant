@@ -25,17 +25,12 @@ class TestContentViewController: XCTestCase {
         
         XCTAssertEqual(spy.plantDataModel.plantDataList, stub)
     }
-    
-    func test_viewDidLoad_withNoNetworkFail_renderTwentyCells() {
-        let (sut, _, _) = makeSUT()
-        _ = sut.view
 
-        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 20)
-    }
-
-    func test_viewDidLoad_withNoNetworkFail_renderCorrectContentInCell() {
+    func test_viewDidLoad_withNoNetworkFail_renderTwentyCellsWithCorrectContent() {
         let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithImage], totalStub: 1, stubWithImage: true)
         _ = sut.view
+        
+        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 20)
         
         let cell = sut.tableView.cell(at: 0)
         XCTAssertEqual(cell.plantName.text, stub.first?.name)
