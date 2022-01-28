@@ -49,7 +49,7 @@ class ContentViewModel {
         while index >= alreadyRequestOffset + requestLimit {}
         
         let target = plantDataModel.plantDataList[index]
-        guard target.image != nil, let imageURL = target.imageURL else { return }
+        guard target.image == nil, let imageURL = target.imageURL else { return }
         
         fireAPI(url: imageURL)
     }
