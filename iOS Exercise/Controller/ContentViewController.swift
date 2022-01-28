@@ -23,12 +23,12 @@ class ContentViewController: UIViewController {
     }
 }
 
-//MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource
 
 extension ContentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.plantDataModel.plantDataList.count ?? 0
+        return dataCount()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -40,9 +40,18 @@ extension ContentViewController: UITableViewDataSource {
         }
         return cell
     }
+    
+    private func dataCount() -> Int {
+        return viewModel?.plantDataModel.plantDataList.count ?? 0
+    }
 }
 
-//MARK: - ContentProtocol
+// MARK: - UITableViewDelegate
+
+extension ContentViewController: UITableViewDelegate {
+}
+
+// MARK: - ContentProtocol
 
 extension ContentViewController: ContentProtocol {
     
