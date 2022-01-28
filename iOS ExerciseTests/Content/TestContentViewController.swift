@@ -13,7 +13,9 @@ class TestContentViewController: XCTestCase {
     func test_viewDidLoad_setupViewModelDelegate() {
         let (sut, spy, _) = makeSUT()
         _ = sut.view
-        
+
+        XCTAssertNotNil(spy.delegate, "delegate should not be nil")
+        if spy.delegate == nil { return }
         XCTAssertTrue(sut.isEqualTo(spy.delegate!))
     }
     
@@ -22,6 +24,13 @@ class TestContentViewController: XCTestCase {
         _ = sut.view
         
         XCTAssertEqual(spy.plantDataModel.plantDataList, stub)
+    }
+    
+    func test_viewDidLoad_withNoNetworkFail_renderTwentyCells() {
+        let (sut, _, _) = makeSUT()
+        _ = sut.view
+
+        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 20)
     }
     
     // MARK: - Helper
