@@ -8,14 +8,18 @@
 import UIKit
 
 class DataMapper {
+    
     static func mapTextData(data: Data) -> [PlantData] {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(DecodedPlantModel.self, from: data)
             let responseResult = decodedData.result.results
-            var usableResult: [PlantData] = []
-            responseResult.forEach { data in
-                usableResult.append(PlantData(name: data.F_Name_Ch, location: data.F_Location, feature: data.F_Feature, imageURL: URL(string: data.F_Pic01_URL) ?? nil, image: nil))
+            let usableResult = responseResult.map {
+                PlantData(name: $0.F_Name_Ch,
+                          location: $0.F_Location,
+                          feature: $0.F_Feature,
+                          imageURL: URL(string: $0.F_Pic01_URL) ?? nil,
+                          image: nil)
             }
             return usableResult
         } catch {
