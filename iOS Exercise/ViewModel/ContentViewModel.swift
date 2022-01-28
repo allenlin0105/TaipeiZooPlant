@@ -52,6 +52,7 @@ class ContentViewModel {
             } else {
                 plantDataModel.plantDataList += newData
                 alreadyRequestOffset += newData.count
+                delegate?.updateContentTableView()
             }
             break
         case .failure(_):
@@ -80,6 +81,7 @@ class ContentViewModel {
         case .success(let data):
             let image = DataMapper.mapImageData(data: data)
             plantDataModel.plantDataList[index].image = image
+            delegate?.updateContentTableView()
             break
         case .failure(_):
             break
