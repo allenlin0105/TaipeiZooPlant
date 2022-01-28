@@ -44,6 +44,20 @@ class TestContentViewController: XCTestCase {
         XCTAssertNotNil(cell.plantImage.image)
     }
     
+    func test_secondRequest_whenAtTheEndOfPage_renderFourtyCellsWithCorrectData() {
+        let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithJSON, .successWithImage], totalStub: 2, stubWithImage: true)
+        _ = sut.view
+        sut.tableView.willDisplayCell(at: 19)
+        
+        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 40)
+
+        let cell = sut.tableView.cell(at: 20)
+        XCTAssertEqual(cell.plantName.text, stub[20].name)
+        XCTAssertEqual(cell.plantLocation.text, stub[20].location)
+        XCTAssertEqual(cell.plantFeature.text, stub[20].feature)
+        XCTAssertNotNil(cell.plantImage.image)
+    }
+    
     
     // MARK: - Helper
     
@@ -88,5 +102,10 @@ private extension UITableView {
         let indexPath = IndexPath(row: row, section: section)
         let cell = dataSource?.tableView(self, cellForRowAt: indexPath) as! ContentTableViewCell
         return cell
+    }
+    
+    func willDisplayCell(at row: Int, section: Int = 0) {
+        let indexPath = IndexPath(row: row, section: section)
+        delegate?.tableView?(self, willDisplay: ContentTableViewCell(), forRowAt: indexPath)
     }
 }

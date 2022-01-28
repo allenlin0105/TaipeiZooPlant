@@ -49,6 +49,13 @@ extension ContentViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension ContentViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let nextIndex = indexPath.row + 1
+        if nextIndex == dataCount() {
+            viewModel?.requestPlantData(at: nextIndex)
+        }
+    }
 }
 
 // MARK: - ContentProtocol
