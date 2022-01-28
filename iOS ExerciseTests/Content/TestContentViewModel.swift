@@ -109,91 +109,23 @@ class TestContentViewModel: XCTestCase {
     // MARK: - Helper
     
     func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {
-        let imageUrlString = withImageUrl ? "http://www.zoo.gov.tw/image.jpg" : ""
-        let image = stubWithImage ? UIImage(named: "TestImage") : nil
-        
-        let mock: DataLoaderProtocol = DataLoaderMock(apiCondition: apiCondition, imageUrl: imageUrlString, image: image?.pngData())
+        var mock = DataLoaderMock()
+        if withImageUrl && stubWithImage {
+            mock = DataLoaderMock(apiCondition: apiCondition)
+        } else if !withImageUrl {
+            mock = DataLoaderMock(apiCondition: apiCondition, imageUrl: "")
+        } else if !stubWithImage {
+            mock = DataLoaderMock(apiCondition: apiCondition, image: nil)
+        } else {
+            mock = DataLoaderMock(apiCondition: apiCondition, imageUrl: "", image: nil)
+        }
         let sut = ContentViewModel(dataLoader: mock)
         
         var stub: [PlantData] = []
         for i in 0..<totalStub {
-            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: imageUrlString), image: image), count: 20)
+            stub += [PlantData].init(repeating: PlantData(name: "name\(i)", location: "location\(i)", feature: "feature\(i)", imageURL: URL(string: mock.imageUrl), image: mock.image), count: 20)
         }
         return (sut, stub)
-    }
-    
-    private class DataLoaderMock: DataLoaderProtocol {
-        private let apiCondition: [APICondition]
-        private let imageUrl: String
-        private let image: Data?
-        private var requestCount: Int = 0
-        
-        init(apiCondition: [APICondition], imageUrl: String, image: Data?) {
-            self.apiCondition = apiCondition
-            self.imageUrl = imageUrl
-            self.image = image
-        }
-
-        func loadData(requestUrl: URL, completionHandler: @escaping resultCallback) {
-            switch apiCondition[requestCount] {
-            case .successWithJSON:
-                let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
-                let offset = (Int(offsetString) ?? 0) / 20
-                let data = createValidationData(at: offset)
-                completionHandler(.success(data))
-                break
-            case .successWithImage:
-                completionHandler(.success(image!))
-                break
-            case .networkFailure:
-                completionHandler(.failure(.requestFail))
-                break
-            case .decodeFailure:
-                let data = createDecodeFailData()
-                completionHandler(.success(data))
-                break
-            }
-            
-            requestCount += 1
-        }
-        
-        private func createValidationData(at offset: Int) -> Data {
-            let singleResult = """
-                 {
-                    "F_Location":"location\(String(describing: offset))",
-                    "F_Pic01_URL":"\(imageUrl)",
-                    "F_Name_Ch":"name\(String(describing: offset))",
-                    "F_Feature":"feature\(String(describing: offset))",
-                 },
-            """
-            var allResults = ""
-            for _ in 0..<20 {
-                allResults += singleResult
-            }
-            let jsonString = """
-                {
-                   "result":{
-                      "results":[
-                         \(allResults)
-                      ]
-                   }
-                }
-            """
-            let data: Data? = jsonString.data(using: .utf8)
-            return data!
-        }
-        
-        private func createDecodeFailData() -> Data {
-            let jsonString = """
-                {
-                   "result":{
-                      "results":[]
-                   }
-                }
-            """
-            let data: Data? = jsonString.data(using: .utf8)
-            return data!
-        }
     }
 }
 
