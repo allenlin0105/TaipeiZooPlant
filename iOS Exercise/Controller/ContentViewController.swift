@@ -51,8 +51,10 @@ extension ContentViewController: UITableViewDataSource {
 extension ContentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let finish = viewModel?.finishAllAccess else { return }
+        
         let nextIndex = indexPath.row + 1
-        if nextIndex == dataCount() {
+        if !finish && nextIndex == dataCount() {
             viewModel?.requestPlantData(at: nextIndex)
         }
     }

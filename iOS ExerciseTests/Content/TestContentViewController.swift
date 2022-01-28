@@ -53,6 +53,13 @@ class TestContentViewController: XCTestCase {
         XCTAssertNotNil(cell.plantImage.image)
     }
     
+    func test_lastRequest_withNoNewData_doNotCallRequestPlantData() {
+        let (sut, spy, _) = makeSUT(apiCondition: [.decodeFailure])
+        _ = sut.view
+        sut.tableView.willDisplayCell(at: 1000)
+        
+        XCTAssertTrue(spy.finishAllAccess)
+    }
     
     // MARK: - Helper
     
