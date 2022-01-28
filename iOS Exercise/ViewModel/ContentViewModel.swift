@@ -51,7 +51,7 @@ class ContentViewModel {
         let target = plantDataModel.plantDataList[index]
         guard target.image == nil, let imageURL = target.imageURL else { return }
         
-        fireAPI(url: imageURL)
+        fireAPI(url: imageURL, imageIndex: index)
     }
 }
 
@@ -59,10 +59,14 @@ class ContentViewModel {
 
 extension ContentViewModel {
     
-    private func fireAPI(url: URL) {
+    private func fireAPI(url: URL, imageIndex: Int? = nil) {
         dataLoader.loadData(requestUrl: url) { [weak self] result in
             guard let self = self else { return }
-            self.handleResult(result: result)
+            if let index = imageIndex {
+                self.handleImage(result: result, index: index)
+            } else {
+                self.handleResult(result: result)
+            }
         }
     }
     
