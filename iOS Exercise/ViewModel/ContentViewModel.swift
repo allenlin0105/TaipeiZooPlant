@@ -16,7 +16,7 @@ class ContentViewModel {
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
     private let requestLimit = 20
-    var delegate: ContentProtocol?
+    weak var delegate: ContentProtocol?
     
     init (dataLoader: DataLoaderProtocol) {
         self.dataLoader = dataLoader
