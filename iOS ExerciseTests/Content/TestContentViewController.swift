@@ -34,13 +34,14 @@ class TestContentViewController: XCTestCase {
     }
 
     func test_viewDidLoad_withNoNetworkFail_renderCorrectContentInCell() {
-        let (sut, _, _) = makeSUT()
+        let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithImage], totalStub: 1, stubWithImage: true)
         _ = sut.view
         
         let cell = sut.tableView.cell(at: 0)
-        XCTAssertEqual(cell.plantName.text, "name0")
-        XCTAssertEqual(cell.plantLocation.text, "location0")
-        XCTAssertEqual(cell.plantFeature.text, "feature0")
+        XCTAssertEqual(cell.plantName.text, stub.first?.name)
+        XCTAssertEqual(cell.plantLocation.text, stub.first?.location)
+        XCTAssertEqual(cell.plantFeature.text, stub.first?.feature)
+        XCTAssertNotNil(cell.plantImage.image)
     }
     
     

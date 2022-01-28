@@ -32,6 +32,8 @@ extension ContentViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        viewModel?.requestImage(at: indexPath.row)
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as! ContentTableViewCell
         if let data = viewModel?.plantDataModel.plantDataList[indexPath.row] {
             cell.bind(data: data)
