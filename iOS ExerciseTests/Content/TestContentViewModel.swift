@@ -108,15 +108,15 @@ class TestContentViewModel: XCTestCase {
         if withImageUrl && stubWithImage {
             mock = DataLoaderMock(apiCondition: apiCondition)
         } else if !withImageUrl {
-            mock = DataLoaderMock(apiCondition: apiCondition, imageUrl: "")
+            mock = DataLoaderMock(apiCondition: apiCondition, imageURL: "")
         } else if !stubWithImage {
             mock = DataLoaderMock(apiCondition: apiCondition, image: nil)
         } else {
-            mock = DataLoaderMock(apiCondition: apiCondition, imageUrl: "", image: nil)
+            mock = DataLoaderMock(apiCondition: apiCondition, imageURL: "", image: nil)
         }
         
         let sut = ContentViewModel(dataLoader: mock)
-        let stub = makeStub(totalStub: totalStub, imageUrl: mock.imageUrl, image: mock.image)
+        let stub = makeStub(totalStub: totalStub, imageURL: mock.imageURL, image: mock.image)
         return (sut, stub)
     }
 }

@@ -12,19 +12,19 @@ class DataLoaderMock: DataLoaderProtocol {
     
     private var requestCount: Int = 0
     private let apiCondition: [APICondition]
-    let imageUrl: String
+    let imageURL: String
     let image: UIImage?
     
-    init(apiCondition: [APICondition] = [], imageUrl: String = "http://www.zoo.gov.tw/image.jpg", image: UIImage? = UIImage(named: "TestImage")) {
+    init(apiCondition: [APICondition] = [], imageURL: String = "http://www.zoo.gov.tw/image.jpg", image: UIImage? = UIImage(named: "TestImage")) {
         self.apiCondition = apiCondition
-        self.imageUrl = imageUrl
+        self.imageURL = imageURL
         self.image = image
     }
 
-    func loadData(requestUrl: URL, completionHandler: @escaping resultCallback) {
+    func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
         switch apiCondition[requestCount] {
         case .successWithJSON:
-            let offsetString = URLComponents(url: requestUrl, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
+            let offsetString = URLComponents(url: requestURL, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
             let offset = (Int(offsetString) ?? 0) / 20
             let data = createValidationData(at: offset)
             completionHandler(.success(data))
@@ -48,7 +48,7 @@ class DataLoaderMock: DataLoaderProtocol {
         let singleResult = """
              {
                 "F_Location":"location\(String(describing: offset))",
-                "F_Pic01_URL":"\(imageUrl)",
+                "F_Pic01_URL":"\(imageURL)",
                 "F_Name_Ch":"name\(String(describing: offset))",
                 "F_Feature":"feature\(String(describing: offset))",
              },

@@ -15,5 +15,5 @@ typealias APIResultType = Result<Data, APIError>
 
 protocol DataLoaderProtocol {
     typealias resultCallback = (APIResultType) -> Void
-    func loadData(requestUrl: URL, completionHandler: @escaping resultCallback)
+    func loadData(requestURL: URL, completionHandler: @escaping resultCallback)
 }

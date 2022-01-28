@@ -10,7 +10,7 @@ import XCTest
 
 class TestContentDataMapper: XCTestCase {
     
-    private let testingImageUrl = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
+    private let testingImageURL = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
     
     func test_mapJSON_withValidJSON_returnCorrect() {
         let data: Data? = jsonString.data(using: .utf8)
@@ -18,32 +18,32 @@ class TestContentDataMapper: XCTestCase {
         if data == nil { return }
         
         let receive = DataMapper.mapTextData(data: data!)
-        let expect = makeCorrectData(withImageUrl: true)
+        let expect = makeCorrectData(withImageURL: true)
         
         XCTAssertEqual(receive, expect)
     }
     
-    func test_mapJSON_withNoImageUrlJSON_returnDataWithImageUrlEqualsNil() {
-        jsonString = jsonString.replace(testingImageUrl, with: "")
+    func test_mapJSON_withNoImageURLJSON_returnDataWithImageURLEqualsNil() {
+        jsonString = jsonString.replace(testingImageURL, with: "")
         let data: Data? = jsonString.data(using: .utf8)
         XCTAssertNotNil(data, "Data is nil in DataMapper test case")
         if data == nil { return }
         
         let receive = DataMapper.mapTextData(data: data!)
-        let expect = makeCorrectData(withImageUrl: false)
+        let expect = makeCorrectData(withImageURL: false)
         
         XCTAssertEqual(receive, expect)
     }
     
     // MARK: - Helper
     
-    func makeCorrectData(withImageUrl: Bool) -> [PlantData] {
-        let imageUrl = withImageUrl ? URL(string: testingImageUrl) : nil
+    func makeCorrectData(withImageURL: Bool) -> [PlantData] {
+        let imageURL = withImageURL ? URL(string: testingImageURL) : nil
         let data: [PlantData] = [
             PlantData(name: "九芎",
                       location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館",
                       feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。",
-                      imageURL: imageUrl,
+                      imageURL: imageURL,
                       image: nil)
         ]
         

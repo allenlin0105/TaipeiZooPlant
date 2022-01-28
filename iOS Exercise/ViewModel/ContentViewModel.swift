@@ -62,7 +62,7 @@ class ContentViewModel {
 extension ContentViewModel {
     
     private func fireAPI(url: URL, imageIndex: Int? = nil) {
-        dataLoader.loadData(requestUrl: url) { [weak self] result in
+        dataLoader.loadData(requestURL: url) { [weak self] result in
             guard let self = self else { return }
             if let index = imageIndex {
                 self.handleImage(result: result, index: index)
