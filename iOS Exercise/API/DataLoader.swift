@@ -8,11 +8,11 @@
 import Foundation
 
 class DataLoader: DataLoaderProtocol {
-    func loadData(requestUrl: URL, completionHandler: @escaping (Swift.Result<Data, Error>) -> Void) {
+    func loadData(requestUrl: URL, completionHandler: @escaping resultCallback) {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: requestUrl) { data, response, error in
-            if let error = error {
-                completionHandler(.failure(error))
+            if error != nil {
+                completionHandler(.failure(.requestFail))
             }
             if let data = data {
                 completionHandler(.success(data))
