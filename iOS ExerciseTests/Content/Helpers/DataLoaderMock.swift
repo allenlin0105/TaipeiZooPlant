@@ -24,27 +24,22 @@ class DataLoaderMock: DataLoaderProtocol {
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
         switch apiCondition[requestCount] {
         case .successWithJSON:
-            let offsetString = URLComponents(url: requestURL, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == "offset" })?.value ?? "0"
-            let offset = (Int(offsetString) ?? 0) / 20
+            let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
             let data = createValidationData(at: offset)
             completionHandler(.success(data))
-            break
         case .successWithImage:
             completionHandler(.success(image!.pngData()!))
-            break
         case .networkFailure:
             completionHandler(.failure(.requestFail))
-            break
         case .decodeFailure:
-            let data = createDecodeFailData()
+            let data = createValidationData(withDecodeFail: true)
             completionHandler(.success(data))
-            break
         }
         
         requestCount += 1
     }
     
-    private func createValidationData(at offset: Int) -> Data {
+    private func createValidationData(at offset: Int = 0, withDecodeFail: Bool = false) -> Data {
         let singleResult = """
              {
                 "F_Location":"location\(String(describing: offset))",
@@ -53,8 +48,9 @@ class DataLoaderMock: DataLoaderProtocol {
                 "F_Feature":"feature\(String(describing: offset))",
              },
         """
+        let totalDataCount = withDecodeFail ? 0 : 20
         var allResults = ""
-        for _ in 0..<20 {
+        for _ in 0..<totalDataCount {
             allResults += singleResult
         }
         let jsonString = """
@@ -66,19 +62,18 @@ class DataLoaderMock: DataLoaderProtocol {
                }
             }
         """
-        let data: Data? = jsonString.data(using: .utf8)
+        let data = jsonString.data(using: .utf8)
+        
         return data!
     }
+}
+
+// MARK: - Private Extension of URL
+
+private extension URL {
     
-    private func createDecodeFailData() -> Data {
-        let jsonString = """
-            {
-               "result":{
-                  "results":[]
-               }
-            }
-        """
-        let data: Data? = jsonString.data(using: .utf8)
-        return data!
+    func getQueryValue(for key: String) -> String {
+        let value = URLComponents(url: self, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == key })?.value
+        return value ?? "0"
     }
 }
