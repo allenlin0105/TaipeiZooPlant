@@ -65,11 +65,11 @@ class TestContentViewModel: XCTestCase {
     
     func test_requestImage_withImageUrlIsNil_imageStillNil() {
         let (sut, _) = makeSUT(with: [.successWithJSON], withImageURL: false)
-        sut.requestPlantData(at: 0)
+        sut.requestProcedure()
         sut.requestImage(at: 0)
         
-        XCTAssertNil(sut.dataList().first?.imageURL)
-        XCTAssertNil(sut.dataList().first?.image)
+        XCTAssertNil(sut.firstURL())
+        XCTAssertNil(sut.firstImage())
     }
     
     func test_requestImage_withImageUrl_receiveCorrectImage() {
@@ -77,8 +77,8 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure()
         sut.requestImage(at: 0)
         
-        XCTAssertNotNil(sut.dataList().first?.image)
-        XCTAssertEqual(sut.dataList().first?.image?.pngData(), stub.first?.image?.pngData())
+        XCTAssertNotNil(sut.firstImage)
+        XCTAssertEqual(sut.firstImage()?.pngData(), stub.first?.image?.pngData())
     }
     
     func test_requestImage_withImageUrlButNetworkFail_imageStillNil() {
@@ -86,8 +86,8 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure()
         sut.requestImage(at: 0)
         
-        XCTAssertNotNil(sut.dataList().first?.imageURL)
-        XCTAssertNil(sut.dataList().first?.image)
+        XCTAssertNotNil(sut.firstURL())
+        XCTAssertNil(sut.firstImage())
     }
     
     func test_requestImage_jsonNotReceiveYet_shouldBusyWaitingAndDoNotCrash() {
@@ -95,8 +95,8 @@ class TestContentViewModel: XCTestCase {
         DispatchQueue.global().async {
             sut.requestImage(at: 0)
             
-            XCTAssertNotNil(sut.dataList().first?.image)
-            XCTAssertEqual(sut.dataList().first?.image?.pngData(), stub.first?.image?.pngData())
+            XCTAssertNotNil(sut.firstImage())
+            XCTAssertEqual(sut.firstImage()?.pngData(), stub.first?.image?.pngData())
         }
         sut.requestProcedure()
     }
@@ -124,5 +124,13 @@ private extension ContentViewModel {
         for i in offset {
             self.requestPlantData(at: i)
         }
+    }
+    
+    func firstURL() -> URL? {
+        return self.dataList().first?.imageURL
+    }
+    
+    func firstImage() -> UIImage? {
+        return self.dataList().first?.image
     }
 }
