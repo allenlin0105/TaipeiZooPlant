@@ -36,30 +36,11 @@ class ContentViewModel {
         isWaitingData = true
 
         // Fire API
-        let url = URL(string: apiString)!
-        dataLoader.loadData(requestUrl: url) { [weak self] result in
-            let strongSelf = self
-            strongSelf?.handleResult(result: result)
-        }
+        guard let url = URL(string: apiString) else { return }
+        fireAPI(url: url)
     }
     
-    private func handleResult(result: APIResultType) {
-        switch result {
-        case .success(let data):
-            let newData = DataMapper.mapTextData(data: data)
-            if newData.count == 0 {
-                finishAllAccess = true
-            } else {
-                plantDataModel.plantDataList += newData
-                alreadyRequestOffset += newData.count
-                delegate?.updateContentTableView()
-            }
-            break
-        case .failure(_):
-            break
-        }
-        isWaitingData = false
-    }
+    
     
     // MARK: - Image Request
     
@@ -68,12 +49,38 @@ class ContentViewModel {
         while index >= alreadyRequestOffset + requestLimit {}
         
         let target = plantDataModel.plantDataList[index]
-        if target.imageURL == nil || target.image != nil { return }
+        guard target.image != nil, let imageURL = target.imageURL else { return }
         
-        dataLoader.loadData(requestUrl: target.imageURL!) { [weak self] result in
-            let strongSelf = self
-            strongSelf?.handleImage(result: result, index: index)
+        fireAPI(url: imageURL)
+    }
+}
+
+// MARK: - Helpers
+
+extension ContentViewModel {
+    
+    private func fireAPI(url: URL) {
+        dataLoader.loadData(requestUrl: url) { [weak self] result in
+            guard let self = self else { return }
+            self.handleResult(result: result)
         }
+    }
+    
+    private func handleResult(result: APIResultType) {
+        switch result {
+        case .success(let data):
+            let newData = DataMapper.mapTextData(data: data)
+            if newData.isEmpty {
+                finishAllAccess = true
+            } else {
+                plantDataModel.plantDataList += newData
+                alreadyRequestOffset += newData.count
+                delegate?.updateContentTableView()
+            }
+        case .failure(_):
+            break
+        }
+        isWaitingData = false
     }
     
     private func handleImage(result: APIResultType, index: Int) {
@@ -82,7 +89,6 @@ class ContentViewModel {
             let image = DataMapper.mapImageData(data: data)
             plantDataModel.plantDataList[index].image = image
             delegate?.updateContentTableView()
-            break
         case .failure(_):
             break
         }
