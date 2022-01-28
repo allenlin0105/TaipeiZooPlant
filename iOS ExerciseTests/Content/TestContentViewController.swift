@@ -27,7 +27,7 @@ class TestContentViewController: XCTestCase {
     }
 
     func test_viewDidLoad_withNoNetworkFail_renderTwentyCellsWithCorrectContent() {
-        let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithImage], totalStub: 1, stubWithImage: true)
+        let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithImage], totalStub: 1, withImage: true)
         _ = sut.view
         
         XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 20)
@@ -40,7 +40,7 @@ class TestContentViewController: XCTestCase {
     }
     
     func test_secondRequest_whenAtTheEndOfPage_renderFourtyCellsWithCorrectData() {
-        let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithJSON, .successWithImage], totalStub: 2, stubWithImage: true)
+        let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithJSON, .successWithImage], totalStub: 2, withImage: true)
         _ = sut.view
         sut.tableView.willDisplayCell(at: 19)
         
@@ -63,25 +63,14 @@ class TestContentViewController: XCTestCase {
     
     // MARK: - Helper
     
-    func makeSUT(apiCondition: [APICondition] = [.successWithJSON], totalStub: Int = 0,  withImageUrl: Bool = true, stubWithImage: Bool = false) -> (ContentViewController, ContentViewModel, [PlantData]) {
-        var mock = DataLoaderMock()
-        if withImageUrl && stubWithImage {
-            mock = DataLoaderMock(apiCondition: apiCondition)
-        } else if !withImageUrl {
-            mock = DataLoaderMock(apiCondition: apiCondition, imageURL: "")
-        } else if !stubWithImage {
-            mock = DataLoaderMock(apiCondition: apiCondition, image: nil)
-        } else {
-            mock = DataLoaderMock(apiCondition: apiCondition, imageURL: "", image: nil)
-        }
-        
+    func makeSUT(apiCondition: [APICondition] = [.successWithJSON], totalStub: Int = 0, withImage: Bool = false) -> (ContentViewController, ContentViewModel, [PlantData]) {
+        let mock = DataLoaderMock(apiCondition: apiCondition, withImageURL: true, withImage: withImage)
         let spy = ContentViewModel(dataLoader: mock)
+        let stub = makeStub(totalStub: totalStub, imageURL: mock.imageURL, image: mock.image)
         
         let mainStoryboard = UIStoryboard.init(name: GlobalStrings.mainStoryboardIdentifier, bundle: nil)
         let sut = mainStoryboard.instantiateViewController(withIdentifier: GlobalStrings.mainStoryboardIdentifier) as! ContentViewController
         sut.viewModel = spy
-        
-        let stub = makeStub(totalStub: totalStub, imageURL: mock.imageURL, image: mock.image)
         
         return (sut, spy, stub)
     }

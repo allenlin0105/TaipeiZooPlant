@@ -15,12 +15,12 @@ class DataLoaderMock: DataLoaderProtocol {
     let imageURL: String
     let image: UIImage?
     
-    init(apiCondition: [APICondition] = [], imageURL: String = "http://www.zoo.gov.tw/image.jpg", image: UIImage? = UIImage(named: "TestImage")) {
+    init(apiCondition: [APICondition], withImageURL: Bool, withImage: Bool) {
         self.apiCondition = apiCondition
-        self.imageURL = imageURL
-        self.image = image
+        self.imageURL = withImageURL ? "http://www.zoo.gov.tw/image.jpg" : ""
+        self.image = withImage ? UIImage(named: "TestImage") : nil
     }
-
+    
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
         switch apiCondition[requestCount] {
         case .successWithJSON:

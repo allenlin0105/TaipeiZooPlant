@@ -64,7 +64,7 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_requestImage_withImageUrlIsNil_imageStillNil() {
-        let (sut, _) = makeSUT(with: [.successWithJSON], withImageUrl: false)
+        let (sut, _) = makeSUT(with: [.successWithJSON], withImageURL: false)
         sut.requestPlantData(at: 0)
         sut.requestImage(at: 0)
         
@@ -103,20 +103,11 @@ class TestContentViewModel: XCTestCase {
     
     // MARK: - Helper
     
-    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageUrl: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {
-        var mock = DataLoaderMock()
-        if withImageUrl && stubWithImage {
-            mock = DataLoaderMock(apiCondition: apiCondition)
-        } else if !withImageUrl {
-            mock = DataLoaderMock(apiCondition: apiCondition, imageURL: "")
-        } else if !stubWithImage {
-            mock = DataLoaderMock(apiCondition: apiCondition, image: nil)
-        } else {
-            mock = DataLoaderMock(apiCondition: apiCondition, imageURL: "", image: nil)
-        }
-        
+    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageURL: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {
+        let mock = DataLoaderMock(apiCondition: apiCondition, withImageURL: withImageURL, withImage: stubWithImage)
         let sut = ContentViewModel(dataLoader: mock)
         let stub = makeStub(totalStub: totalStub, imageURL: mock.imageURL, image: mock.image)
+        
         return (sut, stub)
     }
 }
