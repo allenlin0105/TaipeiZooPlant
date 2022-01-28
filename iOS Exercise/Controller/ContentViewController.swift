@@ -65,6 +65,8 @@ extension ContentViewController: UITableViewDelegate {
 extension ContentViewController: ContentProtocol {
     
     func updateContentTableView() {
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
