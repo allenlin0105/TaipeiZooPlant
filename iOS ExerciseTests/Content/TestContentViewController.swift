@@ -37,9 +37,7 @@ class TestContentViewController: XCTestCase {
         let (sut, _, _) = makeSUT()
         _ = sut.view
         
-        let indexPath = IndexPath(row: 0, section: 0)
-        let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath) as! ContentTableViewCell
-        
+        let cell = sut.tableView.cell(at: 0)
         XCTAssertEqual(cell.plantName.text, "name0")
         XCTAssertEqual(cell.plantLocation.text, "location0")
         XCTAssertEqual(cell.plantFeature.text, "feature0")
@@ -78,5 +76,16 @@ private extension ContentProtocol where Self: Equatable {
     func isEqualTo(_ another: ContentProtocol) -> Bool {
         guard let another = another as? Self else { return false }
         return self == another
+    }
+}
+
+// MARK: - Private extension for UITableView
+
+private extension UITableView {
+    
+    func cell(at row: Int, section: Int = 0) -> ContentTableViewCell {
+        let indexPath = IndexPath(row: row, section: section)
+        let cell = dataSource?.tableView(self, cellForRowAt: indexPath) as! ContentTableViewCell
+        return cell
     }
 }
