@@ -5,7 +5,7 @@
 //  Created by allen on 2022/1/20.
 //
 
-import UIKit
+import Foundation
 
 class DataMapper {
     
@@ -25,12 +25,5 @@ class DataMapper {
         } catch {
             return []
         }
-    }
-    
-    static func mapImageData(data: Data?) -> UIImage? {
-        if let safeData = data {
-            return UIImage(data: safeData)
-        }
-        return nil
     }
 }

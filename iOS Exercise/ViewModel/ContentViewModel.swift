@@ -5,7 +5,7 @@
 //  Created by 林承濬 on 2022/1/14.
 //
 
-import Foundation
+import UIKit
 
 class ContentViewModel {
     
@@ -15,7 +15,6 @@ class ContentViewModel {
     private var alreadyRequestOffset: Int = -20
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
-    private let requestLimit = 20
     weak var delegate: ContentProtocol?
     
     init (dataLoader: DataLoaderProtocol) {
@@ -89,8 +88,7 @@ extension ContentViewModel {
     private func handleImage(result: APIResultType, index: Int) {
         switch result {
         case .success(let data):
-            let image = DataMapper.mapImageData(data: data)
-            plantDataModel.plantDataList[index].image = image
+            plantDataModel.plantDataList[index].image = UIImage(data: data)
             delegate?.updateContentTableView()
         case .failure(_):
             break
