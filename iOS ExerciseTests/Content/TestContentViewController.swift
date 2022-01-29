@@ -29,9 +29,9 @@ class TestContentViewController: XCTestCase {
     func test_viewDidLoad_withNoNetworkFail_renderTwentyCellsWithCorrectContent() {
         let (sut, _, stub) = makeSUT(apiCondition: [.successWithJSON, .successWithImage], totalStub: 1, withImage: true)
         _ = sut.view
-        
-        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 20)
-        
+
+        XCTAssertEqual(sut.tableView.totalRows(), 20)
+
         let cell = sut.tableView.cell(at: 0)
         XCTAssertEqual(cell.plantName.text, stub.first?.name)
         XCTAssertEqual(cell.plantLocation.text, stub.first?.location)
@@ -44,7 +44,7 @@ class TestContentViewController: XCTestCase {
         _ = sut.view
         sut.tableView.willDisplayCell(at: 19)
         
-        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 40)
+        XCTAssertEqual(sut.tableView.totalRows(), 40)
 
         let cell = sut.tableView.cell(at: 20)
         XCTAssertEqual(cell.plantName.text, stub[20].name)
@@ -88,6 +88,10 @@ private extension ContentProtocol where Self: Equatable {
 // MARK: - Private extension for UITableView
 
 private extension UITableView {
+    
+    func totalRows(at section: Int = 0) -> Int {
+        return self.dataSource?.tableView(self, numberOfRowsInSection: section) ?? 0
+    }
     
     func cell(at row: Int, section: Int = 0) -> ContentTableViewCell {
         let indexPath = IndexPath(row: row, section: section)
