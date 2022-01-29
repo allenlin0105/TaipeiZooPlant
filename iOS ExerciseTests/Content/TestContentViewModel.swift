@@ -68,7 +68,7 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure()
         sut.requestImage(at: 0)
         
-        XCTAssertNil(sut.firstURL())
+        XCTAssertNil(sut.firstImageURL())
         XCTAssertNil(sut.firstImage())
     }
     
@@ -86,7 +86,7 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure()
         sut.requestImage(at: 0)
         
-        XCTAssertNotNil(sut.firstURL())
+        XCTAssertNotNil(sut.firstImageURL())
         XCTAssertNil(sut.firstImage())
     }
     
@@ -126,7 +126,7 @@ private extension ContentViewModel {
         }
     }
     
-    func firstURL() -> URL? {
+    func firstImageURL() -> URL? {
         return self.dataList().first?.imageURL
     }
     
