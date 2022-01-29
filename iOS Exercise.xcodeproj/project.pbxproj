@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8AE944D5022B7D4B54941EB4 /* Pods_iOS_Exercise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ECB2E933D4E03F40E2341A /* Pods_iOS_Exercise.framework */; };
 		9F1075AA27A2715600E116B7 /* TestContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1075A927A2715600E116B7 /* TestContentViewController.swift */; };
-		9F29F49A2795A12100BB9E35 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F29F4992795A12100BB9E35 /* UIImageExtension.swift */; };
 		9F3353FE27A3926900E57D7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F3353FD27A3926900E57D7E /* Main.storyboard */; };
 		9F3FDF5327A37B7F00426BAB /* DataLoaderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FDF5227A37B7F00426BAB /* DataLoaderMock.swift */; };
 		9F3FDF5527A383AB00426BAB /* StubMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FDF5427A383AB00426BAB /* StubMaker.swift */; };
@@ -46,7 +45,6 @@
 		06D10C9432256CCE3C16395C /* Pods-iOS Exercise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Exercise.debug.xcconfig"; path = "Target Support Files/Pods-iOS Exercise/Pods-iOS Exercise.debug.xcconfig"; sourceTree = "<group>"; };
 		2EABCD473150CD90E48DFBD5 /* Pods-iOS Exercise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Exercise.release.xcconfig"; path = "Target Support Files/Pods-iOS Exercise/Pods-iOS Exercise.release.xcconfig"; sourceTree = "<group>"; };
 		9F1075A927A2715600E116B7 /* TestContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentViewController.swift; sourceTree = "<group>"; };
-		9F29F4992795A12100BB9E35 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		9F3353FD27A3926900E57D7E /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9F3FDF5227A37B7F00426BAB /* DataLoaderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoaderMock.swift; sourceTree = "<group>"; };
 		9F3FDF5427A383AB00426BAB /* StubMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubMaker.swift; sourceTree = "<group>"; };
@@ -147,14 +145,6 @@
 			path = Protocol;
 			sourceTree = "<group>";
 		};
-		E374777527926B5B006D6A4D /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				9F29F4992795A12100BB9E35 /* UIImageExtension.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
 		E37477782792762F006D6A4D /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,7 +177,6 @@
 			isa = PBXGroup;
 			children = (
 				E37477782792762F006D6A4D /* Library */,
-				E374777527926B5B006D6A4D /* Extension */,
 				E310C24027917203005A1AD7 /* Protocol */,
 				E3F882F9278FC0DB00B50353 /* Controller */,
 				E3F882F8278FC0C300B50353 /* View */,
@@ -411,7 +400,6 @@
 				E310C23D27916FE5005A1AD7 /* PlantModel.swift in Sources */,
 				E310C24427917849005A1AD7 /* DecodedPlantModel.swift in Sources */,
 				E3A31CBF277D416900146AAD /* ContentViewController.swift in Sources */,
-				9F29F49A2795A12100BB9E35 /* UIImageExtension.swift in Sources */,
 				E3A31CBB277D416900146AAD /* AppDelegate.swift in Sources */,
 				E374777A27927644006D6A4D /* GlobalStrings.swift in Sources */,
 				E3A31CBD277D416900146AAD /* SceneDelegate.swift in Sources */,
