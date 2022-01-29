@@ -14,9 +14,6 @@ class TestContentDataMapper: XCTestCase {
     
     func test_mapJSON_withValidJSON_returnCorrect() {
         let data = jsonString.data(using: .utf8)
-        XCTAssertNotNil(data, "Data is nil in DataMapper test case")
-        if data == nil { return }
-        
         let receive = DataMapper.mapTextData(data: data!)
         let expect = makeCorrectData(withImageURL: true)
         
@@ -26,9 +23,6 @@ class TestContentDataMapper: XCTestCase {
     func test_mapJSON_withNoImageURLJSON_returnDataWithImageURLEqualsNil() {
         let newJSONString = jsonString.replace(testingImageURL, with: "")
         let data = newJSONString.data(using: .utf8)
-        XCTAssertNotNil(data, "Data is nil in DataMapper test case")
-        if data == nil { return }
-        
         let receive = DataMapper.mapTextData(data: data!)
         let expect = makeCorrectData(withImageURL: false)
         
@@ -37,7 +31,7 @@ class TestContentDataMapper: XCTestCase {
     
     // MARK: - Helper
     
-    func makeCorrectData(withImageURL: Bool) -> [PlantData] {
+    private func makeCorrectData(withImageURL: Bool) -> [PlantData] {
         let imageURL = withImageURL ? URL(string: testingImageURL) : nil
         let data: [PlantData] = [
             PlantData(name: "九芎",
