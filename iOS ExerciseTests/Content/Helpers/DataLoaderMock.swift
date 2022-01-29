@@ -10,7 +10,7 @@ import UIKit
 
 class DataLoaderMock: DataLoaderProtocol {
     
-    private var requestCount: Int = 0
+    private var currentRequestIndex: Int = 0
     private let apiCondition: [APICondition]
     let imageURL: String
     let image: UIImage?
@@ -22,7 +22,7 @@ class DataLoaderMock: DataLoaderProtocol {
     }
     
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
-        switch apiCondition[requestCount] {
+        switch apiCondition[currentRequestIndex] {
         case .successWithJSON:
             let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
             let data = createValidationData(at: offset)
@@ -36,7 +36,7 @@ class DataLoaderMock: DataLoaderProtocol {
             completionHandler(.success(data))
         }
         
-        requestCount += 1
+        currentRequestIndex += 1
     }
     
     private func createValidationData(at offset: Int = 0, withDecodeFail: Bool = false) -> Data {
@@ -73,7 +73,8 @@ class DataLoaderMock: DataLoaderProtocol {
 private extension URL {
     
     func getQueryValue(for key: String) -> String {
-        let value = URLComponents(url: self, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { $0.name == key })?.value
-        return value ?? "0"
+        let queryItems = URLComponents(url: self, resolvingAgainstBaseURL: true)?.queryItems
+        let value = queryItems?.first(where: { $0.name == key })?.value
+        return value ?? ""
     }
 }
