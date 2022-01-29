@@ -25,11 +25,8 @@ class ContentViewModel {
     // MARK: - API Request
     
     func requestPlantData(at offset: Int) {
-        // Waiting for callback return
-        while isWaitingData {}
-        
         // Check if it is duplicated request
-        if offset == alreadyRequestOffset { return }
+        if isWaitingData || offset == alreadyRequestOffset { return }
         
         // Setup property value for view model
         apiString = "\(GlobalStrings.baseAPIString)&offset=\(offset)"
@@ -46,7 +43,7 @@ class ContentViewModel {
     
     func requestImage(at index: Int) {
         // Prevent json data not loading back yet
-        while index >= alreadyRequestOffset + requestLimit {}
+        guard index < plantDataModel.plantDataList.count else { return }
         
         // Decides whether to fire API for image
         let target = plantDataModel.plantDataList[index]
