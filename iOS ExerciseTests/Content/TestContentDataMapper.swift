@@ -13,7 +13,7 @@ class TestContentDataMapper: XCTestCase {
     private let testingImageURL = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
     
     func test_mapJSON_withValidJSON_returnCorrect() {
-        let data: Data? = jsonString.data(using: .utf8)
+        let data = jsonString.data(using: .utf8)
         XCTAssertNotNil(data, "Data is nil in DataMapper test case")
         if data == nil { return }
         
@@ -24,8 +24,8 @@ class TestContentDataMapper: XCTestCase {
     }
     
     func test_mapJSON_withNoImageURLJSON_returnDataWithImageURLEqualsNil() {
-        jsonString = jsonString.replace(testingImageURL, with: "")
-        let data: Data? = jsonString.data(using: .utf8)
+        let newJSONString = jsonString.replace(testingImageURL, with: "")
+        let data = newJSONString.data(using: .utf8)
         XCTAssertNotNil(data, "Data is nil in DataMapper test case")
         if data == nil { return }
         
@@ -50,7 +50,7 @@ class TestContentDataMapper: XCTestCase {
         return data
     }
     
-    private var jsonString = """
+    private let jsonString = """
         {
            "result":{
               "limit":1,
