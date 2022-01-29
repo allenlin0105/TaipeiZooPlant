@@ -8,6 +8,13 @@
 import UIKit
 @testable import iOS_Exercise
 
+enum APICondition {
+    case successWithJSON
+    case successWithImage
+    case networkFailure
+    case decodeFailure
+}
+
 class DataLoaderMock: DataLoaderProtocol {
     
     private var currentRequestIndex: Int = 0
