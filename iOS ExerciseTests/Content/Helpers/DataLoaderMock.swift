@@ -10,6 +10,7 @@ import UIKit
 
 enum APICondition {
     case successWithJSON
+    case successWithJSONButNoData
     case successWithImage
     case networkFailure
     case decodeFailure
@@ -34,19 +35,22 @@ class DataLoaderMock: DataLoaderProtocol {
             let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
             let data = createValidationData(at: offset)
             completionHandler(.success(data))
+        case .successWithJSONButNoData:
+            let data = createValidationData(withNoData: true)
+            completionHandler(.success(data))
         case .successWithImage:
             completionHandler(.success(image!.pngData()!))
         case .networkFailure:
             completionHandler(.failure(.requestFail))
         case .decodeFailure:
-            let data = createValidationData(withDecodeFail: true)
-            completionHandler(.success(data))
+            let data = "{\"Wrong\": {}}".data(using: .utf8)
+            completionHandler(.success(data!))
         }
         
         currentRequestIndex += 1
     }
     
-    private func createValidationData(at offset: Int = 0, withDecodeFail: Bool = false) -> Data {
+    private func createValidationData(at offset: Int = 0, withNoData: Bool = false) -> Data {
         let singleResult = """
              {
                 "F_Location":"location\(String(describing: offset))",
@@ -55,7 +59,7 @@ class DataLoaderMock: DataLoaderProtocol {
                 "F_Feature":"feature\(String(describing: offset))",
              },
         """
-        let totalDataCount = withDecodeFail ? 0 : 20
+        let totalDataCount = withNoData ? 0 : 20
         var allResults = ""
         for _ in 0..<totalDataCount {
             allResults += singleResult

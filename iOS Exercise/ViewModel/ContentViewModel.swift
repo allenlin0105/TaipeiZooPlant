@@ -72,6 +72,7 @@ extension ContentViewModel {
         switch result {
         case .success(let data):
             let newData = DataMapper.mapTextData(data: data)
+            guard let newData = newData else { return }
             if newData.isEmpty {
                 finishAllAccess = true
             } else {

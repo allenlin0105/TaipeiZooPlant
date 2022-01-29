@@ -17,8 +17,15 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
         
-    func test_requestDataOnce_withNetworkFail_receiveNetworkError() {
+    func test_requestData_withNetworkFail_receiveError() {
         let (sut, _) = makeSUT(with: [.networkFailure])
+        sut.requestProcedure()
+        
+        XCTAssertEqual(sut.dataList(), [])
+    }
+    
+    func test_requestData_withDecodeFail_receiveError() {
+        let (sut, _) = makeSUT(with: [.decodeFailure])
         sut.requestProcedure()
         
         XCTAssertEqual(sut.dataList(), [])
@@ -57,7 +64,7 @@ class TestContentViewModel: XCTestCase {
     }
     
     func test_lastRequest_withAllDataReceived_setFinishAllAccessToTrue() {
-        let (sut, _) = makeSUT(with: [.decodeFailure])
+        let (sut, _) = makeSUT(with: [.successWithJSONButNoData])
         sut.requestProcedure(for: [1000])
         
         XCTAssertTrue(sut.finishAllAccess)

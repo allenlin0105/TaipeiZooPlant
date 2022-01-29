@@ -54,7 +54,7 @@ class TestContentViewController: XCTestCase {
     }
     
     func test_lastRequest_withNoNewData_doNotCallRequestPlantData() {
-        let (sut, spy, _) = makeSUT(apiCondition: [.decodeFailure])
+        let (sut, spy, _) = makeSUT(apiCondition: [.successWithJSONButNoData])
         _ = sut.view
         sut.tableView.willDisplayCell(at: 1000)
         

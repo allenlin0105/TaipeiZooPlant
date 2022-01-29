@@ -9,7 +9,7 @@ import Foundation
 
 class DataMapper {
     
-    static func mapTextData(data: Data) -> [PlantData] {
+    static func mapTextData(data: Data) -> [PlantData]? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(DecodedPlantModel.self, from: data)
@@ -23,7 +23,7 @@ class DataMapper {
             }
             return usableResult
         } catch {
-            return []
+            return nil
         }
     }
 }
