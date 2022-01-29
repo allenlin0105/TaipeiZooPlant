@@ -8,13 +8,6 @@
 import XCTest
 @testable import iOS_Exercise
 
-enum APICondition {
-    case successWithJSON
-    case successWithImage
-    case networkFailure
-    case decodeFailure
-}
-
 class TestContentViewModel: XCTestCase {
     
     func test_setupUrl_withOneRequest_receiveUrlWithOffsetEqualsZero() {
@@ -24,8 +17,22 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
         
+    func test_requestDataOnce_withNetworkFail_receiveNetworkError() {
+        let (sut, _) = makeSUT(with: [.networkFailure])
+        sut.requestProcedure()
+        
+        XCTAssertEqual(sut.dataList(), [])
+    }
+    
     func test_requestDataTwice_withTwoSameRequestsAndNoFail_onlyReceiveDataOnce() {
         let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithJSON], totalStub: 1)
+        sut.requestProcedure(for: [0, 0])
+        
+        XCTAssertEqual(sut.dataList(), stub)
+    }
+    
+    func test_requestDataTwice_withTwoSameRequestsButFirstFail_shouldReceiveCorrectData() {
+        let (sut, stub) = makeSUT(with: [.networkFailure, .successWithJSON], totalStub: 1)
         sut.requestProcedure(for: [0, 0])
         
         XCTAssertEqual(sut.dataList(), stub)
@@ -49,13 +56,6 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(secondSUT.dataList(), stub)
     }
     
-    func test_requestDataTwice_withTwoDifferentRequestsButBothFail_receiveNetworkError() {
-        let (sut, _) = makeSUT(with: [.networkFailure, .networkFailure])
-        sut.requestProcedure(for: [0, 0])
-        
-        XCTAssertEqual(sut.dataList(), [])
-    }
-    
     func test_lastRequest_withAllDataReceived_setFinishAllAccessToTrue() {
         let (sut, _) = makeSUT(with: [.decodeFailure])
         sut.requestProcedure(for: [1000])
@@ -77,7 +77,7 @@ class TestContentViewModel: XCTestCase {
         sut.requestProcedure()
         sut.requestImage(at: 0)
         
-        XCTAssertNotNil(sut.firstImage)
+        XCTAssertNotNil(sut.firstImage())
         XCTAssertEqual(sut.firstImage()?.pngData(), stub.first?.image?.pngData())
     }
     
@@ -90,15 +90,9 @@ class TestContentViewModel: XCTestCase {
         XCTAssertNil(sut.firstImage())
     }
     
-    func test_requestImage_jsonNotReceiveYet_shouldBusyWaitingAndDoNotCrash() {
-        let (sut, stub) = makeSUT(with: [.successWithImage, .successWithJSON], totalStub: 1, stubWithImage: true)
-        DispatchQueue.global().async {
-            sut.requestImage(at: 0)
-            
-            XCTAssertNotNil(sut.firstImage())
-            XCTAssertEqual(sut.firstImage()?.pngData(), stub.first?.image?.pngData())
-        }
-        sut.requestProcedure()
+    func test_requestImage_jsonNotReceiveYet_shouldReturnAndNotCrash() {
+        let (sut, _) = makeSUT(with: [.successWithImage])
+        sut.requestImage(at: 0)
     }
     
     // MARK: - Helper
