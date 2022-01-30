@@ -34,15 +34,11 @@ extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         viewModel?.requestImage(at: indexPath.row)
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as! ContentTableViewCell
+        let cell = tableView.dequeueCell()
         if let data = viewModel?.plantDataModel.plantDataList[indexPath.row] {
             cell.bind(data: data)
         }
         return cell
-    }
-    
-    private func dataCount() -> Int {
-        return viewModel?.plantDataModel.plantDataList.count ?? 0
     }
 }
 
@@ -60,6 +56,16 @@ extension ContentViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - UITableView Private Extension
+
+private extension UITableView {
+    
+    func dequeueCell() -> ContentTableViewCell {
+        let cell = self.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as! ContentTableViewCell
+        return cell
+    }
+}
+
 // MARK: - ContentProtocol
 
 extension ContentViewController: ContentProtocol {
@@ -68,5 +74,14 @@ extension ContentViewController: ContentProtocol {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
+    }
+}
+
+// MARK: - Helper Extension
+
+extension ContentViewController {
+    
+    private func dataCount() -> Int {
+        return viewModel?.plantDataModel.plantDataList.count ?? 0
     }
 }

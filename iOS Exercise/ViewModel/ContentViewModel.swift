@@ -36,8 +36,6 @@ class ContentViewModel {
         fireAPI(url: url)
     }
     
-    
-    
     // MARK: - Image Request
     
     func requestImage(at index: Int) {

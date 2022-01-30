@@ -8,6 +8,7 @@
 import Foundation
 
 class DataLoader: DataLoaderProtocol {
+    
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: requestURL) { data, response, error in
