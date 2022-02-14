@@ -16,6 +16,9 @@ class ContentViewModel {
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
     weak var delegate: ContentProtocol?
+    var dataCount: Int {
+        return plantDataModel.plantDataList.count
+    }
     
     init (dataLoader: DataLoaderProtocol) {
         self.dataLoader = dataLoader

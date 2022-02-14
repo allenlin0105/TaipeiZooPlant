@@ -11,13 +11,18 @@ class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var viewModel: ContentViewModel?
+    var viewModel: ContentViewModel
+
+    required init?(coder aDecoder: NSCoder) {
+        self.viewModel = ContentViewModel(dataLoader: DataLoader())
+        super.init(coder: aDecoder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel?.delegate = self
-        viewModel?.requestPlantData(at: 0)
+        viewModel.delegate = self
+        viewModel.requestPlantData(at: 0)
         
         tableView.register(UINib(nibName: GlobalStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
     }
@@ -28,16 +33,18 @@ class ContentViewController: UIViewController {
 extension ContentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataCount()
+        return viewModel.dataCount
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        viewModel?.requestImage(at: indexPath.row)
+        viewModel.requestImage(at: indexPath.row)
         
-        let cell = tableView.dequeueCell()
-        if let data = viewModel?.plantDataModel.plantDataList[indexPath.row] {
-            cell.bind(data: data)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as? ContentTableViewCell else {
+            return UITableViewCell()
         }
+        
+        let data = viewModel.plantDataModel.plantDataList[indexPath.row]
+        cell.bind(data: data)
         return cell
     }
 }
@@ -47,22 +54,10 @@ extension ContentViewController: UITableViewDataSource {
 extension ContentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let finish = viewModel?.finishAllAccess else { return }
-        
         let nextIndex = indexPath.row + 1
-        if !finish && nextIndex == dataCount() {
-            viewModel?.requestPlantData(at: nextIndex)
+        if !viewModel.finishAllAccess && nextIndex == viewModel.dataCount {
+            viewModel.requestPlantData(at: nextIndex)
         }
-    }
-}
-
-// MARK: - UITableView Private Extension
-
-private extension UITableView {
-    
-    func dequeueCell() -> ContentTableViewCell {
-        let cell = self.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as! ContentTableViewCell
-        return cell
     }
 }
 
@@ -74,14 +69,5 @@ extension ContentViewController: ContentProtocol {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-    }
-}
-
-// MARK: - Helper Extension
-
-extension ContentViewController {
-    
-    private func dataCount() -> Int {
-        return viewModel?.plantDataModel.plantDataList.count ?? 0
     }
 }
