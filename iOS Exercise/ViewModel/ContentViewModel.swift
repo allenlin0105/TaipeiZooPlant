@@ -9,7 +9,6 @@ import UIKit
 
 class ContentViewModel {
     
-    private(set) var apiString: String = ""
     private(set) var finishAllAccess: Bool = false
     private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     private var alreadyRequestOffset: Int = -20
@@ -31,12 +30,16 @@ class ContentViewModel {
         if isWaitingData || offset == alreadyRequestOffset { return }
         
         // Setup property value for view model
-        apiString = "\(GlobalStrings.baseAPIString)&offset=\(offset)"
+        let apiString = makeAPIString(offset: offset)
         isWaitingData = true
 
         // Fire API
         guard let url = URL(string: apiString) else { return }
         fireAPI(url: url)
+    }
+    
+    func makeAPIString(offset: Int) -> String {
+        return "\(GlobalStrings.baseAPIString)&offset=\(offset)"
     }
     
     // MARK: - Image Request

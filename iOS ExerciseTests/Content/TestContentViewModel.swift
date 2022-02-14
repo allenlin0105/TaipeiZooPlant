@@ -10,11 +10,11 @@ import XCTest
 
 class TestContentViewModel: XCTestCase {
     
-    func test_setupUrl_withOneRequest_receiveUrlWithOffsetEqualsZero() {
+    func test_setupURLString_withOffsetEqualsZero_receiveCorrectURL() {
         let (sut, _) = makeSUT(with: [.successWithJSON])
-        sut.requestProcedure()
+        let apiString = sut.makeAPIString(offset: 0)
         
-        XCTAssertEqual(sut.apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
+        XCTAssertEqual(apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
         
     func test_requestData_withNetworkFail_receiveError() {
