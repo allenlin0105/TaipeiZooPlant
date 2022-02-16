@@ -26,7 +26,6 @@
 		E310C23B27915C5D005A1AD7 /* ContentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E310C23927915C5D005A1AD7 /* ContentTableViewCell.xib */; };
 		E310C23D27916FE5005A1AD7 /* PlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C23C27916FE5005A1AD7 /* PlantModel.swift */; };
 		E310C23F279170BE005A1AD7 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C23E279170BE005A1AD7 /* ContentViewModel.swift */; };
-		E310C24427917849005A1AD7 /* DecodedPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C24327917849005A1AD7 /* DecodedPlantModel.swift */; };
 		E310C246279179EC005A1AD7 /* ContentViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E310C245279179EC005A1AD7 /* ContentViewProtocol.swift */; };
 		E374777A27927644006D6A4D /* GlobalStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E374777927927644006D6A4D /* GlobalStrings.swift */; };
 		E3A31CBB277D416900146AAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A31CBA277D416900146AAD /* AppDelegate.swift */; };
@@ -69,7 +68,6 @@
 		E310C23927915C5D005A1AD7 /* ContentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentTableViewCell.xib; sourceTree = "<group>"; };
 		E310C23C27916FE5005A1AD7 /* PlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantModel.swift; sourceTree = "<group>"; };
 		E310C23E279170BE005A1AD7 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
-		E310C24327917849005A1AD7 /* DecodedPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedPlantModel.swift; sourceTree = "<group>"; };
 		E310C245279179EC005A1AD7 /* ContentViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewProtocol.swift; sourceTree = "<group>"; };
 		E374777927927644006D6A4D /* GlobalStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStrings.swift; sourceTree = "<group>"; };
 		E3A31CB7277D416900146AAD /* iOS Exercise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Exercise.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,7 +213,6 @@
 			isa = PBXGroup;
 			children = (
 				E310C23C27916FE5005A1AD7 /* PlantModel.swift */,
-				E310C24327917849005A1AD7 /* DecodedPlantModel.swift */,
 				9FDEE61927BC96F000A82912 /* ContentStrings.swift */,
 				9FDEE61B27BC9DA300A82912 /* APIStatus.swift */,
 			);
@@ -426,7 +423,6 @@
 				9F8EB826279996BF00085C81 /* DataLoader.swift in Sources */,
 				E310C246279179EC005A1AD7 /* ContentViewProtocol.swift in Sources */,
 				E310C23D27916FE5005A1AD7 /* PlantModel.swift in Sources */,
-				E310C24427917849005A1AD7 /* DecodedPlantModel.swift in Sources */,
 				E3A31CBF277D416900146AAD /* ContentViewController.swift in Sources */,
 				E3A31CBB277D416900146AAD /* AppDelegate.swift in Sources */,
 				E374777A27927644006D6A4D /* GlobalStrings.swift in Sources */,
