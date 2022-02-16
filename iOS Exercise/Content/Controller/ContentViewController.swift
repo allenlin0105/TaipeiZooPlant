@@ -35,12 +35,10 @@ extension ContentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch viewModel.requestPlantDataStatus {
-        case .loading, .noData:
+        case .loading, .noData, .requestFail, .decodeFail:
             return viewModel.dataCount + 1
         case .success:
             return viewModel.dataCount
-        case .requestFail, .decodeFail:
-            return 1
         }
     }
 
@@ -49,19 +47,15 @@ extension ContentViewController: UITableViewDataSource {
         
         switch viewModel.requestPlantDataStatus {
         case .loading:
-            if indexPath.row < viewModel.dataCount {
-                return contentCell(at: indexPath.row)
-            } else {
-                return errorCell(description: "Loading...")
-            }
+            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "Loading...")
         case .success:
             return contentCell(at: indexPath.row)
         case .noData:
-            return errorCell(description: "End of data...")
+            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "End of data...")
         case .requestFail:
-            return errorCell(description: "Request Fail...")
+            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "Request Fail...")
         case .decodeFail:
-            return errorCell(description: "Decode Fail...")
+            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "Decode Fail...")
         }
     }
     
