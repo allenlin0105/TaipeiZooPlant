@@ -41,7 +41,7 @@ class ContentViewModel {
             case .success(let data):
                 guard let newData = DataMapper.mapTextData(data: data) else {
                     self.requestPlantDataStatus = .decodeFail
-                    self.delegate?.updateContentTableView()
+                    self.delegate?.reloadContentTableView()
                     return
                 }
                 if newData.isEmpty {
@@ -55,7 +55,7 @@ class ContentViewModel {
             case .failure(_):
                 self.requestPlantDataStatus = .requestFail
             }
-            self.delegate?.updateContentTableView()
+            self.delegate?.reloadContentTableView()
         }
     }
     
@@ -79,7 +79,7 @@ class ContentViewModel {
             switch result {
             case .success(let data):
                 self.plantDataModel.plantDataList[index].image = UIImage(data: data)
-                self.delegate?.updateContentTableView()
+                self.delegate?.reloadContentTableView()
             case .failure(_):
                 break
             }

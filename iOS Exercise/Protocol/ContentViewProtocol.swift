@@ -8,5 +8,5 @@
 import Foundation
 
 protocol ContentViewProtocol: AnyObject {
-    func updateContentTableView()
+    func reloadContentTableView()
 }
