@@ -50,42 +50,24 @@ extension ContentViewController: UITableViewDataSource {
         switch viewModel.requestPlantDataStatus {
         case .loading:
             if indexPath.row < viewModel.dataCount {
-                guard let cell = makeContentCell(at: indexPath.row) else {
-                    return UITableViewCell()
-                }
-                return cell
+                return contentCell(at: indexPath.row)
             } else {
-                guard let cell = makeErrorCell(description: "Loading...") else {
-                    return UITableViewCell()
-                }
-                return cell
+                return errorCell(description: "Loading...")
             }
         case .success:
-            guard let cell = makeContentCell(at: indexPath.row) else {
-                return UITableViewCell()
-            }
-            return cell
+            return contentCell(at: indexPath.row)
         case .noData:
-            guard let cell = makeErrorCell(description: "End of data...") else {
-                return UITableViewCell()
-            }
-            return cell
+            return errorCell(description: "End of data...")
         case .requestFail:
-            guard let cell = makeErrorCell(description: "Request Fail...") else {
-                return UITableViewCell()
-            }
-            return cell
+            return errorCell(description: "Request Fail...")
         case .decodeFail:
-            guard let cell = makeErrorCell(description: "Decode Fail...") else {
-                return UITableViewCell()
-            }
-            return cell
+            return errorCell(description: "Decode Fail...")
         }
     }
     
-    private func makeContentCell(at row: Int) -> ContentTableViewCell? {
+    private func contentCell(at row: Int) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.cellIdentifier) as? ContentTableViewCell else {
-            return nil
+            return UITableViewCell()
         }
         
         let data = viewModel.plantDataModel.plantDataList[row]
@@ -93,9 +75,9 @@ extension ContentViewController: UITableViewDataSource {
         return cell
     }
     
-    private func makeErrorCell(description: String) -> ErrorTableViewCell? {
+    private func errorCell(description: String) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.errorCellIdentifier) as? ErrorTableViewCell else {
-            return nil
+            return UITableViewCell()
         }
         cell.errorLabel.text = description
         return cell
