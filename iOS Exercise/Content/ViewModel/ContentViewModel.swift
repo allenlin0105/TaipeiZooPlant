@@ -25,6 +25,10 @@ class ContentViewModel {
     
     // MARK: - API Request
     
+    func makeAPIString(offset: Int) -> String {
+        return "\(ContentStrings.baseAPIString)&offset=\(offset)"
+    }
+    
     func requestPlantData(at offset: Int) {
         // Check if it is duplicated request
         if requestPlantDataStatus == .loading || offset == alreadyRequestOffset { return }
@@ -39,19 +43,7 @@ class ContentViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let data):
-                guard let newData = DataMapper.mapTextData(data: data) else {
-                    self.requestPlantDataStatus = .decodeFail
-                    self.delegate?.reloadContentTableView()
-                    return
-                }
-                if newData.isEmpty {
-                    self.finishAllAccess = true
-                    self.requestPlantDataStatus = .noData
-                } else {
-                    self.plantDataModel.plantDataList += newData
-                    self.alreadyRequestOffset += newData.count
-                    self.requestPlantDataStatus = .success
-                }
+                self.handleSuccessJSONSituation(data: data)
             case .failure(_):
                 self.requestPlantDataStatus = .requestFail
             }
@@ -59,8 +51,19 @@ class ContentViewModel {
         }
     }
     
-    func makeAPIString(offset: Int) -> String {
-        return "\(ContentStrings.baseAPIString)&offset=\(offset)"
+    private func handleSuccessJSONSituation(data: Data) {
+        guard let newData = DataMapper.mapTextData(data: data) else {
+            self.requestPlantDataStatus = .decodeFail
+            return
+        }
+        if newData.isEmpty {
+            finishAllAccess = true
+            requestPlantDataStatus = .noData
+        } else {
+            plantDataModel.plantDataList += newData
+            alreadyRequestOffset += newData.count
+            requestPlantDataStatus = .success
+        }
     }
     
     // MARK: - Image Request
