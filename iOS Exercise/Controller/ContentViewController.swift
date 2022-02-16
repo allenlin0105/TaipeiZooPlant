@@ -21,10 +21,11 @@ class ContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(UINib(nibName: ContentStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.cellIdentifier)
+        tableView.register(UINib(nibName: ContentStrings.errorCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.errorCellIdentifier)
+        
         viewModel.delegate = self
         viewModel.requestPlantData(at: 0)
-        
-        tableView.register(UINib(nibName: ContentStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.cellIdentifier)
     }
 }
 
@@ -46,25 +47,48 @@ extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         viewModel.requestImage(at: indexPath.row)
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.cellIdentifier) as? ContentTableViewCell else {
-            return UITableViewCell()
-        }
-        
         switch viewModel.requestPlantDataStatus {
         case .loading:
-            cell.plantFeature.text = "Loading..."
+            if indexPath.row < viewModel.dataCount {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.cellIdentifier) as? ContentTableViewCell else {
+                    return UITableViewCell()
+                }
+                let data = viewModel.plantDataModel.plantDataList[indexPath.row]
+                cell.bind(data: data)
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.errorCellIdentifier) as? ErrorTableViewCell else {
+                    return UITableViewCell()
+                }
+                cell.errorLabel.text = "Loading..."
+                return cell
+            }
         case .success:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.cellIdentifier) as? ContentTableViewCell else {
+                return UITableViewCell()
+            }
             let data = viewModel.plantDataModel.plantDataList[indexPath.row]
             cell.bind(data: data)
+            return cell
         case .noData:
-            cell.plantFeature.text = "End of data..."
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.errorCellIdentifier) as? ErrorTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.errorLabel.text = "End of data..."
+            return cell
         case .requestFail:
-            cell.plantFeature.text = "Request Fail..."
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.errorCellIdentifier) as? ErrorTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.errorLabel.text = "Request Fail..."
+            return cell
         case .decodeFail:
-            cell.plantFeature.text = "Decode Fail..."
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.errorCellIdentifier) as? ErrorTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.errorLabel.text = "Decode Fail..."
+            return cell
         }
-        
-        return cell
     }
 }
 
