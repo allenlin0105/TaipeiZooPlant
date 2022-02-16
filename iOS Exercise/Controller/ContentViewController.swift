@@ -24,7 +24,7 @@ class ContentViewController: UIViewController {
         viewModel.delegate = self
         viewModel.requestPlantData(at: 0)
         
-        tableView.register(UINib(nibName: GlobalStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: GlobalStrings.cellIdentifier)
+        tableView.register(UINib(nibName: ContentStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.cellIdentifier)
     }
 }
 
@@ -39,7 +39,7 @@ extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         viewModel.requestImage(at: indexPath.row)
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: GlobalStrings.cellIdentifier) as? ContentTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.cellIdentifier) as? ContentTableViewCell else {
             return UITableViewCell()
         }
         

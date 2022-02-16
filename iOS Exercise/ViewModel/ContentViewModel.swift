@@ -55,7 +55,7 @@ class ContentViewModel {
     }
     
     func makeAPIString(offset: Int) -> String {
-        return "\(GlobalStrings.baseAPIString)&offset=\(offset)"
+        return "\(ContentStrings.baseAPIString)&offset=\(offset)"
     }
     
     // MARK: - Image Request
