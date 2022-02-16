@@ -14,7 +14,7 @@ class ContentViewModel {
     private var alreadyRequestOffset: Int = -20
     private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
-    weak var delegate: ContentProtocol?
+    weak var delegate: ContentViewProtocol?
     var dataCount: Int {
         return plantDataModel.plantDataList.count
     }

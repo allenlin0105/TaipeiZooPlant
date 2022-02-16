@@ -78,8 +78,8 @@ class TestContentViewController: XCTestCase {
 
 // MARK: - Private extension for ContentProtocol
 
-private extension ContentProtocol where Self: Equatable {
-    func isEqualTo(_ another: ContentProtocol) -> Bool {
+private extension ContentViewProtocol where Self: Equatable {
+    func isEqualTo(_ another: ContentViewProtocol) -> Bool {
         guard let another = another as? Self else { return false }
         return self == another
     }

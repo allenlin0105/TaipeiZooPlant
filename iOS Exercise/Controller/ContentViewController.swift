@@ -63,7 +63,7 @@ extension ContentViewController: UITableViewDelegate {
 
 // MARK: - ContentProtocol
 
-extension ContentViewController: ContentProtocol {
+extension ContentViewController: ContentViewProtocol {
     
     func updateContentTableView() {
         DispatchQueue.main.async {
