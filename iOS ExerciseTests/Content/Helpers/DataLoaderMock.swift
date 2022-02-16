@@ -41,7 +41,8 @@ class DataLoaderMock: DataLoaderProtocol {
         case .successWithImage:
             completionHandler(.success(image!.pngData()!))
         case .networkFailure:
-            completionHandler(.failure(.requestFail))
+            let error = NSError(domain: "", code: 404, userInfo: nil)
+            completionHandler(.failure(error))
         case .decodeFailure:
             let data = "{\"Wrong\": {}}".data(using: .utf8)
             completionHandler(.success(data!))

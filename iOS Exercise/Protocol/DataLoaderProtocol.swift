@@ -7,13 +7,9 @@
 
 import Foundation
 
-enum APIError: Error {
-    case requestFail
-}
-
-typealias APIResultType = Result<Data, APIError>
+typealias APIResult = Result<Data, Error>
 
 protocol DataLoaderProtocol {
-    typealias resultCallback = (APIResultType) -> Void
+    typealias resultCallback = (APIResult) -> Void
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback)
 }
