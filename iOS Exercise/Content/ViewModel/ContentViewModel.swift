@@ -7,17 +7,17 @@
 
 import UIKit
 
-class ContentViewModel {
-    
-    private(set) var finishAllAccess: Bool = false
-    private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
-    private(set) var requestPlantDataStatus: APIStatus = .success
-    private var alreadyRequestOffset: Int = -20
-    private var dataLoader: DataLoaderProtocol
-    weak var delegate: ContentViewProtocol?
+class ContentViewModel: ContentViewModelProtocol {    
+
+    var finishAllAccess: Bool = false
+    var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    var requestPlantDataStatus: APIStatus = .success
     var dataCount: Int {
         return plantDataModel.plantDataList.count
     }
+    weak var delegate: ContentViewProtocol?
+    private var alreadyRequestOffset: Int = -20
+    private var dataLoader: DataLoaderProtocol
     
     init (dataLoader: DataLoaderProtocol) {
         self.dataLoader = dataLoader
