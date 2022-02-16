@@ -138,6 +138,19 @@
 			path = Content;
 			sourceTree = "<group>";
 		};
+		9FDEE62327BCC0AD00A82912 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				E310C24027917203005A1AD7 /* Protocol */,
+				E3F882F9278FC0DB00B50353 /* Controller */,
+				E3F882F8278FC0C300B50353 /* View */,
+				E3F882F7278FC0B700B50353 /* ViewModel */,
+				E3F882F6278FC0A700B50353 /* Model */,
+				9F8EB8242799965800085C81 /* API */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
 		D1B280AF3AA4B2C285DE06B8 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,12 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				E37477782792762F006D6A4D /* Library */,
-				E310C24027917203005A1AD7 /* Protocol */,
-				E3F882F9278FC0DB00B50353 /* Controller */,
-				E3F882F8278FC0C300B50353 /* View */,
-				E3F882F7278FC0B700B50353 /* ViewModel */,
-				E3F882F6278FC0A700B50353 /* Model */,
-				9F8EB8242799965800085C81 /* API */,
+				9FDEE62327BCC0AD00A82912 /* Content */,
 				E3A31CBA277D416900146AAD /* AppDelegate.swift */,
 				E3A31CBC277D416900146AAD /* SceneDelegate.swift */,
 				E3A31CC3277D416A00146AAD /* Assets.xcassets */,
