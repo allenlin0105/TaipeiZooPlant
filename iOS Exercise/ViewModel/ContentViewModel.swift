@@ -11,8 +11,8 @@ class ContentViewModel {
     
     private(set) var finishAllAccess: Bool = false
     private(set) var plantDataModel: PlantModel = PlantModel(plantDataList: [])
+    private(set) var requestPlantDataStatus: APIStatus = .success
     private var alreadyRequestOffset: Int = -20
-    private var isWaitingData: Bool = false
     private var dataLoader: DataLoaderProtocol
     weak var delegate: ContentViewProtocol?
     var dataCount: Int {
@@ -27,11 +27,11 @@ class ContentViewModel {
     
     func requestPlantData(at offset: Int) {
         // Check if it is duplicated request
-        if isWaitingData || offset == alreadyRequestOffset { return }
+        if requestPlantDataStatus == .loading || offset == alreadyRequestOffset { return }
         
         // Setup property value for view model
         let apiString = makeAPIString(offset: offset)
-        isWaitingData = true
+        requestPlantDataStatus = .loading
 
         // Fire API
         guard let url = URL(string: apiString) else { return }
@@ -39,18 +39,23 @@ class ContentViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let data):
-                guard let newData = DataMapper.mapTextData(data: data) else { return }
+                guard let newData = DataMapper.mapTextData(data: data) else {
+                    self.requestPlantDataStatus = .decodeFail
+                    self.delegate?.updateContentTableView()
+                    return
+                }
                 if newData.isEmpty {
                     self.finishAllAccess = true
+                    self.requestPlantDataStatus = .noData
                 } else {
                     self.plantDataModel.plantDataList += newData
                     self.alreadyRequestOffset += newData.count
-                    self.delegate?.updateContentTableView()
+                    self.requestPlantDataStatus = .success
                 }
             case .failure(_):
-                break
+                self.requestPlantDataStatus = .requestFail
             }
-            self.isWaitingData = false
+            self.delegate?.updateContentTableView()
         }
     }
     

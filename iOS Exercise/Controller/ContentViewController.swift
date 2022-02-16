@@ -33,7 +33,14 @@ class ContentViewController: UIViewController {
 extension ContentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.dataCount
+        switch viewModel.requestPlantDataStatus {
+        case .loading, .noData:
+            return viewModel.dataCount + 1
+        case .success:
+            return viewModel.dataCount
+        case .requestFail, .decodeFail:
+            return 1
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -43,8 +50,20 @@ extension ContentViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let data = viewModel.plantDataModel.plantDataList[indexPath.row]
-        cell.bind(data: data)
+        switch viewModel.requestPlantDataStatus {
+        case .loading:
+            cell.plantFeature.text = "Loading..."
+        case .success:
+            let data = viewModel.plantDataModel.plantDataList[indexPath.row]
+            cell.bind(data: data)
+        case .noData:
+            cell.plantFeature.text = "End of data..."
+        case .requestFail:
+            cell.plantFeature.text = "Request Fail..."
+        case .decodeFail:
+            cell.plantFeature.text = "Decode Fail..."
+        }
+        
         return cell
     }
 }
