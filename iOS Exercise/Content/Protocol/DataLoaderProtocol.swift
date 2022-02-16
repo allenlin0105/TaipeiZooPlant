@@ -7,9 +7,7 @@
 
 import Foundation
 
-typealias APIResult = Result<Data, Error>
-
 protocol DataLoaderProtocol {
-    typealias resultCallback = (APIResult) -> Void
+    typealias resultCallback = (Result<Data, Error>) -> Void
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback)
 }
