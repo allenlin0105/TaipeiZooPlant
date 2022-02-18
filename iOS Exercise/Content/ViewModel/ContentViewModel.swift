@@ -9,7 +9,6 @@ import UIKit
 
 class ContentViewModel: ContentViewModelProtocol {    
 
-    var finishAllAccess: Bool = false
     var plantDataModel: PlantModel = PlantModel(plantDataList: [])
     var requestPlantDataStatus: APIStatus = .success
     var dataCount: Int {
@@ -57,7 +56,6 @@ class ContentViewModel: ContentViewModelProtocol {
             return
         }
         if newData.isEmpty {
-            finishAllAccess = true
             requestPlantDataStatus = .noData
         } else {
             plantDataModel.plantDataList += newData

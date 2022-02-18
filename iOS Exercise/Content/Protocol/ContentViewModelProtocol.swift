@@ -9,9 +9,8 @@ import Foundation
 
 protocol ContentViewModelProtocol {
     var plantDataModel: PlantModel { get }
-    var dataCount: Int { get }
-    var finishAllAccess: Bool { get }
     var requestPlantDataStatus: APIStatus { get }
+    var dataCount: Int { get }
     var delegate: ContentViewProtocol? { get set }
     
     func makeAPIString(offset: Int) -> String

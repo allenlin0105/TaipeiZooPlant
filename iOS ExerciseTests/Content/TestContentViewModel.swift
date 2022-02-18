@@ -67,7 +67,7 @@ class TestContentViewModel: XCTestCase {
         let (sut, _) = makeSUT(with: [.successWithJSONButNoData])
         sut.requestProcedure(for: [1000])
         
-        XCTAssertTrue(sut.finishAllAccess)
+        XCTAssertEqual(sut.requestPlantDataStatus, .noData)
     }
     
     func test_requestImage_withImageUrlIsNil_imageStillNil() {

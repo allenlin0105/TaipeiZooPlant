@@ -11,7 +11,7 @@ class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var viewModel: ContentViewModel
+    var viewModel: ContentViewModelProtocol
 
     required init?(coder aDecoder: NSCoder) {
         self.viewModel = ContentViewModel(dataLoader: DataLoader())
@@ -84,7 +84,7 @@ extension ContentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let nextIndex = indexPath.row + 1
-        if !viewModel.finishAllAccess && nextIndex == viewModel.dataCount {
+        if viewModel.requestPlantDataStatus != .noData && nextIndex == viewModel.dataCount {
             viewModel.requestPlantData(at: nextIndex)
         }
     }

@@ -58,7 +58,7 @@ class TestContentViewController: XCTestCase {
         _ = sut.view
         sut.tableView.willDisplayCell(at: 1000)
         
-        XCTAssertTrue(spy.finishAllAccess)
+        XCTAssertEqual(spy.requestPlantDataStatus, .noData)
     }
     
     // MARK: - Helper
