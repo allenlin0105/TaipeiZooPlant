@@ -11,18 +11,18 @@ import UIKit
 class DataLoaderMock: DataLoaderProtocol {
     
     private var currentRequestIndex: Int = 0
-    private let apiCondition: [APICondition]
+    private let apiConditions: [APICondition]
     let imageURL: String
     let image: UIImage?
     
     init(apiCondition: [APICondition], withImageURL: Bool, withImage: Bool) {
-        self.apiCondition = apiCondition
+        self.apiConditions = apiCondition
         self.imageURL = withImageURL ? "http://www.zoo.gov.tw/image.jpg" : ""
         self.image = withImage ? UIImage(named: "TestImage") : nil
     }
     
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
-        switch apiCondition[currentRequestIndex] {
+        switch apiConditions[currentRequestIndex] {
         case .successWithJSON:
             let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
             let data = createValidationData(at: offset)
@@ -49,14 +49,12 @@ class DataLoaderMock: DataLoaderProtocol {
                 "F_Location":"location\(String(describing: offset))",
                 "F_Pic01_URL":"\(imageURL)",
                 "F_Name_Ch":"name\(String(describing: offset))",
-                "F_Feature":"feature\(String(describing: offset))",
+                "F_Feature":"feature\(String(describing: offset))"
              },
         """
         let totalDataCount = withNoData ? 0 : 20
-        var allResults = ""
-        for _ in 0..<totalDataCount {
-            allResults += singleResult
-        }
+        var allResults = [String].init(repeating: singleResult, count: totalDataCount).joined(separator: "")
+        allResults = String(allResults.dropLast())
         let jsonString = """
             {
                "result":{

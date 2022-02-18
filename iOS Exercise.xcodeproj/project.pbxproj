@@ -109,8 +109,8 @@
 			children = (
 				9F77077B27BF412A00F1D582 /* URLSessionMock.swift */,
 				9F3FDF5227A37B7F00426BAB /* DataLoaderMock.swift */,
-				9F3FDF5427A383AB00426BAB /* StubMaker.swift */,
 				9FDEE61727BC922F00A82912 /* APICondition.swift */,
+				9F3FDF5427A383AB00426BAB /* StubMaker.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
