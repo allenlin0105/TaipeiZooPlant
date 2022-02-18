@@ -33,6 +33,26 @@ class TestDataLoader: XCTestCase {
         self.wait(for: [expectation], timeout: 2)
     }
     
+    func test_dataLoader_withFailRequest_receiveRequestError() {
+        // Given
+        let errorMessage = "Request Fail"
+        URLSessionMock.errorDescription = errorMessage
+        
+        // When
+        sut.loadData(requestURL: url) { result in
+            // Then
+            switch result {
+            case .success(_):
+                XCTFail()
+            case .failure(let error):
+                XCTAssertEqual(error.localizedDescription, errorMessage)
+            }
+            self.expectation.fulfill()
+        }
+        
+        self.wait(for: [expectation], timeout: 2)
+    }
+    
     // MARK: - Helpers
     
     override func setUp() {
