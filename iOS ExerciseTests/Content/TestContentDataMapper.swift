@@ -12,20 +12,28 @@ class TestContentDataMapper: XCTestCase {
     
     private let testingImageURL = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
     
-    func test_mapJSON_withValidJSON_returnCorrect() {
+    func test_mapJSON_withValidJSON_returnCorrectData() {
+        // Given
         let data = jsonString.data(using: .utf8)
-        let receive = DataMapper.mapTextData(data: data!)
         let expect = makeCorrectData(withImageURL: true)
         
+        // When
+        let receive = DataMapper.mapTextData(data: data!)
+        
+        // Then
         XCTAssertEqual(receive, expect)
     }
     
     func test_mapJSON_withNoImageURLJSON_returnDataWithImageURLEqualsNil() {
+        // Given
         let newJSONString = jsonString.replace(testingImageURL, with: "")
         let data = newJSONString.data(using: .utf8)
-        let receive = DataMapper.mapTextData(data: data!)
         let expect = makeCorrectData(withImageURL: false)
         
+        // When
+        let receive = DataMapper.mapTextData(data: data!)
+        
+        // Then
         XCTAssertEqual(receive, expect)
     }
     
