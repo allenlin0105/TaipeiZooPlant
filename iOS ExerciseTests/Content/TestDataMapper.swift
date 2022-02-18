@@ -8,7 +8,7 @@
 import XCTest
 @testable import iOS_Exercise
 
-class TestContentDataMapper: XCTestCase {
+class TestDataMapper: XCTestCase {
     
     private let testingImageURL = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
     

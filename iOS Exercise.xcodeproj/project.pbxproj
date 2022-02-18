@@ -14,7 +14,7 @@
 		9F3FDF5527A383AB00426BAB /* StubMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FDF5427A383AB00426BAB /* StubMaker.swift */; };
 		9F8EB826279996BF00085C81 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB825279996BF00085C81 /* DataLoader.swift */; };
 		9F8EB82A27999D3800085C81 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB82927999D3800085C81 /* DataMapper.swift */; };
-		9FCE1A8E279E3750000A751D /* TestContentDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A8D279E3750000A751D /* TestContentDataMapper.swift */; };
+		9FCE1A8E279E3750000A751D /* TestDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A8D279E3750000A751D /* TestDataMapper.swift */; };
 		9FCE1A90279E7EF2000A751D /* TestContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A8F279E7EF2000A751D /* TestContentViewModel.swift */; };
 		9FCE1A92279E8D2D000A751D /* DataLoaderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A91279E8D2D000A751D /* DataLoaderProtocol.swift */; };
 		9FDE542627BCEDA900DB7F5C /* ContentViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDE542527BCEDA900DB7F5C /* ContentViewModelProtocol.swift */; };
@@ -56,7 +56,7 @@
 		9F8EB825279996BF00085C81 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		9F8EB82927999D3800085C81 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		9FCE1A80279D4243000A751D /* iOS ExerciseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS ExerciseTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9FCE1A8D279E3750000A751D /* TestContentDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentDataMapper.swift; sourceTree = "<group>"; };
+		9FCE1A8D279E3750000A751D /* TestDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataMapper.swift; sourceTree = "<group>"; };
 		9FCE1A8F279E7EF2000A751D /* TestContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentViewModel.swift; sourceTree = "<group>"; };
 		9FCE1A91279E8D2D000A751D /* DataLoaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoaderProtocol.swift; sourceTree = "<group>"; };
 		9FDE542527BCEDA900DB7F5C /* ContentViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				9F3FDF5127A37B6A00426BAB /* Helpers */,
-				9FCE1A8D279E3750000A751D /* TestContentDataMapper.swift */,
+				9FCE1A8D279E3750000A751D /* TestDataMapper.swift */,
 				9FCE1A8F279E7EF2000A751D /* TestContentViewModel.swift */,
 				9F1075A927A2715600E116B7 /* TestContentViewController.swift */,
 			);
@@ -406,7 +406,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F1075AA27A2715600E116B7 /* TestContentViewController.swift in Sources */,
-				9FCE1A8E279E3750000A751D /* TestContentDataMapper.swift in Sources */,
+				9FCE1A8E279E3750000A751D /* TestDataMapper.swift in Sources */,
 				9FDEE61827BC922F00A82912 /* APICondition.swift in Sources */,
 				9F3FDF5327A37B7F00426BAB /* DataLoaderMock.swift in Sources */,
 				9F3FDF5527A383AB00426BAB /* StubMaker.swift in Sources */,
