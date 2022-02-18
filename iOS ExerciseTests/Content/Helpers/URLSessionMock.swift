@@ -9,8 +9,7 @@ import Foundation
 
 class URLSessionMock: URLProtocol {
     
-    static var responseDataStub: Data?
-    static var errorDescription: String?
+    static var isSuccess: Bool = true
     
     override class func canInit(with request: URLRequest) -> Bool {
         return true
@@ -21,11 +20,11 @@ class URLSessionMock: URLProtocol {
     }
     
     override func startLoading() {
-        if let errorDescription = URLSessionMock.errorDescription {
-            let error = NSError(domain: "TestingError", code: 1, userInfo: [NSLocalizedDescriptionKey: errorDescription])
-            client?.urlProtocol(self, didFailWithError: error)
+        if URLSessionMock.isSuccess {
+            client?.urlProtocol(self, didLoad: Data())
         } else {
-            client?.urlProtocol(self, didLoad: URLSessionMock.responseDataStub ?? Data())
+            let error = NSError(domain: "TestingError", code: 1, userInfo: nil)
+            client?.urlProtocol(self, didFailWithError: error)
         }
         client?.urlProtocolDidFinishLoading(self)
     }

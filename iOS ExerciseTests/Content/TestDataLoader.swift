@@ -12,11 +12,11 @@ class TestDataLoader: XCTestCase {
     
     var sut: DataLoaderProtocol!
     var expectation: XCTestExpectation!
-    private let url = URL(string: "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")!
+    var url: URL!
     
     func test_dataLoader_withSuccessRequest_receiveData() {
         // Given
-        URLSessionMock.responseDataStub = Data()
+        URLSessionMock.isSuccess = true
         
         // When
         sut.loadData(requestURL: url) { result in
@@ -35,8 +35,7 @@ class TestDataLoader: XCTestCase {
     
     func test_dataLoader_withFailRequest_receiveRequestError() {
         // Given
-        let errorMessage = "Request Fail"
-        URLSessionMock.errorDescription = errorMessage
+        URLSessionMock.isSuccess = false
         
         // When
         sut.loadData(requestURL: url) { result in
@@ -45,7 +44,7 @@ class TestDataLoader: XCTestCase {
             case .success(_):
                 XCTFail()
             case .failure(let error):
-                XCTAssertEqual(error.localizedDescription, errorMessage)
+                XCTAssertNotNil(error)
             }
             self.expectation.fulfill()
         }
@@ -61,11 +60,12 @@ class TestDataLoader: XCTestCase {
         let urlSession = URLSession(configuration: config)
         sut = DataLoader(urlSession: urlSession)
         expectation = XCTestExpectation(description: "Test DataLoader")
+        url = URL(string: "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
     
     override func tearDown() {
         sut = nil
-        URLSessionMock.responseDataStub = nil
-        URLSessionMock.errorDescription = nil
+        expectation = nil
+        url = nil
     }
 }
