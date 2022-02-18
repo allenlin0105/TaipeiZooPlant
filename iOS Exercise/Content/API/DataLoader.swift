@@ -9,9 +9,14 @@ import Foundation
 
 class DataLoader: DataLoaderProtocol {
     
+    private var urlSession: URLSession
+    
+    init(urlSession: URLSession = .shared) {
+        self.urlSession = urlSession
+    }
+    
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
-        let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: requestURL) { data, _, error in
+        let task = urlSession.dataTask(with: requestURL) { data, _, error in
             if let error = error {
                 completionHandler(.failure(error))
                 return
