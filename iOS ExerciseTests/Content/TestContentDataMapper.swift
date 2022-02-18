@@ -29,6 +29,18 @@ class TestContentDataMapper: XCTestCase {
         XCTAssertEqual(receive, expect)
     }
     
+    func test_mapJSON_jsonWithWrongFormat_returnNil() {
+        // Given
+        let wrongJSON = "{results: []}"
+        let data = wrongJSON.data(using: .utf8)
+        
+        // When
+        let receive = DataMapper.mapTextData(data: data!)
+        
+        // Then
+        XCTAssertNil(receive)
+    }
+    
     // MARK: - Helper
     
     private func makeCorrectData(withImageURL: Bool) -> [PlantData] {
