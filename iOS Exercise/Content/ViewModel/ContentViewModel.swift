@@ -30,7 +30,7 @@ class ContentViewModel: ContentViewModelProtocol {
     
     func requestPlantData(at offset: Int) {
         // Check if it is duplicated request
-        if requestPlantDataStatus == .loading || offset == alreadyRequestOffset { return }
+        if offset == alreadyRequestOffset { return }
         
         // Setup property value for view model
         let apiString = makeAPIString(offset: offset)

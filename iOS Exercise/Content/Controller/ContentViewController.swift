@@ -79,7 +79,7 @@ extension ContentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let nextIndex = indexPath.row + 1
-        if viewModel.requestPlantDataStatus != .noData && nextIndex == viewModel.dataCount {
+        if viewModel.requestPlantDataStatus == .success && nextIndex == viewModel.dataCount {
             viewModel.requestPlantData(at: nextIndex)
         }
     }
