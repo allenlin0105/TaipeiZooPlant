@@ -46,16 +46,11 @@ extension ContentViewController: UITableViewDataSource {
         viewModel.requestImage(at: indexPath.row)
         
         switch viewModel.requestPlantDataStatus {
-        case .loading:
-            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "Loading...")
+        case .loading, .noData, .requestFail, .decodeFail:
+            let description = viewModel.requestPlantDataStatus.description
+            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: description)
         case .success:
             return contentCell(at: indexPath.row)
-        case .noData:
-            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "End of data...")
-        case .requestFail:
-            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "Request Fail...")
-        case .decodeFail:
-            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: "Decode Fail...")
         }
     }
     
