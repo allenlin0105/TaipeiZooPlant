@@ -10,7 +10,7 @@ import XCTest
 
 class TestDataLoader: XCTestCase {
     
-    var sut: DataLoaderProtocol!
+    var sut: DataLoader!
     var expectation: XCTestExpectation!
     var url: URL!
     
