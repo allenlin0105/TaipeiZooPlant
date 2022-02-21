@@ -10,106 +10,79 @@ import XCTest
 
 class TestContentViewModel: XCTestCase {
     
+    private var sut: ContentViewModel!
+    private var dataLoaderMock: DataLoaderMock!
+    
+    override func setUp() {
+        dataLoaderMock = DataLoaderMock()
+        sut = ContentViewModel(dataLoader: dataLoaderMock)
+    }
+    
+    override func tearDown() {
+        dataLoaderMock = nil
+        sut = nil
+    }
+    
     func test_setupURLString_withOffsetEqualsZero_receiveCorrectURL() {
-        let (sut, _) = makeSUT(with: [.successWithJSON])
+        // Given
+        // When
         let apiString = sut.makeAPIString(offset: 0)
         
+        // Then
         XCTAssertEqual(apiString, "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14&limit=20&offset=0")
     }
-        
-    func test_requestData_withNetworkFail_receiveError() {
-        let (sut, _) = makeSUT(with: [.networkFailure])
-        sut.requestProcedure()
-        
-        XCTAssertEqual(sut.dataList(), [])
-    }
     
-    func test_requestData_withDecodeFail_receiveError() {
-        let (sut, _) = makeSUT(with: [.decodeFailure])
-        sut.requestProcedure()
+    func test_requestData_whenLoadingData_shouldSetStatusToLoading() {
+        // Given
+        dataLoaderMock.runLoadData = false
         
-        XCTAssertEqual(sut.dataList(), [])
+        // When
+        sut.requestPlantData(at: 0)
+        
+        // Then
+        XCTAssertEqual(sut.requestPlantDataStatus, .loading)
     }
-    
-    func test_requestDataTwice_withTwoSameRequestsAndNoFail_onlyReceiveDataOnce() {
-        let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithJSON], totalStub: 1)
-        sut.requestProcedure(for: [0, 0])
         
-        XCTAssertEqual(sut.dataList(), stub)
+    func test_requestData_withNetworkFail_shouldSetStatusToRequestFail() {
+        // Given
+        let expectation = XCTestExpectation(description: "Testing ContentViewModel for request fail")
+        dataLoaderMock.apiStatus = .requestFail
+        dataLoaderMock.expectation = expectation
+
+        // When
+        sut.requestPlantData(at: 0)
+        wait(for: [expectation], timeout: 2)
+        
+        // Then
+        XCTAssertEqual(sut.requestPlantDataStatus, .requestFail)
     }
-    
-    func test_requestDataTwice_withTwoSameRequestsButFirstFail_shouldReceiveCorrectData() {
-        let (sut, stub) = makeSUT(with: [.networkFailure, .successWithJSON], totalStub: 1)
-        sut.requestProcedure(for: [0, 0])
+
+    func test_requestData_withDecodeFail_shouldSetStatusToDecodeFail() {
+        // Given
+        let expectation = XCTestExpectation(description: "Testing ContentViewModel for decode fail")
+        dataLoaderMock.apiStatus = .decodeFail
+        dataLoaderMock.expectation = expectation
+
+        // When
+        sut.requestPlantData(at: 0)
+        wait(for: [expectation], timeout: 2)
         
-        XCTAssertEqual(sut.dataList(), stub)
+        // Then
+        XCTAssertEqual(sut.requestPlantDataStatus, .decodeFail)
     }
-    
-    func test_requestDataTwice_withTwoDifferentRequestsAndNoFail_receiveCorrectData() {
-        let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithJSON], totalStub: 2)
-        sut.requestProcedure(for: [0, 20])
+
+    func test_lastRequest_withAllDataReceived_shouldSetStatusToNoData() {
+        // Given
+        let expectation = XCTestExpectation(description: "Testing ContentViewModel for no data")
+        dataLoaderMock.apiStatus = .noData
+        dataLoaderMock.expectation = expectation
+
+        // When
+        sut.requestPlantData(at: 0)
+        wait(for: [expectation], timeout: 2)
         
-        XCTAssertEqual(sut.dataList(), stub)
-    }
-    
-    func test_requestDataTwice_withTwoDifferentRequestsButOneNetworkFail_onlyReceiveDataOnce() {
-        let (firstSUT, stub) = makeSUT(with: [.successWithJSON, .networkFailure], totalStub: 1)
-        firstSUT.requestProcedure(for: [0, 20])
-        
-        let (secondSUT, _) = makeSUT(with: [.networkFailure, .successWithJSON], totalStub: 1)
-        secondSUT.requestProcedure(for: [0, 0])
-        
-        XCTAssertEqual(firstSUT.dataList(), stub)
-        XCTAssertEqual(secondSUT.dataList(), stub)
-    }
-    
-    func test_lastRequest_withAllDataReceived_setFinishAllAccessToTrue() {
-        let (sut, _) = makeSUT(with: [.successWithJSONButNoData])
-        sut.requestProcedure(for: [1000])
-        
+        // Then
         XCTAssertEqual(sut.requestPlantDataStatus, .noData)
-    }
-    
-    func test_requestImage_withImageUrlIsNil_imageStillNil() {
-        let (sut, _) = makeSUT(with: [.successWithJSON], withImageURL: false)
-        sut.requestProcedure()
-        sut.requestImage(at: 0)
-        
-        XCTAssertNil(sut.firstImageURL())
-        XCTAssertNil(sut.firstImage())
-    }
-    
-    func test_requestImage_withImageUrl_receiveCorrectImage() {
-        let (sut, stub) = makeSUT(with: [.successWithJSON, .successWithImage], totalStub: 1, stubWithImage: true)
-        sut.requestProcedure()
-        sut.requestImage(at: 0)
-        
-        XCTAssertNotNil(sut.firstImage())
-        XCTAssertEqual(sut.firstImage()?.pngData(), stub.first?.image?.pngData())
-    }
-    
-    func test_requestImage_withImageUrlButNetworkFail_imageStillNil() {
-        let (sut, _) = makeSUT(with: [.successWithJSON, .networkFailure])
-        sut.requestProcedure()
-        sut.requestImage(at: 0)
-        
-        XCTAssertNotNil(sut.firstImageURL())
-        XCTAssertNil(sut.firstImage())
-    }
-    
-    func test_requestImage_jsonNotReceiveYet_shouldReturnAndNotCrash() {
-        let (sut, _) = makeSUT(with: [.successWithImage])
-        sut.requestImage(at: 0)
-    }
-    
-    // MARK: - Helper
-    
-    func makeSUT(with apiCondition: [APICondition], totalStub: Int = 0, withImageURL: Bool = true, stubWithImage: Bool = false) -> (ContentViewModel, [PlantData]) {
-        let mock = DataLoaderMock(apiCondition: apiCondition, withImageURL: withImageURL, withImage: stubWithImage)
-        let sut = ContentViewModel(dataLoader: mock)
-        let stub = makeStub(totalStub: totalStub, imageURL: mock.imageURL, image: mock.image)
-        
-        return (sut, stub)
     }
 }
 
