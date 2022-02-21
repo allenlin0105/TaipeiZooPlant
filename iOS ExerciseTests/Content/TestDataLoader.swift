@@ -10,9 +10,9 @@ import XCTest
 
 class TestDataLoader: XCTestCase {
     
-    var sut: DataLoader!
-    var expectation: XCTestExpectation!
-    var url: URL!
+    private var sut: DataLoader!
+    private var expectation: XCTestExpectation!
+    private var url: URL!
     
     override func setUp() {
         let config = URLSessionConfiguration.default
