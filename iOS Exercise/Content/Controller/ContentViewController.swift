@@ -21,7 +21,7 @@ class ContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: ContentStrings.cellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.cellIdentifier)
+        tableView.register(UINib(nibName: ContentStrings.contentCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.contentCellIdentifier)
         tableView.register(UINib(nibName: ContentStrings.errorCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.errorCellIdentifier)
         
         viewModel.delegate = self
@@ -55,7 +55,7 @@ extension ContentViewController: UITableViewDataSource {
     }
     
     private func contentCell(at row: Int) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.cellIdentifier) as? ContentTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentStrings.contentCellIdentifier) as? ContentTableViewCell else {
             return UITableViewCell()
         }
         
