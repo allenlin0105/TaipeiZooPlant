@@ -14,46 +14,6 @@ class TestDataLoader: XCTestCase {
     var expectation: XCTestExpectation!
     var url: URL!
     
-    func test_dataLoader_withSuccessRequest_receiveData() {
-        // Given
-        URLSessionMock.isSuccess = true
-        
-        // When
-        sut.loadData(requestURL: url) { result in
-            // Then
-            switch result {
-            case .success(let data):
-                XCTAssertNotNil(data)
-            case .failure(_):
-                XCTFail()
-            }
-            self.expectation.fulfill()
-        }
-        
-        self.wait(for: [expectation], timeout: 2)
-    }
-    
-    func test_dataLoader_withFailRequest_receiveRequestError() {
-        // Given
-        URLSessionMock.isSuccess = false
-        
-        // When
-        sut.loadData(requestURL: url) { result in
-            // Then
-            switch result {
-            case .success(_):
-                XCTFail()
-            case .failure(let error):
-                XCTAssertNotNil(error)
-            }
-            self.expectation.fulfill()
-        }
-        
-        self.wait(for: [expectation], timeout: 2)
-    }
-    
-    // MARK: - Helpers
-    
     override func setUp() {
         let config = URLSessionConfiguration.default
         config.protocolClasses = [URLSessionMock.self]
@@ -67,5 +27,49 @@ class TestDataLoader: XCTestCase {
         sut = nil
         expectation = nil
         url = nil
+    }
+    
+    func test_dataLoader_withSuccessRequest_receiveData() {
+        // Given
+        var expectedData: Data? = nil
+        URLSessionMock.isSuccess = true
+        
+        // When
+        sut.loadData(requestURL: url) { result in
+            switch result {
+            case .success(let data):
+                expectedData = data
+            case .failure(_):
+                XCTFail()
+            }
+            self.expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 2)
+        
+        // Then
+        XCTAssertNotNil(expectedData)
+    }
+    
+    func test_dataLoader_withFailRequest_receiveRequestError() {
+        // Given
+        var expectedError: Error? = nil
+        URLSessionMock.isSuccess = false
+        
+        // When
+        sut.loadData(requestURL: url) { result in
+            switch result {
+            case .success(_):
+                XCTFail()
+            case .failure(let error):
+                expectedError = error
+            }
+            self.expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 2)
+        
+        // Then
+        XCTAssertNotNil(expectedError)
     }
 }
