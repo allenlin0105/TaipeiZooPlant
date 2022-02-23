@@ -13,7 +13,8 @@ class DataLoaderMock: DataLoaderProtocol {
     
     var runLoadData: Bool = true
     var apiStatus: APIStatus = .success
-    var expectation: XCTestExpectation?
+    var expectations: [XCTestExpectation]?
+    private var apiIndex = 0
     
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
         if !runLoadData { return }
@@ -47,7 +48,7 @@ class DataLoaderMock: DataLoaderProtocol {
             let data = "{results: []}".data(using: .utf8)!
             completionHandler(.success(data))
         }
-        expectation?.fulfill()
+        expectations?[apiIndex].fulfill()
     }
 }
 
