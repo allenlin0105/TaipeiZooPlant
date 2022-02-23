@@ -32,9 +32,9 @@ public func makeJSONData(at offset: Int = 0) -> Data {
     return data
 }
 
-public func makePlantData(totalStub: Int, imageURL: String, image: UIImage?) -> [PlantData] {
+public func makePlantData(totalData: Int, imageURL: String, image: UIImage?) -> [PlantData] {
     var stub: [PlantData] = []
-    for i in 0..<totalStub {
+    for i in 0..<(totalData / 20) {
         stub += [PlantData].init(repeating: PlantData(name: "name\(i)",
                                                       location: "location\(i)",
                                                       feature: "feature\(i)",
