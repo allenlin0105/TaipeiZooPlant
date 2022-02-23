@@ -111,6 +111,24 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.requestPlantDataStatus, .noData)
         XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
     }
+    
+    func test_requestData_withTwoSameRequests_shouldOnlySaveDataOnce() {
+        // Given
+        let expectations = Array(expectations[..<1])
+        dataLoaderMock.expectations = expectations
+        dataLoaderMock.apiStatuses = [.success]
+        let expect = makePlantData(totalStub: 1,
+                                   imageURL: "http://www.zoo.gov.tw/image.jpg",
+                                   image: nil)
+        
+        // When
+        sut.requestPlantData(at: 0)
+        wait(for: expectations, timeout: 2)
+        sut.requestPlantData(at: 0)
+        
+        // Then
+        XCTAssertEqual(sut.plantDataModel.plantDataList, expect)
+    }
 }
 
 // MARK: - ContentViewModel Private Extension
