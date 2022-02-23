@@ -71,7 +71,7 @@ class TestContentViewModel: XCTestCase {
         // Given
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatus = .requestFail
+        dataLoaderMock.apiStatuses = [.requestFail]
 
         // When
         sut.requestPlantData(at: 0)
@@ -86,7 +86,7 @@ class TestContentViewModel: XCTestCase {
         // Given
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatus = .decodeFail
+        dataLoaderMock.apiStatuses = [.decodeFail]
 
         // When
         sut.requestPlantData(at: 0)
@@ -101,7 +101,7 @@ class TestContentViewModel: XCTestCase {
         // Given
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatus = .noData
+        dataLoaderMock.apiStatuses = [.noData]
 
         // When
         sut.requestPlantData(at: 0)
