@@ -11,12 +11,7 @@ class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var viewModel: ContentViewModelProtocol
-
-    required init?(coder aDecoder: NSCoder) {
-        self.viewModel = ContentViewModel(dataLoader: DataLoader())
-        super.init(coder: aDecoder)
-    }
+    var viewModel: ContentViewModelProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +19,10 @@ class ContentViewController: UIViewController {
         tableView.register(UINib(nibName: ContentStrings.contentCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.contentCellIdentifier)
         tableView.register(UINib(nibName: ContentStrings.errorCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.errorCellIdentifier)
         
-        viewModel.delegate = self
-        viewModel.requestPlantData(at: 0)
+        viewModel = ContentViewModel(dataLoader: DataLoader(),
+                                     delegate: self)
+    
+        viewModel?.requestPlantData(at: 0)
     }
 }
 
@@ -34,21 +31,22 @@ class ContentViewController: UIViewController {
 extension ContentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch viewModel.requestPlantDataStatus {
+        let dataCount = viewModel?.dataCount ?? 0
+        switch viewModel?.requestPlantDataStatus {
         case .loading, .noData, .requestFail, .decodeFail:
-            return viewModel.dataCount + 1
-        case .success:
-            return viewModel.dataCount
+            return dataCount + 1
+        case .success, .none:
+            return dataCount
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        viewModel.requestImage(at: indexPath.row)
+        viewModel?.requestImage(at: indexPath.row)
         
-        switch viewModel.requestPlantDataStatus {
-        case .loading, .noData, .requestFail, .decodeFail:
-            let description = viewModel.requestPlantDataStatus.description
-            return (indexPath.row < viewModel.dataCount) ? contentCell(at: indexPath.row) : errorCell(description: description)
+        switch viewModel?.requestPlantDataStatus {
+        case .loading, .noData, .requestFail, .decodeFail, .none:
+            let description = viewModel?.requestPlantDataStatus.description ?? ""
+            return (indexPath.row < (viewModel?.dataCount ?? 0)) ? contentCell(at: indexPath.row) : errorCell(description: description)
         case .success:
             return contentCell(at: indexPath.row)
         }
@@ -59,8 +57,9 @@ extension ContentViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let data = viewModel.plantDataModel.plantDataList[row]
-        cell.bind(data: data)
+        if let data = viewModel?.plantDataModel.plantDataList[row] {
+            cell.bind(data: data)
+        }
         return cell
     }
     
@@ -79,8 +78,8 @@ extension ContentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let nextIndex = indexPath.row + 1
-        if viewModel.requestPlantDataStatus == .success && nextIndex == viewModel.dataCount {
-            viewModel.requestPlantData(at: nextIndex)
+        if viewModel?.requestPlantDataStatus == .success && nextIndex == viewModel?.dataCount {
+            viewModel?.requestPlantData(at: nextIndex)
         }
     }
 }

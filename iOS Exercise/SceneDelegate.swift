@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func makeContentViewController() -> ContentViewController {
         let mainStoryboard = UIStoryboard.init(name: GlobalStrings.mainStoryboardIdentifier, bundle: nil)
         let viewController = mainStoryboard.instantiateViewController(withIdentifier: GlobalStrings.mainStoryboardIdentifier) as! ContentViewController
-        viewController.viewModel = ContentViewModel(dataLoader: DataLoader())
+        viewController.viewModel = ContentViewModel(dataLoader: DataLoader(), delegate: viewController)
 
         return viewController
     }

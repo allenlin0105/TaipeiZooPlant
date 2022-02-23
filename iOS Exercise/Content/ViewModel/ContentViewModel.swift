@@ -18,8 +18,9 @@ class ContentViewModel: ContentViewModelProtocol {
     private var alreadyRequestOffset: Int = -20
     private var dataLoader: DataLoaderProtocol
     
-    init(dataLoader: DataLoaderProtocol) {
+    init(dataLoader: DataLoaderProtocol, delegate: ContentViewProtocol) {
         self.dataLoader = dataLoader
+        self.delegate = delegate
     }
     
     // MARK: - API Request
