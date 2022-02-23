@@ -12,14 +12,18 @@ class TestContentViewModel: XCTestCase {
     
     private var sut: ContentViewModel!
     private var dataLoaderMock: DataLoaderMock!
+    private var viewDelegateMock: ContentViewDelegateMock!
     
     override func setUp() {
         dataLoaderMock = DataLoaderMock()
-        sut = ContentViewModel(dataLoader: dataLoaderMock)
+        viewDelegateMock = ContentViewDelegateMock()
+        sut = ContentViewModel(dataLoader: dataLoaderMock,
+                               delegate: viewDelegateMock)
     }
     
     override func tearDown() {
         dataLoaderMock = nil
+        viewDelegateMock = nil
         sut = nil
     }
     
@@ -43,7 +47,21 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.requestPlantDataStatus, .loading)
     }
         
-    func test_requestData_withNetworkFail_shouldSetStatusToRequestFail() {
+    func test_requestData_withSuccessResponse_shouldSetStatusToSuccessAndReloadTableView() {
+        // Given
+        let expectation = XCTestExpectation(description: "Testing ContentViewModel for request fail")
+        dataLoaderMock.expectation = expectation
+        
+        // When
+        sut.requestPlantData(at: 0)
+        wait(for: [expectation], timeout: 2)
+        
+        // Then
+        XCTAssertEqual(sut.requestPlantDataStatus, .success)
+        XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
+    }
+    
+    func test_requestData_withNetworkFail_shouldSetStatusToRequestFailAndReloadTableView() {
         // Given
         let expectation = XCTestExpectation(description: "Testing ContentViewModel for request fail")
         dataLoaderMock.apiStatus = .requestFail
@@ -55,9 +73,10 @@ class TestContentViewModel: XCTestCase {
         
         // Then
         XCTAssertEqual(sut.requestPlantDataStatus, .requestFail)
+        XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
     }
 
-    func test_requestData_withDecodeFail_shouldSetStatusToDecodeFail() {
+    func test_requestData_withDecodeFail_shouldSetStatusToDecodeFailAndReloadTableView() {
         // Given
         let expectation = XCTestExpectation(description: "Testing ContentViewModel for decode fail")
         dataLoaderMock.apiStatus = .decodeFail
@@ -69,9 +88,10 @@ class TestContentViewModel: XCTestCase {
         
         // Then
         XCTAssertEqual(sut.requestPlantDataStatus, .decodeFail)
+        XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
     }
 
-    func test_lastRequest_withAllDataReceived_shouldSetStatusToNoData() {
+    func test_lastRequest_withAllDataReceived_shouldSetStatusToNoDataAndReloadTableView() {
         // Given
         let expectation = XCTestExpectation(description: "Testing ContentViewModel for no data")
         dataLoaderMock.apiStatus = .noData
@@ -83,6 +103,7 @@ class TestContentViewModel: XCTestCase {
         
         // Then
         XCTAssertEqual(sut.requestPlantDataStatus, .noData)
+        XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
     }
 }
 
