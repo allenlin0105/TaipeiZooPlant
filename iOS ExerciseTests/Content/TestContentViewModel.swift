@@ -117,7 +117,7 @@ class TestContentViewModel: XCTestCase {
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
         dataLoaderMock.apiStatuses = [.success]
-        let expect = makePlantData(totalStub: 1,
+        let expect = makePlantData(totalData: 20,
                                    imageURL: "http://www.zoo.gov.tw/image.jpg",
                                    image: nil)
         
@@ -125,6 +125,23 @@ class TestContentViewModel: XCTestCase {
         sut.requestPlantData(at: 0)
         wait(for: expectations, timeout: 2)
         sut.requestPlantData(at: 0)
+        
+        // Then
+        XCTAssertEqual(sut.plantDataModel.plantDataList, expect)
+    }
+    
+    func test_requestData_withTwoDifferentRequests_shouldSaveDataTwice() {
+        // Given
+        dataLoaderMock.expectations = expectations
+        dataLoaderMock.apiStatuses = [.success, .success]
+        let expect = makePlantData(totalData: 40,
+                                   imageURL: "http://www.zoo.gov.tw/image.jpg",
+                                   image: nil)
+        
+        // When
+        sut.requestPlantData(at: 0)
+        sut.requestPlantData(at: 20)
+        wait(for: expectations, timeout: 2)
         
         // Then
         XCTAssertEqual(sut.plantDataModel.plantDataList, expect)
