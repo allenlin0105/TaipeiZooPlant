@@ -6,8 +6,10 @@
 //
 
 import UIKit
+@testable import iOS_Exercise
 
 struct TestingConstant {
     static let imageURLString = "http://www.zoo.gov.tw/image.jpg"
-    static let image = UIImage(named: "TestImage")
+    static let successImage = UIImage(named: "TestImage")
+    static let errorImage = UIImage(named: ContentStrings.errorImageName)
 }

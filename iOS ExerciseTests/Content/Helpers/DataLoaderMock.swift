@@ -26,7 +26,7 @@ class DataLoaderMock: DataLoaderProtocol {
         case .success:
             var data = Data()
             if isRequestImage {
-                data = TestingConstant.image?.pngData()! ?? Data()
+                data = TestingConstant.successImage?.pngData()! ?? Data()
             } else {
                 let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
                 data = makeJSONData(at: offset)

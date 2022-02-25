@@ -73,7 +73,11 @@ class ContentViewModel: ContentViewModelProtocol {
         
         // Decides whether to fire API for image
         let target = plantDataModel.plantDataList[index]
-        guard target.image == nil, let imageURL = target.imageURL else { return }
+        guard target.image == nil else { return }
+        guard let imageURL = target.imageURL else {
+            handleFailImageSituation(at: index)
+            return
+        }
         
         // Fire API
         dataLoader.loadData(requestURL: imageURL) { [weak self] result in
@@ -81,10 +85,14 @@ class ContentViewModel: ContentViewModelProtocol {
             switch result {
             case .success(let data):
                 self.plantDataModel.plantDataList[index].image = UIImage(data: data)
-                self.delegate?.reloadContentTableView()
             case .failure(_):
-                break
+                self.handleFailImageSituation(at: index)
             }
+            self.delegate?.reloadContentTableView()
         }
+    }
+    
+    private func handleFailImageSituation(at index: Int) {
+        plantDataModel.plantDataList[index].image = UIImage(named: ContentStrings.errorImageName)
     }
 }
