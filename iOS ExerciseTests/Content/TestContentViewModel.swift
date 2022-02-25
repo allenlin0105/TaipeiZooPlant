@@ -159,9 +159,6 @@ class TestContentViewModel: XCTestCase {
         // Given
         dataLoaderMock.apiStatuses = [.success, .success]
         dataLoaderMock.expectations = expectations
-        let expect = makePlantData(totalData: 20,
-                                   withImageURL: true,
-                                   image: TestingConstant.successImage)
         sut.requestPlantData(at: 0)
         wait(for: [expectations[0]], timeout: 2)
         viewDelegateMock.reloadContentTableViewIsCalled = false
@@ -172,7 +169,7 @@ class TestContentViewModel: XCTestCase {
         wait(for: [expectations[1]], timeout: 2)
         
         // Then
-        XCTAssertEqual(sut.firstImage?.pngData(), expect.first?.image?.pngData())
+        XCTAssertEqual(sut.firstImage?.pngData(), TestingConstant.successImage?.pngData())
         XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
     }
     
@@ -180,9 +177,7 @@ class TestContentViewModel: XCTestCase {
         // Given
         dataLoaderMock.apiStatuses = [.success, .requestFail]
         dataLoaderMock.expectations = expectations
-        let expect = makePlantData(totalData: 20,
-                                   withImageURL: true,
-                                   image: TestingConstant.errorImage)
+        
         sut.requestPlantData(at: 0)
         wait(for: [expectations[0]], timeout: 2)
         viewDelegateMock.reloadContentTableViewIsCalled = false
@@ -193,8 +188,27 @@ class TestContentViewModel: XCTestCase {
         wait(for: [expectations[1]], timeout: 2)
         
         // Then
-        XCTAssertEqual(sut.firstImage?.pngData(), expect.first?.image?.pngData())
+        XCTAssertEqual(sut.firstImage?.pngData(), TestingConstant.errorImage?.pngData())
         XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
+    }
+    
+    func test_requestImage_withImageURLEqualsNil_shouldSaveErrorImageAndNotCallLoadData() {
+        // Given
+        let expectations = Array(expectations[..<1])
+        dataLoaderMock.expectations = expectations
+        dataLoaderMock.withImageURL = false
+
+        sut.requestPlantData(at: 0)
+        wait(for: [expectations[0]], timeout: 2)
+        dataLoaderMock.isRequestImage = true
+        dataLoaderMock.loadDataIsCalled = false
+
+        // When
+        sut.requestImage(at: 0)
+
+        // Then
+        XCTAssertEqual(sut.firstImage?.pngData(), TestingConstant.errorImage?.pngData())
+        XCTAssertFalse(dataLoaderMock.loadDataIsCalled)
     }
     
     func test_requestImage_withImageAlreadySaved_shouldNotCallLoadData() {

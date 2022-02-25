@@ -8,11 +8,12 @@
 import UIKit
 @testable import iOS_Exercise
 
-public func makeJSONData(at offset: Int = 0) -> Data {
+public func makeJSONData(at offset: Int = 0, withImageURL: Bool) -> Data {
+    let imageURLString = withImageURL ? TestingConstant.imageURLString : ""
     let singleResult = """
          {
             "F_Location":"location\(String(describing: offset))",
-            "F_Pic01_URL":"\(TestingConstant.imageURLString)",
+            "F_Pic01_URL":"\(imageURLString)",
             "F_Name_Ch":"name\(String(describing: offset))",
             "F_Feature":"feature\(String(describing: offset))"
          },

@@ -14,6 +14,7 @@ class DataLoaderMock: DataLoaderProtocol {
     var runLoadData = true
     var apiStatuses: [APIStatus] = [.success]
     var isRequestImage = false
+    var withImageURL = true
     var loadDataIsCalled = false
     var expectations: [XCTestExpectation]?
     private var apiIndex = 0
@@ -31,7 +32,7 @@ class DataLoaderMock: DataLoaderProtocol {
                 data = TestingConstant.successImage?.pngData()! ?? Data()
             } else {
                 let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
-                data = makeJSONData(at: offset)
+                data = makeJSONData(at: offset, withImageURL: withImageURL)
             }
             completionHandler(.success(data))
         case .noData:
