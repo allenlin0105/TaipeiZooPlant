@@ -118,7 +118,7 @@ class TestContentViewModel: XCTestCase {
         dataLoaderMock.expectations = expectations
         let expect = makePlantData(totalData: 20,
                                    withImageURL: true,
-                                   image: nil)
+                                   withImage: false)
         
         // When
         sut.requestPlantData(at: 0)
@@ -135,7 +135,7 @@ class TestContentViewModel: XCTestCase {
         dataLoaderMock.expectations = expectations
         let expect = makePlantData(totalData: 40,
                                    withImageURL: true,
-                                   image: nil)
+                                   withImage: false)
         
         // When
         sut.requestPlantData(at: 0)
@@ -144,6 +144,37 @@ class TestContentViewModel: XCTestCase {
         
         // Then
         XCTAssertEqual(sut.dataList, expect)
+    }
+    
+    func test_requestImage_withNoDataReturnYet_shouldNotCrashInProductionCode() {
+        // Given
+        // When
+        sut.requestImage(at: 0)
+        
+        // Then
+        // It should not crash
+    }
+    
+    func test_requestImage_withSuccessResponse_shouldSaveImageAndReloadTableView() {
+        // Given
+        dataLoaderMock.apiStatuses = [.success, .success]
+        dataLoaderMock.expectations = expectations
+        let expect = makePlantData(totalData: 20,
+                                   withImageURL: true,
+                                   withImage: true)
+        sut.requestPlantData(at: 0)
+        wait(for: [expectations.first!], timeout: 2)
+        viewDelegateMock.reloadContentTableViewIsCalled = false
+        dataLoaderMock.isRequestImage = true
+
+        // When
+        sut.requestImage(at: 0)
+        wait(for: [expectations[1]], timeout: 2)
+        
+        // Then
+        XCTAssertEqual(sut.firstImage?.pngData(), expect[0].image?.pngData())
+        XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
+        
     }
 }
 

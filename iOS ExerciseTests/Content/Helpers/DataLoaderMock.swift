@@ -11,8 +11,9 @@ import XCTest
 
 class DataLoaderMock: DataLoaderProtocol {
     
-    var runLoadData: Bool = true
+    var runLoadData = true
     var apiStatuses: [APIStatus] = [.success]
+    var isRequestImage = false
     var expectations: [XCTestExpectation]?
     private var apiIndex = 0
     
@@ -23,8 +24,13 @@ class DataLoaderMock: DataLoaderProtocol {
         case .loading:
             break
         case .success:
-            let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
-            let data = makeJSONData(at: offset)
+            var data = Data()
+            if isRequestImage {
+                data = TestingConstant.image?.pngData()! ?? Data()
+            } else {
+                let offset = (Int(requestURL.getQueryValue(for: "offset")) ?? 0) / 20
+                data = makeJSONData(at: offset)
+            }
             completionHandler(.success(data))
         case .noData:
             let data = "{\"result\":{\"results\":[]}}".data(using: .utf8)!
