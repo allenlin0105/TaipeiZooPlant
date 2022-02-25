@@ -14,12 +14,14 @@ class DataLoaderMock: DataLoaderProtocol {
     var runLoadData = true
     var apiStatuses: [APIStatus] = [.success]
     var isRequestImage = false
+    var loadDataIsCalled = false
     var expectations: [XCTestExpectation]?
     private var apiIndex = 0
     
     func loadData(requestURL: URL, completionHandler: @escaping resultCallback) {
         if !runLoadData { return }
         
+        loadDataIsCalled = true
         switch apiStatuses[apiIndex] {
         case .loading:
             break

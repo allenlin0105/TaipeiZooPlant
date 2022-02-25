@@ -196,6 +196,26 @@ class TestContentViewModel: XCTestCase {
         XCTAssertEqual(sut.firstImage?.pngData(), expect.first?.image?.pngData())
         XCTAssertTrue(viewDelegateMock.reloadContentTableViewIsCalled)
     }
+    
+    func test_requestImage_withImageAlreadySaved_shouldNotCallLoadData() {
+        // Given
+        // Request order: json, image, image
+        dataLoaderMock.apiStatuses = [.success, .success, .success]
+        dataLoaderMock.expectations = expectations
+
+        sut.requestPlantData(at: 0)
+        wait(for: [expectations[0]], timeout: 2)
+        dataLoaderMock.isRequestImage = true
+        sut.requestImage(at: 0)
+        wait(for: [expectations[1]], timeout: 2)
+        dataLoaderMock.loadDataIsCalled = false
+
+        // When
+        sut.requestImage(at: 0)
+        
+        // Then
+        XCTAssertFalse(dataLoaderMock.loadDataIsCalled)
+    }
 }
 
 // MARK: - ContentViewModel Private Extension
