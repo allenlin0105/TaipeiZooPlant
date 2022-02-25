@@ -69,9 +69,9 @@ class TestContentViewModel: XCTestCase {
     
     func test_requestData_withNetworkFail_shouldSetStatusToRequestFailAndReloadTableView() {
         // Given
+        dataLoaderMock.apiStatuses = [.requestFail]
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatuses = [.requestFail]
 
         // When
         sut.requestPlantData(at: 0)
@@ -84,9 +84,9 @@ class TestContentViewModel: XCTestCase {
 
     func test_requestData_withDecodeFail_shouldSetStatusToDecodeFailAndReloadTableView() {
         // Given
+        dataLoaderMock.apiStatuses = [.decodeFail]
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatuses = [.decodeFail]
 
         // When
         sut.requestPlantData(at: 0)
@@ -99,9 +99,9 @@ class TestContentViewModel: XCTestCase {
 
     func test_lastRequest_withAllDataReceived_shouldSetStatusToNoDataAndReloadTableView() {
         // Given
+        dataLoaderMock.apiStatuses = [.noData]
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatuses = [.noData]
 
         // When
         sut.requestPlantData(at: 0)
@@ -116,9 +116,8 @@ class TestContentViewModel: XCTestCase {
         // Given
         let expectations = Array(expectations[..<1])
         dataLoaderMock.expectations = expectations
-        dataLoaderMock.apiStatuses = [.success]
         let expect = makePlantData(totalData: 20,
-                                   imageURL: "http://www.zoo.gov.tw/image.jpg",
+                                   withImageURL: true,
                                    image: nil)
         
         // When
@@ -127,15 +126,15 @@ class TestContentViewModel: XCTestCase {
         sut.requestPlantData(at: 0)
         
         // Then
-        XCTAssertEqual(sut.plantDataModel.plantDataList, expect)
+        XCTAssertEqual(sut.dataList, expect)
     }
     
     func test_requestData_withTwoDifferentRequests_shouldSaveDataTwice() {
         // Given
-        dataLoaderMock.expectations = expectations
         dataLoaderMock.apiStatuses = [.success, .success]
+        dataLoaderMock.expectations = expectations
         let expect = makePlantData(totalData: 40,
-                                   imageURL: "http://www.zoo.gov.tw/image.jpg",
+                                   withImageURL: true,
                                    image: nil)
         
         // When
@@ -144,29 +143,19 @@ class TestContentViewModel: XCTestCase {
         wait(for: expectations, timeout: 2)
         
         // Then
-        XCTAssertEqual(sut.plantDataModel.plantDataList, expect)
+        XCTAssertEqual(sut.dataList, expect)
     }
 }
 
 // MARK: - ContentViewModel Private Extension
 
 private extension ContentViewModel {
-
-    func dataList() -> [PlantData] {
+    
+    var dataList: [PlantData] {
         return self.plantDataModel.plantDataList
     }
     
-    func requestProcedure(for offset: [Int] = [0]) {
-        for i in offset {
-            self.requestPlantData(at: i)
-        }
-    }
-    
-    func firstImageURL() -> URL? {
-        return self.dataList().first?.imageURL
-    }
-    
-    func firstImage() -> UIImage? {
-        return self.dataList().first?.image
+    var firstImage: UIImage? {
+        return self.dataList.first?.image
     }
 }

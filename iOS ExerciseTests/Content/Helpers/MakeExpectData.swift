@@ -12,7 +12,7 @@ public func makeJSONData(at offset: Int = 0) -> Data {
     let singleResult = """
          {
             "F_Location":"location\(String(describing: offset))",
-            "F_Pic01_URL":"http://www.zoo.gov.tw/image.jpg",
+            "F_Pic01_URL":"\(TestingConstant.imageURLString)",
             "F_Name_Ch":"name\(String(describing: offset))",
             "F_Feature":"feature\(String(describing: offset))"
          },
@@ -32,13 +32,14 @@ public func makeJSONData(at offset: Int = 0) -> Data {
     return data
 }
 
-public func makePlantData(totalData: Int, imageURL: String, image: UIImage?) -> [PlantData] {
+public func makePlantData(totalData: Int, withImageURL: Bool, image: UIImage?) -> [PlantData] {
     var stub: [PlantData] = []
+    let imageURL = withImageURL ? URL(string: TestingConstant.imageURLString) : nil
     for i in 0..<(totalData / 20) {
         stub += [PlantData].init(repeating: PlantData(name: "name\(i)",
                                                       location: "location\(i)",
                                                       feature: "feature\(i)",
-                                                      imageURL: URL(string: imageURL),
+                                                      imageURL: imageURL,
                                                       image: image),
                                  count: 20)
     }
