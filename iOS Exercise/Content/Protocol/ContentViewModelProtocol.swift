@@ -8,6 +8,8 @@
 import Foundation
 
 protocol ContentViewModelProtocol {
+    init(dataLoader: DataLoaderProtocol, delegate: ContentViewProtocol)
+    
     var plantDataModel: PlantModel { get }
     var requestPlantDataStatus: APIStatus { get }
     var dataCount: Int { get }

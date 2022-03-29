@@ -19,9 +19,6 @@ class ContentViewController: UIViewController {
         tableView.register(UINib(nibName: ContentStrings.contentCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.contentCellIdentifier)
         tableView.register(UINib(nibName: ContentStrings.errorCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.errorCellIdentifier)
         
-        viewModel = ContentViewModel(dataLoader: DataLoader(),
-                                     delegate: self)
-    
         viewModel?.requestPlantData(at: 0)
     }
 }

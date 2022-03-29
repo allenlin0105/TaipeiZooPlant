@@ -15,10 +15,11 @@ class ContentViewModel: ContentViewModelProtocol {
         return plantDataModel.plantDataList.count
     }
     weak var delegate: ContentViewProtocol?
+    
     private var alreadyRequestOffset: Int = -20
     private var dataLoader: DataLoaderProtocol
     
-    init(dataLoader: DataLoaderProtocol, delegate: ContentViewProtocol) {
+    required init(dataLoader: DataLoaderProtocol, delegate: ContentViewProtocol) {
         self.dataLoader = dataLoader
         self.delegate = delegate
     }
