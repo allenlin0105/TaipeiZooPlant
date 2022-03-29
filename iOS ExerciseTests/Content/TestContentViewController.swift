@@ -49,4 +49,13 @@ class TestContentViewController: XCTestCase {
         // Then
         XCTAssertNotNil(cell)
     }
+    
+    func test_firstRequest_whenViewDidLoad_shouldRequestData() {
+        // Given
+        // When
+        sut.loadViewIfNeeded()
+        
+        // Then
+        XCTAssertEqual(sut.viewModel?.dataCount, 20)
+    }
 }

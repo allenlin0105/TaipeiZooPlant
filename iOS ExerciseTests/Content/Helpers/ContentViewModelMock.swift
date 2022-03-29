@@ -24,6 +24,7 @@ class ContentViewModelMock: ContentViewModelProtocol {
     }
     
     func requestPlantData(at offset: Int) {
+        dataCount = offset + 20
     }
     
     func requestImage(at index: Int) {
