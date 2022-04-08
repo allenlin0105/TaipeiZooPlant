@@ -57,8 +57,59 @@ class TestContentViewController: XCTestCase {
         XCTAssertTrue(viewModelMock.requestPlantDataIsCalled)
         XCTAssertEqual(viewModelMock.requestOffset, 0)
     }
+    
+    func test_notFirstRequest_whenFirstRequestIsNotSuccess_shouldNotCallRequestData() {
+        // Given
+        viewModelMock.requestPlantDataIsCalled = false
+        
+        // When
+        APIStatus.allCases.forEach { status in
+            guard status != .success else { return }
+            
+            viewModelMock.requestPlantDataStatus = status
+            sut.tableView.willDisplayCellAt(row: 0)
+        }
         
         // Then
-        XCTAssertEqual(sut.viewModel?.dataCount, 20)
+        XCTAssertFalse(viewModelMock.requestPlantDataIsCalled)
+    }
+    
+    func test_notFirstRequest_whenNotReachingThePageEnd_shouldNotCallRequestData() {
+        // Given
+        viewModelMock.requestPlantDataIsCalled = false
+        viewModelMock.requestPlantDataStatus = .success
+        
+        // When
+        for row in 0..<(viewModelMock.dataCount - 1) {
+            sut.tableView.willDisplayCellAt(row: row)
+        }
+        
+        // Then
+        XCTAssertFalse(viewModelMock.requestPlantDataIsCalled)
+    }
+    
+    func test_notFirstRequest_whenReachingThePageEnd_shouldCallRequestData() {
+        // Given
+        viewModelMock.requestPlantDataIsCalled = false
+        viewModelMock.requestPlantDataStatus = .success
+        
+        // When
+        sut.tableView.willDisplayCellAt(row: viewModelMock.dataCount - 1)
+        
+        // Then
+        XCTAssertTrue(viewModelMock.requestPlantDataIsCalled)
+        XCTAssertEqual(viewModelMock.requestOffset, 20)
+    }
+}
+
+// MARK: - Helpers
+
+private extension UITableView {
+    
+    func willDisplayCellAt(row: Int) {
+        let indexPath = IndexPath(row: row, section: 0)
+        self.delegate?.tableView?(self,
+                                  willDisplay: UITableViewCell(),
+                                  forRowAt: indexPath)
     }
 }

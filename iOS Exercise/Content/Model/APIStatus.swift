@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIStatus {
+enum APIStatus: CaseIterable {
     case loading
     case success
     case noData
