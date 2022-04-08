@@ -130,6 +130,13 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		9FB348C027FFD93200A8AE4A /* ShrinkHeader */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ShrinkHeader;
+			sourceTree = "<group>";
+		};
 		9FCE1A81279D4243000A751D /* iOS ExerciseTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,10 +222,12 @@
 			children = (
 				E37477782792762F006D6A4D /* Library */,
 				9FDEE62327BCC0AD00A82912 /* Content */,
+				9FB348C027FFD93200A8AE4A /* ShrinkHeader */,
 				E3A31CBA277D416900146AAD /* AppDelegate.swift */,
 				E3A31CBC277D416900146AAD /* SceneDelegate.swift */,
 				E3A31CC3277D416A00146AAD /* Assets.xcassets */,
 				E3A31CC5277D416A00146AAD /* LaunchScreen.storyboard */,
+				9F3353FD27A3926900E57D7E /* Main.storyboard */,
 				E3A31CC8277D416A00146AAD /* Info.plist */,
 			);
 			path = "iOS Exercise";
@@ -245,7 +254,6 @@
 		E3F882F8278FC0C300B50353 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9F3353FD27A3926900E57D7E /* Main.storyboard */,
 				E310C23827915C5D005A1AD7 /* ContentTableViewCell.swift */,
 				E310C23927915C5D005A1AD7 /* ContentTableViewCell.xib */,
 				9FDEE61F27BC9FE700A82912 /* ErrorTableViewCell.swift */,
