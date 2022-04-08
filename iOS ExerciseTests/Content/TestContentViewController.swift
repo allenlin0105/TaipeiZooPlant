@@ -100,6 +100,33 @@ class TestContentViewController: XCTestCase {
         XCTAssertTrue(viewModelMock.requestPlantDataIsCalled)
         XCTAssertEqual(viewModelMock.requestOffset, 20)
     }
+    
+    func test_numberOfRows_whenSuccess_shouldEqualToDataCount() {
+        // Given
+        // When
+        let rowCount = sut.tableView.numberOfRows(inSection: 0)
+        
+        // Then
+        XCTAssertEqual(rowCount, 20)
+    }
+    
+    func test_numberOfRows_whenNotSuccess_shouldEqualToDataCountPlusOne() {
+        // Given
+        var receivedRowCount: [Int] = []
+        
+        // When
+        APIStatus.allCases.forEach { status in
+            guard status != .success else { return }
+            
+            viewModelMock.requestPlantDataStatus = status
+            receivedRowCount.append(sut.tableView.numberOfRows(inSection: 0))
+        }
+        
+        // Then
+        receivedRowCount.forEach { rowCount in
+            XCTAssertEqual(rowCount, 21)
+        }
+    }
 }
 
 // MARK: - Helpers

@@ -30,9 +30,9 @@ extension ContentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let dataCount = viewModel?.dataCount ?? 0
         switch viewModel?.requestPlantDataStatus {
-        case .loading, .noData, .requestFail, .decodeFail:
+        case .loading, .noData, .requestFail, .decodeFail, .none:
             return dataCount + 1
-        case .success, .none:
+        case .success:
             return dataCount
         }
     }
