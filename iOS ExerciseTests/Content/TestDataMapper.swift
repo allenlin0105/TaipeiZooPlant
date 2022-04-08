@@ -8,42 +8,63 @@
 import XCTest
 @testable import iOS_Exercise
 
-class TestContentDataMapper: XCTestCase {
-    func test_mapJSON_withDataEqualsNil_receiveEmptyList() {
-        let data: Data? = nil
-        let expect: [PlantData] = []
-        
-        let receive = DataMapper.mapTextData(data: data)
-        XCTAssertTrue(expect == receive)
-    }
+class TestDataMapper: XCTestCase {
     
-    func test_mapJSON_withData_returnPlantDataListWithImageUrl() {
-        let data: Data? = jsonString.data(using: .utf8)
-        XCTAssertNotNil(data)
+    private let testingImageURL = "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
+    
+    func test_mapJSON_withValidJSON_returnCorrectData() {
+        // Given
+        let data = jsonString.data(using: .utf8)
+        let expect = makeCorrectData(withImageURL: true)
         
-        let receive = DataMapper.mapTextData(data: data)
-        let expect: [PlantData] = [
-            PlantData(name: "九芎", location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館", feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。", imageURL: URL(string: "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"), image: nil)
-        ]
+        // When
+        let receive = DataMapper.mapTextData(data: data!)
         
+        // Then
         XCTAssertEqual(receive, expect)
     }
     
-    func test_mapJSON_withData_returnPlantDataListWithImageUrlEqualsNil() {
-        jsonString = jsonString.replacingOccurrences(of: "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg", with: "", options: NSString.CompareOptions.literal, range: nil)
-        let data: Data? = jsonString.data(using: .utf8)
-        XCTAssertNotNil(data)
+    func test_mapJSON_withNoImageURLJSON_returnDataWithImageURLEqualsNil() {
+        // Given
+        let newJSONString = jsonString.replace(testingImageURL, with: "")
+        let data = newJSONString.data(using: .utf8)
+        let expect = makeCorrectData(withImageURL: false)
         
-        let receive = DataMapper.mapTextData(data: data)
-        let expect: [PlantData] = [
-            PlantData(name: "九芎", location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館", feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。", imageURL: nil, image: nil)
-        ]
+        // When
+        let receive = DataMapper.mapTextData(data: data!)
         
+        // Then
         XCTAssertEqual(receive, expect)
+    }
+    
+    func test_mapJSON_jsonWithWrongFormat_returnNil() {
+        // Given
+        let wrongJSON = "{results: []}"
+        let data = wrongJSON.data(using: .utf8)
+        
+        // When
+        let receive = DataMapper.mapTextData(data: data!)
+        
+        // Then
+        XCTAssertNil(receive)
     }
     
     // MARK: - Helper
-    private var jsonString: String = """
+    
+    private func makeCorrectData(withImageURL: Bool) -> [PlantData] {
+        let imageURL = withImageURL ? URL(string: testingImageURL) : nil
+        let data: [PlantData] = [
+            PlantData(name: "九芎",
+                      location: "臺灣動物區；蟲蟲探索谷；熱帶雨林區；鳥園；兩棲爬蟲動物館",
+                      feature: "紅褐色的樹皮剝落後呈灰白色，樹幹光滑堅硬。葉有極短的柄，長橢圓形或卵形，全綠，葉片兩端尖，秋冬轉紅。夏季6～8月開花，花冠白色，花數甚多而密生於枝端，花為圓錐花序頂生，花瓣有長柄，邊緣皺曲像衣裙的花邊花絲長短不一。果實為蒴果，橢圓形約6-8公厘，種子有翅。",
+                      imageURL: imageURL,
+                      image: nil)
+        ]
+        
+        return data
+    }
+    
+    private let jsonString = """
         {
            "result":{
               "limit":1,
@@ -93,4 +114,13 @@ class TestContentDataMapper: XCTestCase {
            }
         }
     """
+}
+
+// MARK: - Private Extension for String
+
+private extension String {
+    
+    func replace(_ target: String, with newSubString: String) -> String {
+        return self.replacingOccurrences(of: target, with: newSubString, options: NSString.CompareOptions.literal, range: nil)
+    }
 }

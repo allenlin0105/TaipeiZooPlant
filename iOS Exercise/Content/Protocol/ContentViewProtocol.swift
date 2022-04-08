@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol ContentProtocol {
-    func updateContentTableView()
+protocol ContentViewProtocol: AnyObject {
+    func reloadContentTableView()
 }
