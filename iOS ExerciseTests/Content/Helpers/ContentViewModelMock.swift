@@ -15,6 +15,9 @@ class ContentViewModelMock: ContentViewModelProtocol {
     var dataCount: Int = 0
     var delegate: ContentViewProtocol?
     
+    var requestPlantDataIsCalled = false
+    var requestOffset = -1
+    
     required init(dataLoader: DataLoaderProtocol, delegate: ContentViewProtocol) {
         self.delegate = delegate
     }
@@ -24,6 +27,8 @@ class ContentViewModelMock: ContentViewModelProtocol {
     }
     
     func requestPlantData(at offset: Int) {
+        requestPlantDataIsCalled = true
+        requestOffset = offset
         dataCount = offset + 20
     }
     

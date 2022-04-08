@@ -21,6 +21,8 @@ class TestContentViewController: XCTestCase {
         dataLoaderMock = DataLoaderMock()
         viewModelMock = ContentViewModelMock(dataLoader: dataLoaderMock, delegate: sut)
         sut.viewModel = viewModelMock
+        
+        sut.loadViewIfNeeded()
     }
     
     override func tearDown() {
@@ -33,7 +35,6 @@ class TestContentViewController: XCTestCase {
     func test_registerContentCell_whenViewDidLoad_contentCellCanBeReused() {
         // Given
         // When
-        sut.loadViewIfNeeded()
         let cell = sut.tableView.dequeueReusableCell(withIdentifier: ContentStrings.contentCellIdentifier) as? ContentTableViewCell
         
         // Then
@@ -43,7 +44,6 @@ class TestContentViewController: XCTestCase {
     func test_registerErrorCell_whenViewDidLoad_errorCellCanBeReused() {
         // Given
         // When
-        sut.loadViewIfNeeded()
         let cell = sut.tableView.dequeueReusableCell(withIdentifier: ContentStrings.errorCellIdentifier) as? ErrorTableViewCell
         
         // Then
@@ -53,7 +53,10 @@ class TestContentViewController: XCTestCase {
     func test_firstRequest_whenViewDidLoad_shouldRequestData() {
         // Given
         // When
-        sut.loadViewIfNeeded()
+        // Then
+        XCTAssertTrue(viewModelMock.requestPlantDataIsCalled)
+        XCTAssertEqual(viewModelMock.requestOffset, 0)
+    }
         
         // Then
         XCTAssertEqual(sut.viewModel?.dataCount, 20)
