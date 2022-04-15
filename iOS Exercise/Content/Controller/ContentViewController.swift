@@ -10,8 +10,15 @@ import UIKit
 class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var upperHeaderLabel: UILabel!
+    @IBOutlet weak var lowerHeaderLabel: UILabel!
+    @IBOutlet weak var headerHeightConstraint: NSLayoutConstraint!
     
     var viewModel: ContentViewModelProtocol?
+    var previousScrollOffset: CGFloat = 0
+    
+    let maxHeaderHeight: CGFloat = 200
+    let minHeaderHeight: CGFloat = 100
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +27,9 @@ class ContentViewController: UIViewController {
         tableView.register(UINib(nibName: ContentStrings.errorCellIdentifier, bundle: nil), forCellReuseIdentifier: ContentStrings.errorCellIdentifier)
         
         viewModel?.requestPlantData(at: 0)
+        
+        headerHeightConstraint.constant = maxHeaderHeight
+        updateHeaderLabelAlpha()
     }
 }
 

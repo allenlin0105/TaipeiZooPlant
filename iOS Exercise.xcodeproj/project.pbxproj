@@ -16,6 +16,7 @@
 		9F77077C27BF412A00F1D582 /* URLSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F77077B27BF412A00F1D582 /* URLSessionMock.swift */; };
 		9F8EB826279996BF00085C81 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB825279996BF00085C81 /* DataLoader.swift */; };
 		9F8EB82A27999D3800085C81 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EB82927999D3800085C81 /* DataMapper.swift */; };
+		9FB348C227FFE2A200A8AE4A /* ShrinkHeaderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB348C127FFE2A200A8AE4A /* ShrinkHeaderExtension.swift */; };
 		9FCC6E4427C868C500F72F0B /* TestingConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCC6E4327C868C500F72F0B /* TestingConstant.swift */; };
 		9FCD6E3C27CDAD9F00E1DE8D /* ContentViewModelMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD6E3B27CDAD9F00E1DE8D /* ContentViewModelMock.swift */; };
 		9FCE1A8E279E3750000A751D /* TestDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE1A8D279E3750000A751D /* TestDataMapper.swift */; };
@@ -61,6 +62,7 @@
 		9F77077B27BF412A00F1D582 /* URLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionMock.swift; sourceTree = "<group>"; };
 		9F8EB825279996BF00085C81 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		9F8EB82927999D3800085C81 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
+		9FB348C127FFE2A200A8AE4A /* ShrinkHeaderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkHeaderExtension.swift; sourceTree = "<group>"; };
 		9FCC6E4327C868C500F72F0B /* TestingConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingConstant.swift; sourceTree = "<group>"; };
 		9FCD6E3B27CDAD9F00E1DE8D /* ContentViewModelMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModelMock.swift; sourceTree = "<group>"; };
 		9FCE1A80279D4243000A751D /* iOS ExerciseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS ExerciseTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,14 @@
 				9F8EB82927999D3800085C81 /* DataMapper.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		9FB348C027FFD93200A8AE4A /* ShrinkHeader */ = {
+			isa = PBXGroup;
+			children = (
+				9FB348C127FFE2A200A8AE4A /* ShrinkHeaderExtension.swift */,
+			);
+			path = ShrinkHeader;
 			sourceTree = "<group>";
 		};
 		9FCE1A81279D4243000A751D /* iOS ExerciseTests */ = {
@@ -215,10 +225,12 @@
 			children = (
 				E37477782792762F006D6A4D /* Library */,
 				9FDEE62327BCC0AD00A82912 /* Content */,
+				9FB348C027FFD93200A8AE4A /* ShrinkHeader */,
 				E3A31CBA277D416900146AAD /* AppDelegate.swift */,
 				E3A31CBC277D416900146AAD /* SceneDelegate.swift */,
 				E3A31CC3277D416A00146AAD /* Assets.xcassets */,
 				E3A31CC5277D416A00146AAD /* LaunchScreen.storyboard */,
+				9F3353FD27A3926900E57D7E /* Main.storyboard */,
 				E3A31CC8277D416A00146AAD /* Info.plist */,
 			);
 			path = "iOS Exercise";
@@ -245,7 +257,6 @@
 		E3F882F8278FC0C300B50353 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9F3353FD27A3926900E57D7E /* Main.storyboard */,
 				E310C23827915C5D005A1AD7 /* ContentTableViewCell.swift */,
 				E310C23927915C5D005A1AD7 /* ContentTableViewCell.xib */,
 				9FDEE61F27BC9FE700A82912 /* ErrorTableViewCell.swift */,
@@ -445,6 +456,7 @@
 				E310C23D27916FE5005A1AD7 /* PlantModel.swift in Sources */,
 				E3A31CBF277D416900146AAD /* ContentViewController.swift in Sources */,
 				E3A31CBB277D416900146AAD /* AppDelegate.swift in Sources */,
+				9FB348C227FFE2A200A8AE4A /* ShrinkHeaderExtension.swift in Sources */,
 				E374777A27927644006D6A4D /* GlobalStrings.swift in Sources */,
 				E3A31CBD277D416900146AAD /* SceneDelegate.swift in Sources */,
 				E310C23F279170BE005A1AD7 /* ContentViewModel.swift in Sources */,
