@@ -64,7 +64,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="headerHeightConstraint" destination="QDd-Q6-vWR" id="1b8-pM-TkN"/>
+                        <outlet property="lowerHeaderLabel" destination="Exi-cq-OzQ" id="ndk-71-Vax"/>
                         <outlet property="tableView" destination="nXv-Uy-HiK" id="3YQ-Yp-RNR"/>
+                        <outlet property="upperHeaderLabel" destination="Q6Y-Re-D14" id="G58-hT-Yq7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

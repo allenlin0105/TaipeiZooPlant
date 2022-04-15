@@ -10,6 +10,9 @@ import UIKit
 class ContentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var upperHeaderLabel: UILabel!
+    @IBOutlet weak var lowerHeaderLabel: UILabel!
+    @IBOutlet weak var headerHeightConstraint: NSLayoutConstraint!
     
     var viewModel: ContentViewModelProtocol?
     
